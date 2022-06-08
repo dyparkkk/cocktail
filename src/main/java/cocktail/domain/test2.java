@@ -1,4 +1,4 @@
 package cocktail.domain;
 
-public class test {
+public class test2 {
 }
