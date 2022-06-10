@@ -16,11 +16,10 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect   # H2Dialect, MySQL57Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
-        globally_quoted_identifiers: true
   #        show_sql: true
   #        format_sql: true
 
-  output.ansi.enabled: always  # terminal color
+  output.ansi.enabled: ALWAYS  # terminal color
