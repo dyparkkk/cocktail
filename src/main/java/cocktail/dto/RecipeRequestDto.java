@@ -1,5 +1,7 @@
 package cocktail.dto;
 
+import cocktail.domain.Order;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,11 +14,13 @@ public class RecipeRequestDto {
     // 검증 xx.x 형식
     private String dosu;
     private List<String> tags;
-    private List<String> orders;
+    private List<Order> orders;
 
-    public RecipeRequestDto(String name, String dosu, List<String> tags) {
+    @Builder
+    public RecipeRequestDto(String name, String dosu, List<String> tags, List<Order> orders) {
         this.name = name;
         this.dosu = dosu;
         this.tags = tags;
+        this.orders = orders;
     }
 }

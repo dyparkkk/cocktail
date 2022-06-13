@@ -1,5 +1,6 @@
 package cocktail.application;
 
+import cocktail.domain.Order;
 import cocktail.domain.Recipe;
 import cocktail.domain.Tag;
 import cocktail.dto.RecipeRequestDto;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +26,9 @@ public class RecipeService {
     @Transactional
     public void createRecipe(RecipeRequestDto dto) {
         // Recipe 생성
-        Recipe recipe = new Recipe(dto.getName(), BigDecimal.valueOf(Double.valueOf(dto.getDosu())));
+        BigDecimal decimalDosu = stringToBigDecimal(dto.getDosu());
+
+        Recipe recipe = new Recipe(dto.getName(), decimalDosu, dto.getOrders());
         recipeRepository.save(recipe);
 
         // dto로 부터 tag 생성해서 저장
@@ -32,7 +37,11 @@ public class RecipeService {
                 .collect(Collectors.toList());
         saveTagList(tagList);
 
-        // ...
+        //
+    }
+
+    private BigDecimal stringToBigDecimal(String dosu) {
+        return BigDecimal.valueOf(Double.valueOf(dosu));
     }
 
     private void saveTagList(List<Tag> tagList) {

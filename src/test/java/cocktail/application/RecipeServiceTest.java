@@ -1,5 +1,6 @@
 package cocktail.application;
 
+import cocktail.domain.Order;
 import cocktail.domain.Recipe;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.infra.RecipeRepository;
@@ -53,17 +54,30 @@ class RecipeServiceTest {
 
         BigDecimal findDosu = (BigDecimal) ReflectionTestUtils.getField(findRecipe, "dosu");
         assertThat(dto.getDosu()).isEqualTo(findDosu.toString());
+
+        List<Order> findOrders = findRecipe.getOrders();
+        assertThat(findOrders).contains(dto.getOrders().get(0), dto.getOrders().get(1));
     }
 
     private Recipe getRecipe(RecipeRequestDto dto) {
         BigDecimal dosu = BigDecimal.valueOf(Double.valueOf(dto.getDosu()));
-        return new Recipe(dto.getName(), dosu);
+        return new Recipe(dto.getName(), dosu, dto.getOrders());
     }
 
     private RecipeRequestDto getRequestDto() {
         String name = "마티니";
         String dosu = "30.0";
         List<String> stringTagList = new ArrayList<>(Arrays.asList("드라이 진", "IBA", "젓지말고 흔들어서"));
-        return new RecipeRequestDto(name, dosu, stringTagList);
+
+        Order order1 = new Order(1, "드라이 진과 올리브를 넣는다.");
+        Order order2 = new Order(2, "흔든다.");
+        List<Order> orderList = new ArrayList<>(Arrays.asList(order1, order2));
+
+        return new RecipeRequestDto(name, dosu, stringTagList, orderList);
+    }
+
+    @Test
+    void createRecipe_recipe_Orders_확인() {
+
     }
 }

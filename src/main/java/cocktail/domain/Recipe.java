@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -22,13 +23,24 @@ public class Recipe extends BaseTimeEntity {
     @OneToMany(mappedBy = "Tag")
     private List<Tag> tags  = new ArrayList<>();
 
+    // 값타입 컬렉션 사용
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "orders", joinColumns = @JoinColumn(name = "recipe_id"))
+    private List<Order> orders = new ArrayList<>();
 
-    // orders는 @ElementCollection, @CollectionTable 사용 예정
-
-
-    public Recipe(String name, BigDecimal dosu) {
+    public Recipe(String name, BigDecimal dosu, List<Order> orders) {
         this.name = name;
         this.dosu = dosu;
+        this.orders.addAll(orders);
+        sortOrders();
+    }
+
+    private void sortOrders() {
+        Collections.sort(orders);
+    }
+
+    public List<Order> getOrders() {
+        return orders;
     }
 
     public List<Tag> getTags() {
