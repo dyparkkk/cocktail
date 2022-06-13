@@ -2,6 +2,7 @@ package cocktail.domain;
 
 import cocktail.global.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Recipe extends BaseTimeEntity {
 
@@ -39,11 +41,4 @@ public class Recipe extends BaseTimeEntity {
         Collections.sort(orders);
     }
 
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public List<Tag> getTags() {
-        return tags;
-    }
 }

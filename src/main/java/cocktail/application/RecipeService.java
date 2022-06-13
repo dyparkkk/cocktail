@@ -24,7 +24,7 @@ public class RecipeService {
     private final TagRepository tagRepository;
 
     @Transactional
-    public void createRecipe(RecipeRequestDto dto) {
+    public Long createRecipe(RecipeRequestDto dto) {
         // Recipe 생성
         BigDecimal decimalDosu = stringToBigDecimal(dto.getDosu());
 
@@ -37,7 +37,7 @@ public class RecipeService {
                 .collect(Collectors.toList());
         saveTagList(tagList);
 
-        //
+        return recipe.getId();
     }
 
     private BigDecimal stringToBigDecimal(String dosu) {
