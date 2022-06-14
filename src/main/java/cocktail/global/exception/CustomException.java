@@ -1,4 +1,4 @@
-package cocktail.application;
+package cocktail.global.exception;
 
 import lombok.Getter;
 

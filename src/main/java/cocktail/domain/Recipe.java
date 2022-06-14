@@ -18,4 +18,7 @@ public class Recipe extends BaseTimeEntity {
 
     // orders는 @ElementCollection, @CollectionTable 사용 예정
 
+    @ManyToOne
+    @JoinColumn(name = "users_id")
+    private User user;
 }
