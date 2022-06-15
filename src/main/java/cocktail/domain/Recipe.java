@@ -22,7 +22,7 @@ public class Recipe extends BaseTimeEntity {
     private String name;
     private BigDecimal dosu;
 
-    @OneToMany(mappedBy = "Tag")
+    @OneToMany(mappedBy = "recipe")
     private List<Tag> tags  = new ArrayList<>();
 
     // 값타입 컬렉션 사용

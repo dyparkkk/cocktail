@@ -5,6 +5,7 @@ import cocktail.domain.Recipe;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.infra.RecipeRepository;
 import cocktail.infra.TagRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +18,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static cocktail.dto.RecipeRequestDto.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -29,10 +32,10 @@ class RecipeServiceTest {
     @Mock TagRepository tagRepository;
 
     @Test
-    void createRecipe_recipe불러오기() {
+    void createRecipe_recipe생성() {
         // data
-        RecipeRequestDto dto = getRequestDto();
-        Recipe recipe = getRecipe(dto);
+        RecipeRequestDto dto = createDto();
+        Recipe recipe = createRecipe(dto);
 
         Long id = 1l;
         ReflectionTestUtils.setField(recipe, "id", id);
@@ -49,35 +52,32 @@ class RecipeServiceTest {
         // then
         Recipe findRecipe = recipeRepository.findById(id).get();
 
-        String findName = (String) ReflectionTestUtils.getField(findRecipe, "name");
-        assertThat(dto.getName()).isEqualTo(findName);
-
-        BigDecimal findDosu = (BigDecimal) ReflectionTestUtils.getField(findRecipe, "dosu");
-        assertThat(dto.getDosu()).isEqualTo(findDosu.toString());
-
-        List<Order> findOrders = findRecipe.getOrders();
-        assertThat(findOrders).contains(dto.getOrders().get(0), dto.getOrders().get(1));
+        assertThat(findRecipe.getName()).isEqualTo(recipe.getName());
+        assertThat(findRecipe.getDosu()).isEqualTo(recipe.getDosu());
+        assertThat(findRecipe.getOrders()).contains(recipe.getOrders().get(0), recipe.getOrders().get(1));
     }
 
-    private Recipe getRecipe(RecipeRequestDto dto) {
-        BigDecimal dosu = BigDecimal.valueOf(Double.valueOf(dto.getDosu()));
-        return new Recipe(dto.getName(), dosu, dto.getOrders());
-    }
-
-    private RecipeRequestDto getRequestDto() {
+    private RecipeRequestDto createDto() {
         String name = "마티니";
         String dosu = "30.0";
         List<String> stringTagList = new ArrayList<>(Arrays.asList("드라이 진", "IBA", "젓지말고 흔들어서"));
 
-        Order order1 = new Order(1, "드라이 진과 올리브를 넣는다.");
-        Order order2 = new Order(2, "흔든다.");
-        List<Order> orderList = new ArrayList<>(Arrays.asList(order1, order2));
+        List<OrderDto> orderDtoList = new ArrayList<>(Arrays.asList(
+                new OrderDto(1, "드라이 진과 올리브를 넣는다."),
+                new OrderDto(2, "흔든다.")));
 
-        return new RecipeRequestDto(name, dosu, stringTagList, orderList);
+        return new RecipeRequestDto(name, dosu, stringTagList, orderDtoList);
+    }
+
+    private Recipe createRecipe(RecipeRequestDto dto) {
+        List<Order> orderList = dto.getOrders().stream()
+                .map(OrderDto::toOrder).collect(Collectors.toList());
+        return new Recipe(dto.getName(), new BigDecimal(dto.getDosu()), orderList);
     }
 
     @Test
     void createRecipe_recipe_Orders_확인() {
 
     }
+
 }

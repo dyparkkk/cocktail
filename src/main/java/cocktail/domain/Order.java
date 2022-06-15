@@ -1,8 +1,12 @@
 package cocktail.domain;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Embeddable;
 
 @Embeddable
+@NoArgsConstructor
 public class Order implements Comparable<Order> {
     private int num;
     private String content;
