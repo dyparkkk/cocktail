@@ -24,6 +24,4 @@ public class RecipeController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(recipeId);
     }
-
-
 }

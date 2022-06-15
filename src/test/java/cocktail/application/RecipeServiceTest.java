@@ -2,6 +2,7 @@ package cocktail.application;
 
 import cocktail.domain.Order;
 import cocktail.domain.Recipe;
+import cocktail.domain.Tag;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.infra.RecipeRepository;
 import cocktail.infra.TagRepository;
@@ -76,8 +77,34 @@ class RecipeServiceTest {
     }
 
     @Test
-    void createRecipe_recipe_Orders_확인() {
+    void createRecipe_tag생성() {
+        // data
+        RecipeRequestDto dto = createDto();
+        Recipe recipe = createRecipe(dto);
 
+        Long id = 1l;
+        ReflectionTestUtils.setField(recipe, "id", id);
+
+        List<Tag> tagList = createTagList(dto, recipe);
+
+        // BDDMockito
+        given(tagRepository.saveAll(any()))
+                .willReturn(tagList);
+        given(tagRepository.findAll())
+                .willReturn(tagList);
+
+        // when
+        recipeService.createRecipe(dto);
+
+        // then
+        List<Tag> findTagList = tagRepository.findAll();
+
+        assertThat(findTagList.size()).isEqualTo(3);
+        assertThat(findTagList).contains(tagList.get(0));
+    }
+
+    private List<Tag> createTagList(RecipeRequestDto dto, Recipe recipe) {
+        return dto.getTags().stream().map(s -> new Tag(s, recipe)).collect(Collectors.toList());
     }
 
 }
