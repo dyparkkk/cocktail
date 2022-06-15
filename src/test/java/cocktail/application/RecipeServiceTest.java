@@ -5,6 +5,7 @@ import cocktail.domain.Recipe;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.infra.RecipeRepository;
 import cocktail.infra.TagRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,8 +32,7 @@ class RecipeServiceTest {
     @Test
     void createRecipe_recipe불러오기() {
         // data
-        RecipeRequestDto dto = getRequestDto();
-        Recipe recipe = getRecipe(dto);
+        Recipe recipe = createRecipe();
 
         Long id = 1l;
         ReflectionTestUtils.setField(recipe, "id", id);
@@ -59,12 +59,7 @@ class RecipeServiceTest {
         assertThat(findOrders).contains(dto.getOrders().get(0), dto.getOrders().get(1));
     }
 
-    private Recipe getRecipe(RecipeRequestDto dto) {
-        BigDecimal dosu = BigDecimal.valueOf(Double.valueOf(dto.getDosu()));
-        return new Recipe(dto.getName(), dosu, dto.getOrders());
-    }
-
-    private RecipeRequestDto getRequestDto() {
+    private Recipe createRecipe() {
         String name = "마티니";
         String dosu = "30.0";
         List<String> stringTagList = new ArrayList<>(Arrays.asList("드라이 진", "IBA", "젓지말고 흔들어서"));
@@ -73,11 +68,12 @@ class RecipeServiceTest {
         Order order2 = new Order(2, "흔든다.");
         List<Order> orderList = new ArrayList<>(Arrays.asList(order1, order2));
 
-        return new RecipeRequestDto(name, dosu, stringTagList, orderList);
+        return new Recipe(name, new BigDecimal(dosu), orderList);
     }
 
     @Test
     void createRecipe_recipe_Orders_확인() {
 
     }
+
 }

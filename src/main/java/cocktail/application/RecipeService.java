@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static cocktail.dto.RecipeRequestDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +26,11 @@ public class RecipeService {
     @Transactional
     public Long createRecipe(RecipeRequestDto dto) {
         // Recipe 생성
-        BigDecimal decimalDosu = stringToBigDecimal(dto.getDosu());
+        BigDecimal decimalDosu = new BigDecimal(dto.getDosu());
+        List<Order> orderList = dto.getOrders().stream()
+                .map(OrderDto::toOrder).collect(Collectors.toList());
 
-        Recipe recipe = new Recipe(dto.getName(), decimalDosu, dto.getOrders());
+        Recipe recipe = new Recipe(dto.getName(), decimalDosu, orderList);
         recipeRepository.save(recipe);
 
         // dto로 부터 tag 생성해서 저장
@@ -38,10 +40,6 @@ public class RecipeService {
         saveTagList(tagList);
 
         return recipe.getId();
-    }
-
-    private BigDecimal stringToBigDecimal(String dosu) {
-        return BigDecimal.valueOf(Double.valueOf(dosu));
     }
 
     private void saveTagList(List<Tag> tagList) {
