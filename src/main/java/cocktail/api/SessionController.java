@@ -1,4 +1,4 @@
-package cocktail.application;
+package cocktail.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Date;
 
 import static cocktail.dto.SessionDto.*;
-import static cocktail.application.SessionConst.*;
+import static cocktail.api.SessionConst.*;
 
 @Slf4j
 @RestController

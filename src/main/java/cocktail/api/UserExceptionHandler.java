@@ -1,4 +1,4 @@
-package cocktail.application;
+package cocktail.api;
 
 import cocktail.global.exception.DuplicateUserIdException;
 import cocktail.global.exception.ErrorResponse;

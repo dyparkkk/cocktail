@@ -1,6 +1,6 @@
-package cocktail.application;
+package cocktail.api;
 
-import cocktail.api.UserService;
+import cocktail.application.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
