@@ -37,13 +37,13 @@ jobs:
           ${{ secrets.ENV }}
 
       - name: build client files
-        working-directory: ./client
+        working-directory: client
         run: |
           yarn install --frozen-lockfile
           yarn build
 
       - name: zip distributions
-        run: zip -r blog-vanilla.zip ./client/dist ./server ./appspec.yml ./scripts
+        run: zip -r cocktail.zip client/dist server appspec.yml scripts
 
       - name: AWS configure credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -53,7 +53,7 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./cocktail.zip s3://deploy-cocktail/public/ 
+        run: aws s3 cp --region ap-northeast-2 cocktail.zip s3://deploy-cocktail/public/
       - name: deploy with AWS codeDeploy
         run: aws deploy create-deployment
           --application-name cocktail-api-codedeploy
