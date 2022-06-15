@@ -28,7 +28,9 @@ public class User {
 
     private String username; // userId
 
-    private String pw; //password
+    private String pw;
+
+    private String nickname;
 
     private String roles;
 
@@ -36,9 +38,10 @@ public class User {
     private List<Recipe> post = new ArrayList<Recipe>();
 
     @Builder
-    public User(String username, String pw){
+    public User(String username, String pw, String nickname){
         this.username = username;
         this.pw = pw;
+        this.nickname = nickname;
         this.roles = "ROLE_USER";
     }
 

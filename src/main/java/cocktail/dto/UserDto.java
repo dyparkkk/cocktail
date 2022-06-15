@@ -20,6 +20,9 @@ public class UserDto {
 
         @NotBlank
         private String pw;
+
+        @NotBlank
+        private String nickname;
     }
 
     @Data
