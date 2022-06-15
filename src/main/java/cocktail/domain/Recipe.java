@@ -41,4 +41,7 @@ public class Recipe extends BaseTimeEntity {
         Collections.sort(orders);
     }
 
+    @ManyToOne
+    @JoinColumn(name = "users_id")
+    private User user;
 }
