@@ -1,8 +1,10 @@
-package cocktail.api;
+package cocktail.application;
 
+import cocktail.application.MyUserDetailsService;
 import cocktail.domain.User;
 import cocktail.global.exception.DuplicateUserIdException;
 import cocktail.global.exception.PwNotMatchException;
+import cocktail.infra.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
