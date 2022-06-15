@@ -24,9 +24,15 @@ public class RecipeRequestDto {
         this.orders = orders;
     }
 
+    @NoArgsConstructor
     public static class OrderDto{
         private int num;
         private String content;
+
+        public OrderDto(int num, String content) {
+            this.num = num;
+            this.content = content;
+        }
 
         public Order toOrder(){
             return new Order(num, content);

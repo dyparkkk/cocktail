@@ -37,12 +37,9 @@ public class RecipeService {
         List<String> stringTags = dto.getTags();
         List<Tag> tagList = stringTags.stream().map(s -> new Tag(s, recipe))
                 .collect(Collectors.toList());
-        saveTagList(tagList);
+        tagRepository.saveAll(tagList);
 
         return recipe.getId();
     }
 
-    private void saveTagList(List<Tag> tagList) {
-        tagList.stream().forEach(tag -> tagRepository.save(tag));
-    }
 }
