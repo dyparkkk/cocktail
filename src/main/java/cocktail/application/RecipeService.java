@@ -4,9 +4,11 @@ import cocktail.domain.Order;
 import cocktail.domain.Recipe;
 import cocktail.domain.Tag;
 import cocktail.dto.RecipeRequestDto;
+import cocktail.dto.RecipeResponseDto;
 import cocktail.infra.RecipeRepository;
 import cocktail.infra.TagRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static cocktail.dto.RecipeRequestDto.*;
+import static cocktail.dto.RecipeResponseDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +43,11 @@ public class RecipeService {
         tagRepository.saveAll(tagList);
 
         return recipe.getId();
+    }
+
+    @Transactional
+    public List<RecipeListDto> findAllPageable(Pageable pageable){
+        return recipeRepository.findAllListDto(pageable);
     }
 
 }

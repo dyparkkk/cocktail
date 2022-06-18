@@ -22,17 +22,34 @@ public class QuerydslTest {
     EntityManager em;
 
     @Test
+    void JPQL_세팅확인() {
+        User user = saveMember();
+
+        List resultList = em.createQuery("select u from User u where u.username =: username")
+                .setParameter("username", "name")
+                .getResultList();
+
+        assertThat(resultList).containsExactly(user);
+    }
+
+    @Test
     void querydsl_세팅확인() {
-        User user = new User("name", "pw");
-        em.persist(user);
+        User user = saveMember();
 
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-        QUser Quser = new QUser("u");
+        QUser qUser = new QUser("u");
 
         List<User> result = queryFactory
-                .selectFrom(Quser)
+                .selectFrom(qUser)
+                .where(qUser.username.eq("name"))
                 .fetch();
 
         assertThat(result).containsExactly(user);
+    }
+
+    private User saveMember() {
+        User user = new User("name", "pw");
+        em.persist(user);
+        return user;
     }
 }
