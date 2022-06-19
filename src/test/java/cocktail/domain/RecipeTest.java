@@ -22,7 +22,11 @@ class RecipeTest {
 
         // when
         // 생성시 순서 보장이 됨
-        Recipe recipe = new Recipe("name", BigDecimal.ZERO, orders);
+        Recipe recipe = Recipe.builder()
+                .name("name")
+                .dosu(BigDecimal.ZERO)
+                .orders(orders)
+                .build();
 
         // then
         List<Order> getOrders = recipe.getOrders();

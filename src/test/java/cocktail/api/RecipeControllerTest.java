@@ -35,7 +35,9 @@ class RecipeControllerTest {
 
     @Test
     void createRecipeSuccessTest(){
-        Recipe recipe = new Recipe("name", BigDecimal.ZERO, null);
+        Recipe recipe = Recipe.builder()
+                .name("name")
+                .dosu(BigDecimal.ZERO).build();
         RecipeRequestDto reqDto = new RecipeRequestDto("name", "0", null, null);
         long recipeId = 1l;
 

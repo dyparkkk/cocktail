@@ -33,7 +33,10 @@ public class RecipeService {
         List<Order> orderList = dto.getOrders().stream()
                 .map(OrderDto::toOrder).collect(Collectors.toList());
 
-        Recipe recipe = new Recipe(dto.getName(), decimalDosu, orderList);
+        Recipe recipe = Recipe.builder()
+                .name(dto.getName())
+                .dosu(decimalDosu)
+                .orders(orderList).build();
         recipeRepository.save(recipe);
 
         // dto로 부터 tag 생성해서 저장

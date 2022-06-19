@@ -40,7 +40,11 @@ public class InitRecipe {
                     new Order(3, "마신다."));
 
             for (int i = 0; i < 100; i++) {
-                em.persist(new Recipe("name"+i, new BigDecimal(i), orderList));
+                em.persist(
+                        Recipe.builder()
+                        .name("name"+i)
+                        .dosu(new BigDecimal(i))
+                        .orders(orderList).build());
             }
         }
     }
