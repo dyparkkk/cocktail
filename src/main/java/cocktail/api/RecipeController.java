@@ -3,6 +3,7 @@ package cocktail.api;
 import cocktail.application.RecipeService;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.RecipeResponseDto;
+import cocktail.dto.SearchCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -38,5 +39,11 @@ public class RecipeController {
         List<RecipeListDto> list = recipeService.findAllPageable(pageable);
 
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<RecipeResponseDto>> searchRecipeApi(@RequestBody SearchCondition condition, Pageable pageable) {
+        List<RecipeResponseDto> resList = recipeService.filterSearch(condition, pageable);
+        return new ResponseEntity<>(resList, HttpStatus.OK);
     }
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RecipeResponseDto {
     private Long id;
+    private String name;
     // 추가예정
     //사진
 //    private String userNickname;
@@ -16,6 +17,12 @@ public class RecipeResponseDto {
 
     public RecipeResponseDto(Long id) {
         this.id = id;
+    }
+
+    @QueryProjection
+    public RecipeResponseDto(Long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     @Getter

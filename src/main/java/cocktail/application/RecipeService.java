@@ -5,6 +5,7 @@ import cocktail.domain.Recipe;
 import cocktail.domain.Tag;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.RecipeResponseDto;
+import cocktail.dto.SearchCondition;
 import cocktail.infra.RecipeRepository;
 import cocktail.infra.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,10 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final TagRepository tagRepository;
 
+    /**
+     * 회원 정보 추가
+     * Brewing, Base 저장 추가
+     */
     @Transactional
     public Long createRecipe(RecipeRequestDto dto) {
         // Recipe 생성
@@ -51,6 +56,11 @@ public class RecipeService {
     @Transactional
     public List<RecipeListDto> findAllPageable(Pageable pageable){
         return recipeRepository.findAllListDto(pageable);
+    }
+
+    @Transactional
+    public List<RecipeResponseDto> filterSearch(SearchCondition condition, Pageable pageable){
+        return recipeRepository.filterSearch(condition, pageable);
     }
 
 }
