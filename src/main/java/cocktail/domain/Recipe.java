@@ -33,8 +33,10 @@ public class Recipe extends BaseTimeEntity {
     public Recipe(String name, BigDecimal dosu, List<Order> orders) {
         this.name = name;
         this.dosu = dosu;
-        this.orders.addAll(orders);
-        sortOrders();
+        if(orders != null){
+            this.orders.addAll(orders);
+            sortOrders();
+        }
     }
 
     private void sortOrders() {
