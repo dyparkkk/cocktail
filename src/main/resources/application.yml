@@ -1,4 +1,8 @@
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
   datasource:
     url: jdbc:h2:tcp://localhost/~/test  # window
   #    url: jdbc:h2:~/test           # mac
@@ -6,6 +10,7 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+
 
   h2.console:
     enabled: true
@@ -23,4 +28,27 @@ spring:
         show_sql: true
         format_sql: true
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-name: google
+            client-id: "218531279276-apbi76v06s2p4se8hfuiggcik31j77te.apps.googleusercontent.com"
+            client-secret: "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"
+            scope:
+              - profile
+              - email
+  app:
+    auth:
+      token-secret: devbeekei-token-secret-key
+      token-expiration-time: 1209600000
+    oauth2:
+      authorized-redirect-uris:
+        - http://localhost:8080/auth/token
+
+
   output.ansi.enabled: always  # terminal color
+
+
+

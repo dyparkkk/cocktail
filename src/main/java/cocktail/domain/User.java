@@ -1,5 +1,6 @@
 package cocktail.domain;
 
+import cocktail.global.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,7 @@ import java.util.List;
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "users_id")
@@ -30,6 +31,7 @@ public class User {
 
     private String pw;
 
+    @Column(name = "user_nickname")
     private String nickname;
 
     private String roles;
@@ -51,4 +53,13 @@ public class User {
         }
         return new ArrayList<>();
     }
+
+    /* 회원정보 수정을 위한 set method*/
+    public  User update (String username,String nickname) {
+        this.username = username;
+        this.nickname = nickname;
+       return  this;
+    }
+
+
 }

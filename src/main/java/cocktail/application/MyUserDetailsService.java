@@ -1,5 +1,6 @@
 package cocktail.application;
 
+
 import cocktail.domain.User;
 import cocktail.infra.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ public class MyUserDetailsService implements UserDetailsService {
         return createUserDetails(users);
     }
 
+
     private UserDetails createUserDetails(User user) {
         List<SimpleGrantedAuthority> grantedAuthorities = user.getRoleList().stream()
                 .map(authority -> new SimpleGrantedAuthority(authority))
@@ -41,4 +43,8 @@ public class MyUserDetailsService implements UserDetailsService {
                 user.getPw(),
                 grantedAuthorities);
     }
+
+
+
+
 }
