@@ -73,7 +73,11 @@ class RecipeServiceTest {
     private Recipe createRecipe(RecipeRequestDto dto) {
         List<Order> orderList = dto.getOrders().stream()
                 .map(OrderDto::toOrder).collect(Collectors.toList());
-        return new Recipe(dto.getName(), new BigDecimal(dto.getDosu()), orderList);
+        return Recipe.builder()
+                .name(dto.getName())
+                .dosu(new BigDecimal(dto.getDosu()))
+                .orders(orderList)
+                .build();
     }
 
     @Test

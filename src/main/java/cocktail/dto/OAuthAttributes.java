@@ -1,4 +1,4 @@
-package cocktail.api;
+package cocktail.dto;
 
 import cocktail.domain.User;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package cocktail.application;
 
-import cocktail.api.OAuthAttributes;
+import cocktail.dto.OAuthAttributes;
 import cocktail.domain.User;
 import cocktail.dto.SessionDto;
 import cocktail.infra.UserRepository;
