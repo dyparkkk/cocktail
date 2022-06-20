@@ -33,6 +33,9 @@ class RecipeRepositoryImplTest {
     @Autowired
     RecipeRepository recipeRepository;
 
+    @Autowired
+    TagRepository tagRepository;
+
     private JPAQueryFactory queryFactory;
 
     @BeforeEach
@@ -107,4 +110,17 @@ class RecipeRepositoryImplTest {
         assertThat(result.get(0).getName()).isEqualTo("name1");
     }
 
+    @Test
+    void deleteTagsTest() {
+        Recipe recipe = recipeRepository.findAll().get(0);
+        Long id = recipe.getId();
+
+        // when
+        recipeRepository.deleteTags(id);
+
+        // then
+        List<Tag> findTags = tagRepository.findAll();
+        assertThat(findTags.size()).isEqualTo(2);
+        assertThat(findTags).extracting("name").containsExactly("태그2", "맛있는2");
+    }
 }

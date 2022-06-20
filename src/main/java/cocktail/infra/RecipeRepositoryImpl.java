@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import static cocktail.domain.QRecipe.*;
 import static cocktail.domain.QTag.*;
@@ -58,6 +59,15 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
     }
+
+    @Override
+    public long deleteTags(Long id) {
+        return queryFactory
+                .delete(tag)
+                .where(tag.recipe.id.eq(id))
+                .execute();
+    }
+
 
     private BooleanBuilder tagEq(List<String> tagList){
         if( tagList == null) return null;

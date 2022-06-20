@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -14,16 +15,18 @@ import java.util.List;
 public class RecipeRequestDto {
     private String name;
     // 검증 xx.x 형식
-    private String dosu;
+    private BigDecimal dosu;
     private Brewing brewing;
     private Base base;
     private List<String> tags;
     private List<OrderDto> orders;
 
     @Builder
-    public RecipeRequestDto(String name, String dosu, List<String> tags, List<OrderDto> orders) {
+    public RecipeRequestDto(String name, BigDecimal dosu, Brewing brewing, Base base, List<String> tags, List<OrderDto> orders) {
         this.name = name;
         this.dosu = dosu;
+        this.brewing = brewing;
+        this.base = base;
         this.tags = tags;
         this.orders = orders;
     }
@@ -34,6 +37,10 @@ public class RecipeRequestDto {
 
     public void setBase(String base){
         this.base = Base.valueOf(base.toUpperCase());
+    }
+
+    public void setDosu(String dosu) {
+        this.dosu = new BigDecimal(dosu.toUpperCase());
     }
 
     @NoArgsConstructor

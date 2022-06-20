@@ -34,23 +34,29 @@ public class RecipeService {
     @Transactional
     public Long createRecipe(RecipeRequestDto dto) {
         // Recipe 생성
-        BigDecimal decimalDosu = new BigDecimal(dto.getDosu());
-        List<Order> orderList = dto.getOrders().stream()
-                .map(OrderDto::toOrder).collect(Collectors.toList());
+        List<Order> orderList = dtosToOrders(dto.getOrders());
 
         Recipe recipe = Recipe.builder()
                 .name(dto.getName())
-                .dosu(decimalDosu)
+                .dosu(dto.getDosu())
                 .orders(orderList).build();
         recipeRepository.save(recipe);
 
         // dto로 부터 tag 생성해서 저장
-        List<String> stringTags = dto.getTags();
-        List<Tag> tagList = stringTags.stream().map(s -> new Tag(s, recipe))
-                .collect(Collectors.toList());
+        List<Tag> tagList = dtosToTags(dto.getTags(), recipe);
         tagRepository.saveAll(tagList);
 
         return recipe.getId();
+    }
+
+    private List<Tag> dtosToTags(List<String> stringTags, Recipe recipe) {
+        return stringTags.stream().map(s -> new Tag(s, recipe))
+                .collect(Collectors.toList());
+    }
+
+    private List<Order> dtosToOrders(List<OrderDto> orderDtos) {
+        return orderDtos.stream()
+                .map(OrderDto::toOrder).collect(Collectors.toList());
     }
 
     @Transactional
@@ -63,4 +69,22 @@ public class RecipeService {
         return recipeRepository.filterSearch(condition, pageable);
     }
 
+    @Transactional
+    public Long update(Long id, RecipeRequestDto dto){
+        Recipe recipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("RecipeService.update : id값을 찾을 수 없습니다."));
+
+        // 값 바꿔주기
+        List<Order> orders = dtosToOrders(dto.getOrders());
+        recipe.update(dto.getName(), dto.getDosu(), dto.getBrewing(), dto.getBase(), orders);
+
+        // 전에 있던 태그 삭제
+        recipeRepository.deleteTags(id);
+
+        // 태그 저장
+        List<Tag> tagList = dtosToTags(dto.getTags(), recipe);
+        tagRepository.saveAll(tagList);
+
+        return id;
+    }
 }
