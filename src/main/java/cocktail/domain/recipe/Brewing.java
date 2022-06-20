@@ -1,4 +1,4 @@
-package cocktail.domain;
+package cocktail.domain.recipe;
 
 public enum Brewing {
     BLENDING("블렌딩"),

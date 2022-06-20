@@ -1,9 +1,9 @@
 package cocktail.application;
 
-import cocktail.domain.*;
+import cocktail.domain.recipe.*;
 import cocktail.dto.RecipeRequestDto;
-import cocktail.infra.RecipeRepository;
-import cocktail.infra.TagRepository;
+import cocktail.infra.recipe.RecipeRepository;
+import cocktail.infra.recipe.TagRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,13 +1,14 @@
 package cocktail.infra;
 
-import cocktail.domain.Base;
-import cocktail.domain.Brewing;
-import cocktail.domain.Recipe;
-import cocktail.domain.Tag;
+import cocktail.domain.recipe.Base;
+import cocktail.domain.recipe.Brewing;
+import cocktail.domain.recipe.Recipe;
+import cocktail.domain.recipe.Tag;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
+import cocktail.infra.recipe.RecipeRepository;
+import cocktail.infra.recipe.TagRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Import(TestConfig.class)

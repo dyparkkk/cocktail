@@ -1,19 +1,18 @@
 package cocktail.application;
 
-import cocktail.domain.Order;
-import cocktail.domain.Recipe;
-import cocktail.domain.Tag;
+import cocktail.domain.recipe.Order;
+import cocktail.domain.recipe.Recipe;
+import cocktail.domain.recipe.Tag;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
-import cocktail.infra.RecipeRepository;
-import cocktail.infra.TagRepository;
+import cocktail.infra.recipe.RecipeRepository;
+import cocktail.infra.recipe.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 

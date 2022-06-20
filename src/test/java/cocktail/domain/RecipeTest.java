@@ -1,5 +1,7 @@
 package cocktail.domain;
 
+import cocktail.domain.recipe.Order;
+import cocktail.domain.recipe.Recipe;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -7,8 +9,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RecipeTest {
 

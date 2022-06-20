@@ -1,8 +1,8 @@
 package cocktail.dto;
 
-import cocktail.domain.Base;
-import cocktail.domain.Brewing;
-import cocktail.domain.Order;
+import cocktail.domain.recipe.Base;
+import cocktail.domain.recipe.Brewing;
+import cocktail.domain.recipe.Order;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

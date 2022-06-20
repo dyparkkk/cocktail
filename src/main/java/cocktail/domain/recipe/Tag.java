@@ -1,5 +1,6 @@
-package cocktail.domain;
+package cocktail.domain.recipe;
 
+import cocktail.domain.recipe.Recipe;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

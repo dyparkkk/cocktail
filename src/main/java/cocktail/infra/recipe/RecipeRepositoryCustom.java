@@ -1,12 +1,10 @@
-package cocktail.infra;
+package cocktail.infra.recipe;
 
-import cocktail.domain.Recipe;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Optional;
 
 import static cocktail.dto.RecipeResponseDto.*;
 

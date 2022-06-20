@@ -1,13 +1,10 @@
 package cocktail.api;
 
 import cocktail.application.RecipeService;
-import cocktail.domain.Recipe;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.RecipeResponseDto;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,7 +18,6 @@ import java.util.List;
 
 import static cocktail.dto.RecipeResponseDto.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)

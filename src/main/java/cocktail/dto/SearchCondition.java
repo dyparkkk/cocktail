@@ -1,13 +1,12 @@
 package cocktail.dto;
 
-import cocktail.domain.Base;
-import cocktail.domain.Brewing;
+import cocktail.domain.recipe.Base;
+import cocktail.domain.recipe.Brewing;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
