@@ -1,13 +1,14 @@
 package cocktail.infra;
 
-import cocktail.domain.Base;
-import cocktail.domain.Brewing;
-import cocktail.domain.Recipe;
-import cocktail.domain.Tag;
+import cocktail.domain.recipe.Base;
+import cocktail.domain.recipe.Brewing;
+import cocktail.domain.recipe.Recipe;
+import cocktail.domain.recipe.Tag;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
+import cocktail.infra.recipe.RecipeRepository;
+import cocktail.infra.recipe.TagRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Import(TestConfig.class)
@@ -32,6 +32,9 @@ class RecipeRepositoryImplTest {
 
     @Autowired
     RecipeRepository recipeRepository;
+
+    @Autowired
+    TagRepository tagRepository;
 
     private JPAQueryFactory queryFactory;
 
@@ -107,4 +110,17 @@ class RecipeRepositoryImplTest {
         assertThat(result.get(0).getName()).isEqualTo("name1");
     }
 
+    @Test
+    void deleteTagsTest() {
+        Recipe recipe = recipeRepository.findAll().get(0);
+        Long id = recipe.getId();
+
+        // when
+        recipeRepository.deleteTags(id);
+
+        // then
+        List<Tag> findTags = tagRepository.findAll();
+        assertThat(findTags.size()).isEqualTo(2);
+        assertThat(findTags).extracting("name").containsExactly("태그2", "맛있는2");
+    }
 }

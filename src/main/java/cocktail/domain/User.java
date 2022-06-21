@@ -1,6 +1,8 @@
 package cocktail.domain;
 
+
 import cocktail.global.BaseTimeEntity;
+import cocktail.domain.recipe.Recipe;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

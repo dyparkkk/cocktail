@@ -1,12 +1,9 @@
 package cocktail.application;
 
-import cocktail.domain.Order;
-import cocktail.domain.Recipe;
-import cocktail.domain.Tag;
+import cocktail.domain.recipe.*;
 import cocktail.dto.RecipeRequestDto;
-import cocktail.infra.RecipeRepository;
-import cocktail.infra.TagRepository;
-import org.junit.jupiter.api.BeforeEach;
+import cocktail.infra.recipe.RecipeRepository;
+import cocktail.infra.recipe.TagRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -58,28 +55,6 @@ class RecipeServiceTest {
         assertThat(findRecipe.getOrders()).contains(recipe.getOrders().get(0), recipe.getOrders().get(1));
     }
 
-    private RecipeRequestDto createDto() {
-        String name = "마티니";
-        String dosu = "30.0";
-        List<String> stringTagList = new ArrayList<>(Arrays.asList("드라이 진", "IBA", "젓지말고 흔들어서"));
-
-        List<OrderDto> orderDtoList = new ArrayList<>(Arrays.asList(
-                new OrderDto(1, "드라이 진과 올리브를 넣는다."),
-                new OrderDto(2, "흔든다.")));
-
-        return new RecipeRequestDto(name, dosu, stringTagList, orderDtoList);
-    }
-
-    private Recipe createRecipe(RecipeRequestDto dto) {
-        List<Order> orderList = dto.getOrders().stream()
-                .map(OrderDto::toOrder).collect(Collectors.toList());
-        return Recipe.builder()
-                .name(dto.getName())
-                .dosu(new BigDecimal(dto.getDosu()))
-                .orders(orderList)
-                .build();
-    }
-
     @Test
     void createRecipe_tag생성() {
         // data
@@ -107,8 +82,77 @@ class RecipeServiceTest {
         assertThat(findTagList).contains(tagList.get(0));
     }
 
+    @Test
+    void updateTest() {
+        // data
+        Recipe recipe = persistRecipe();
+        Tag tag = new Tag("전태그", recipe);
+
+        RecipeRequestDto dto = createDto();
+
+        List<Tag> newTagList = dto.getTags().stream()
+                .map(s -> new Tag(s, recipe)).collect(Collectors.toList());
+
+        given(recipeRepository.findById(any()))
+                .willReturn(Optional.ofNullable(recipe));
+        given(recipeRepository.deleteTags(recipe.getId()))
+                .willReturn(1L);
+        given(tagRepository.saveAll(any()))
+                .willReturn(newTagList);
+
+        //when
+        recipeService.update(recipe.getId(), dto);
+
+        //then
+        assertThat(recipe.getName()).isEqualTo("마티니");
+        assertThat(recipe.getBrewing()).isEqualTo(Brewing.BLENDING);
+        assertThat(recipe.getBase()).isEqualTo(Base.NONE);
+        assertThat(recipe.getOrders()).extracting("content")
+                .containsExactly("드라이 진과 올리브를 넣는다.", "흔든다.");
+        assertThat(recipe.getTags()).extracting("name")
+                .contains("드라이 진", "IBA", "젓지말고 흔들어서");
+    }
+
+    private RecipeRequestDto createDto() {
+        String name = "마티니";
+        String dosu = "30.0";
+        List<String> stringTagList = new ArrayList<>(Arrays.asList("드라이 진", "IBA", "젓지말고 흔들어서"));
+
+        List<OrderDto> orderDtoList = new ArrayList<>(Arrays.asList(
+                new OrderDto(1, "드라이 진과 올리브를 넣는다."),
+                new OrderDto(2, "흔든다.")));
+
+        return RecipeRequestDto.builder()
+                .name(name)
+                .dosu(new BigDecimal("30.0"))
+                .brewing(Brewing.BLENDING)
+                .base(Base.NONE)
+                .orders(orderDtoList)
+                .tags(stringTagList).build();
+    }
+
+    private Recipe createRecipe(RecipeRequestDto dto) {
+        List<Order> orderList = dto.getOrders().stream()
+                .map(OrderDto::toOrder).collect(Collectors.toList());
+        return Recipe.builder()
+                .name(dto.getName())
+                .dosu(dto.getDosu())
+                .orders(orderList)
+                .build();
+    }
+
     private List<Tag> createTagList(RecipeRequestDto dto, Recipe recipe) {
         return dto.getTags().stream().map(s -> new Tag(s, recipe)).collect(Collectors.toList());
+    }
+
+    private Recipe persistRecipe() {
+        return Recipe.builder()
+                .name("before")
+                .dosu(BigDecimal.TEN)
+                .brewing(Brewing.THROWING)
+                .base(Base.RUM)
+                .orders(List.of(new Order(1, "1111")))
+                .build();
     }
 
 }

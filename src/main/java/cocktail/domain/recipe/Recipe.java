@@ -1,5 +1,6 @@
-package cocktail.domain;
+package cocktail.domain.recipe;
 
+import cocktail.domain.User;
 import cocktail.global.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,7 +33,7 @@ public class Recipe extends BaseTimeEntity {
     @OneToMany(mappedBy = "recipe")
     private List<Tag> tags  = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
     private User user;
 
@@ -42,11 +43,24 @@ public class Recipe extends BaseTimeEntity {
     private List<Order> orders = new ArrayList<>();
 
     @Builder
-    public Recipe(String name, BigDecimal dosu, Brewing brewing, Base base, List<Tag> tags, List<Order> orders) {
+    public Recipe(String name, BigDecimal dosu, Brewing brewing, Base base, List<Order> orders) {
         this.name = name;
         this.dosu = dosu;
         this.brewing = brewing;
         this.base = base;
+        if(orders != null){
+            this.orders.addAll(orders);
+            sortOrders();
+        }
+    }
+
+    public void update(String name, BigDecimal dosu, Brewing brewing, Base base, List<Order> orders){
+        this.name = name;
+        this.dosu = dosu;
+        this.brewing = brewing;
+        this.base = base;
+
+        this.orders.clear();
         if(orders != null){
             this.orders.addAll(orders);
             sortOrders();

@@ -1,6 +1,6 @@
-package cocktail.infra;
+package cocktail.infra.recipe;
 
-import cocktail.domain.Tag;
+import cocktail.domain.recipe.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TagRepository extends JpaRepository<Tag, Long> {

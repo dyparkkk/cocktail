@@ -1,7 +1,8 @@
 package cocktail.api;
 
-import cocktail.domain.Order;
-import cocktail.domain.Recipe;
+
+import cocktail.domain.recipe.Order;
+import cocktail.domain.recipe.Recipe;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

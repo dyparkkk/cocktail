@@ -1,4 +1,4 @@
-package cocktail.infra;
+package cocktail.infra.recipe;
 
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
@@ -12,4 +12,5 @@ public interface RecipeRepositoryCustom {
 
     List<RecipeListDto> findAllListDto(Pageable pageable);
     List<RecipeResponseDto> filterSearch(SearchCondition condition, Pageable pageable);
+    long deleteTags(Long id);
 }
