@@ -1,6 +1,5 @@
 package cocktail.application;
 
-import cocktail.application.MyUserDetailsService;
 import cocktail.domain.User;
 import cocktail.global.exception.DuplicateUserIdException;
 import cocktail.global.exception.PwNotMatchException;
@@ -11,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static cocktail.dto.UserDto.LoginRequestDto;
 import static cocktail.dto.UserDto.SignUpRequestDto;
@@ -23,6 +24,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final MyUserDetailsService myUserDetailsService;
 
+
     @Transactional
     public Long signUp(SignUpRequestDto dto) { // 회원가입
         // id 중복체크
@@ -32,7 +34,7 @@ public class UserService {
 
         // member 생성 후 저장
         return userRepository
-                .save(new User(dto.getUsername(),encodePw))
+                .save(new User(dto.getUsername(),encodePw, dto.getNickname()))
                 .getId();
     }
 
@@ -58,4 +60,10 @@ public class UserService {
                     throw new DuplicateUserIdException("아이디 중복");
                 });
     }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+
 }
