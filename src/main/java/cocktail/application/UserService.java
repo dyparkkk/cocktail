@@ -24,6 +24,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final MyUserDetailsService myUserDetailsService;
 
+
     @Transactional
     public Long signUp(SignUpRequestDto dto) { // 회원가입
         // id 중복체크
@@ -63,4 +64,6 @@ public class UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
+
 }

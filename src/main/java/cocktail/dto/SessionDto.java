@@ -15,11 +15,12 @@ public class SessionDto implements Serializable {
     private String email;
     private String picture;
 
-    public SessionDto(User user){
+    public SessionDto(User user) {
         this.name = user.getUsername();
         this.email = user.getUsername();
-
     }
+
+
     @Data
     @AllArgsConstructor
     public static class SessionInfoResponse {

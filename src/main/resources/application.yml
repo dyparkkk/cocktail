@@ -38,9 +38,7 @@ spring:
             client-name: google
             client-id: "218531279276-apbi76v06s2p4se8hfuiggcik31j77te.apps.googleusercontent.com"
             client-secret: "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"
-            scope:
-              - profile
-              - email
+            scope: profile,email
   app:
     auth:
       token-secret: devbeekei-token-secret-key

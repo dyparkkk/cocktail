@@ -1,7 +1,7 @@
 package cocktail.application;
 
-import cocktail.dto.OAuthAttributes;
 import cocktail.domain.User;
+import cocktail.dto.OAuthAttributes;
 import cocktail.dto.SessionDto;
 import cocktail.infra.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.Collections;
 
 @RequiredArgsConstructor
 @Service
-public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class CustomOAuth2UserService  extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
     private final HttpSession session;
@@ -43,7 +43,7 @@ public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserReq
         User user = saveOrUpdate(attributes);
 
         // 세션 정보를 저장하는 직렬화된 dto 클래스
-        session.setAttribute("user", new SessionDto(user));
+        session.setAttribute("LOGIN_MEMBER", new SessionDto(user));
 
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),

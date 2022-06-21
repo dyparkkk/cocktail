@@ -1,6 +1,7 @@
 package cocktail.infra;
 
-import cocktail.domain.*;
+import cocktail.domain.Base;
+import cocktail.domain.Brewing;
 import cocktail.dto.QRecipeResponseDto;
 import cocktail.dto.QRecipeResponseDto_RecipeListDto;
 import cocktail.dto.RecipeResponseDto;
@@ -17,8 +18,8 @@ import java.util.List;
 
 import static cocktail.domain.QRecipe.*;
 import static cocktail.domain.QTag.*;
-import static cocktail.dto.RecipeResponseDto.*;
-import static org.springframework.util.StringUtils.*;
+import static cocktail.dto.RecipeResponseDto.RecipeListDto;
+import static org.springframework.util.StringUtils.hasText;
 
 @Repository
 @RequiredArgsConstructor

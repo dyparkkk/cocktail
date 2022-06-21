@@ -20,6 +20,18 @@ public class OAuthAttributes {
     private String email;
     private String picture;
 
+    @Builder
+    public OAuthAttributes(Map<String, Object> attributes,
+                           String nameAttributeKey, String username,
+                           String email, String picture) {
+
+        this.attributes = attributes;
+        this.nameAttributeKey = nameAttributeKey;
+        this.username = username;
+        this.email = email;
+        this.picture = picture;
+    }
+
     //of() OAuth2User에서 반환하는 사용자 정보는Map이기에 값 하나하나를 변환해야 한다
     public static OAuthAttributes of(String registrationId,
                                      String userNameAttributeName,
@@ -34,8 +46,8 @@ public class OAuthAttributes {
     }
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
-        return OAuthAttributes.builder()                .
-                username((String) attributes.get("email"))
+        return OAuthAttributes.builder()
+                .username((String) attributes.get("email"))
                 .email((String) attributes.get("email"))
                 .picture((String) attributes.get("picture"))
                 .attributes(attributes)
