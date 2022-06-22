@@ -88,11 +88,10 @@ public class RecipeService {
     }
 
     @Transactional
-    public RecipeResponseDto findById(Long id) {
+    public DetailDto findById(Long id) {
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("RecipeService.update : id값을 찾을 수 없습니다."));
 
-
-
+        return DetailDto.from(recipe);
     }
 }

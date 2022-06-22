@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -122,5 +123,29 @@ class RecipeRepositoryImplTest {
         List<Tag> findTags = tagRepository.findAll();
         assertThat(findTags.size()).isEqualTo(2);
         assertThat(findTags).extracting("name").containsExactly("태그2", "맛있는2");
+    }
+
+    @Test
+    void fetchFindById_SuccessTest(){
+        // given
+        Recipe recipe = recipeRepository.findAll().get(0);
+        Long id = recipe.getId();
+
+        // when
+        Recipe findRecipe = recipeRepository.fetchFindById(id).get();
+
+        // then
+        assertThat(findRecipe.getTags().size()).isEqualTo(2);
+        assertThat(findRecipe.getTags()).extracting("name").containsExactly("태그1", "맛있는1");
+    }
+
+    @Test
+    void fetchFindById_notFound_failTest(){
+        // given
+        Long id = 123L;
+
+        // when, then
+        assertThatThrownBy(()->recipeRepository.fetchFindById(id).get())
+                .isInstanceOf(NoSuchElementException.class);
     }
 }

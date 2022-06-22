@@ -3,6 +3,8 @@ package cocktail.infra.recipe;
 import cocktail.domain.recipe.Base;
 import cocktail.domain.recipe.Brewing;
 
+import cocktail.domain.recipe.QRecipe;
+import cocktail.domain.recipe.Recipe;
 import cocktail.dto.QRecipeResponseDto;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import static cocktail.domain.recipe.QRecipe.*;
 import static cocktail.domain.recipe.QTag.*;
@@ -66,6 +69,16 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 .delete(tag)
                 .where(tag.recipe.id.eq(id))
                 .execute();
+    }
+
+    @Override
+    public Optional<Recipe> fetchFindById(Long id) {
+        Recipe recipe = queryFactory
+                .selectFrom(QRecipe.recipe)
+                .join(QRecipe.recipe.tags, tag).fetchJoin()
+                .where(QRecipe.recipe.id.eq(id))
+                .fetchOne();
+        return Optional.ofNullable(recipe);
     }
 
 
