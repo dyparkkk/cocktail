@@ -14,7 +14,6 @@ public class RecipeResponseDto {
 //    private String userNickname;
     // 별점, 뷰카운트
 
-
     public RecipeResponseDto(Long id) {
         this.id = id;
     }
@@ -23,16 +22,5 @@ public class RecipeResponseDto {
     public RecipeResponseDto(Long id, String name) {
         this.id = id;
         this.name = name;
-    }
-
-    @Getter
-    @NoArgsConstructor
-    public static class RecipeListDto {
-        private String name;
-
-        @QueryProjection
-        public RecipeListDto(String name) {
-            this.name = name;
-        }
     }
 }

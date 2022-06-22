@@ -59,7 +59,7 @@ public class RecipeService {
     }
 
     @Transactional
-    public List<RecipeListDto> findAllPageable(Pageable pageable){
+    public List<RecipeResponseDto> findAllPageable(Pageable pageable){
         return recipeRepository.findAllListDto(pageable);
     }
 
@@ -85,5 +85,14 @@ public class RecipeService {
         tagRepository.saveAll(tagList);
 
         return id;
+    }
+
+    @Transactional
+    public RecipeResponseDto findById(Long id) {
+        Recipe recipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("RecipeService.update : id값을 찾을 수 없습니다."));
+
+
+
     }
 }

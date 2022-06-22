@@ -44,8 +44,8 @@ public class RecipeController {
             @ApiImplicitParam(name="page",dataType ="int", value="몇 페이지 (0부터 시장)"),
             @ApiImplicitParam(name="size",dataType ="int", value="페이지의 요소 수(default 10)")
     })
-    public ResponseEntity<List<RecipeListDto>> viewAllRecipe(@ApiIgnore @PageableDefault Pageable pageable) {
-        List<RecipeListDto> list = recipeService.findAllPageable(pageable);
+    public ResponseEntity<List<RecipeResponseDto>> viewAllRecipe(@ApiIgnore @PageableDefault Pageable pageable) {
+        List<RecipeResponseDto> list = recipeService.findAllPageable(pageable);
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }

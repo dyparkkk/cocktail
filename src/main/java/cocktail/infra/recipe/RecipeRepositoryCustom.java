@@ -10,7 +10,7 @@ import static cocktail.dto.RecipeResponseDto.*;
 
 public interface RecipeRepositoryCustom {
 
-    List<RecipeListDto> findAllListDto(Pageable pageable);
+    List<RecipeResponseDto> findAllListDto(Pageable pageable);
     List<RecipeResponseDto> filterSearch(SearchCondition condition, Pageable pageable);
     long deleteTags(Long id);
 }

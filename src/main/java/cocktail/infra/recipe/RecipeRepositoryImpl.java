@@ -4,7 +4,6 @@ import cocktail.domain.recipe.Base;
 import cocktail.domain.recipe.Brewing;
 
 import cocktail.dto.QRecipeResponseDto;
-import cocktail.dto.QRecipeResponseDto_RecipeListDto;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
 import com.querydsl.core.BooleanBuilder;
@@ -19,7 +18,6 @@ import java.util.List;
 
 import static cocktail.domain.recipe.QRecipe.*;
 import static cocktail.domain.recipe.QTag.*;
-import static cocktail.dto.RecipeResponseDto.RecipeListDto;
 import static org.springframework.util.StringUtils.hasText;
 
 @Repository
@@ -30,9 +28,10 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
     private final int TAG_LIMIT_NUM = 3;
 
     @Override
-    public List<RecipeListDto> findAllListDto(Pageable pageable) {
+    public List<RecipeResponseDto> findAllListDto(Pageable pageable) {
         return queryFactory
-                .select(new QRecipeResponseDto_RecipeListDto(
+                .select(new QRecipeResponseDto(
+                        recipe.id,
                         recipe.name
                 ))
                 .from(recipe)

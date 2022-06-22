@@ -45,12 +45,14 @@ class RecipeControllerTest {
 
     @Test
     void viewRecipeSuccessTest() {
-        List<RecipeListDto> recipeListDtos = List.of(new RecipeListDto("name1"), new RecipeListDto("name2"));
+        List<RecipeResponseDto> recipeDtos =
+                List.of(new RecipeResponseDto(1L, "name1"),
+                new RecipeResponseDto(2L,"name2"));
         Pageable pageable = PageRequest.of(2, 5);
 
-        given(recipeService.findAllPageable(any())).willReturn(recipeListDtos);
+        given(recipeService.findAllPageable(any())).willReturn(recipeDtos);
 
-        ResponseEntity<List<RecipeListDto>> resEntity = recipeController.viewAllRecipe(pageable);
+        ResponseEntity<List<RecipeResponseDto>> resEntity = recipeController.viewAllRecipe(pageable);
         assertThat(resEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(resEntity.getBody().size()).isEqualTo(2);
         assertThat(resEntity.getBody()).extracting("name").containsExactly("name1", "name2");
