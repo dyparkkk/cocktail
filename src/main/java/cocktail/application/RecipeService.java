@@ -49,7 +49,8 @@ public class RecipeService {
     }
 
     private List<Tag> dtosToTags(List<String> stringTags, Recipe recipe) {
-        return stringTags.stream().map(s -> new Tag(s, recipe))
+        return stringTags.stream()
+                .map(s -> new Tag(s, recipe))
                 .collect(Collectors.toList());
     }
 
