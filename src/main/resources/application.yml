@@ -3,7 +3,7 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   profiles:
-    active: local  # local, test, dev, real로 분류
+    active: dev  # local, test, dev, real로 분류
 
   datasource:
     url: jdbc:h2:tcp://localhost/~/test  # window

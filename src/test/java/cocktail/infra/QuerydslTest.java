@@ -48,7 +48,10 @@ public class QuerydslTest {
     }
 
     private User saveMember() {
-        User user = new User("name", "pw");
+        User user = User.builder()
+                        .username("name")
+                        .pw("pw")
+                        .build();
         em.persist(user);
         return user;
     }
