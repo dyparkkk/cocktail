@@ -4,11 +4,16 @@ import cocktail.application.RecipeService;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -35,14 +40,23 @@ public class RecipeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RecipeListDto>> viewAllRecipe(Pageable pageable) {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="page",dataType ="int", value="몇 페이지 (0부터 시장)"),
+            @ApiImplicitParam(name="size",dataType ="int", value="페이지의 요소 수(default 10)")
+    })
+    public ResponseEntity<List<RecipeListDto>> viewAllRecipe(@ApiIgnore @PageableDefault Pageable pageable) {
         List<RecipeListDto> list = recipeService.findAllPageable(pageable);
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<RecipeResponseDto>> searchRecipeApi(@RequestBody SearchCondition condition, Pageable pageable) {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="page",dataType ="int", value="몇 페이지 (0부터 시장)"),
+            @ApiImplicitParam(name="size",dataType ="int", value="페이지의 데이터 수(default 10)")
+    })
+    public ResponseEntity<List<RecipeResponseDto>> searchRecipeApi(@RequestBody SearchCondition condition,
+                                                                   @ApiIgnore @PageableDefault Pageable pageable) {
         List<RecipeResponseDto> resList = recipeService.filterSearch(condition, pageable);
         return new ResponseEntity<>(resList, HttpStatus.OK);
     }
