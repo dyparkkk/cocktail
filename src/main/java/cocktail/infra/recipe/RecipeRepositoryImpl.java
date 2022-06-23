@@ -3,8 +3,9 @@ package cocktail.infra.recipe;
 import cocktail.domain.recipe.Base;
 import cocktail.domain.recipe.Brewing;
 
+import cocktail.domain.recipe.QRecipe;
+import cocktail.domain.recipe.Recipe;
 import cocktail.dto.QRecipeResponseDto;
-import cocktail.dto.QRecipeResponseDto_RecipeListDto;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
 import com.querydsl.core.BooleanBuilder;
@@ -16,10 +17,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import static cocktail.domain.recipe.QRecipe.*;
 import static cocktail.domain.recipe.QTag.*;
-import static cocktail.dto.RecipeResponseDto.RecipeListDto;
 import static org.springframework.util.StringUtils.hasText;
 
 @Repository
@@ -30,9 +31,10 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
     private final int TAG_LIMIT_NUM = 3;
 
     @Override
-    public List<RecipeListDto> findAllListDto(Pageable pageable) {
+    public List<RecipeResponseDto> findAllListDto(Pageable pageable) {
         return queryFactory
-                .select(new QRecipeResponseDto_RecipeListDto(
+                .select(new QRecipeResponseDto(
+                        recipe.id,
                         recipe.name
                 ))
                 .from(recipe)
@@ -67,6 +69,16 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 .delete(tag)
                 .where(tag.recipe.id.eq(id))
                 .execute();
+    }
+
+    @Override
+    public Optional<Recipe> fetchFindById(Long id) {
+        Recipe recipe = queryFactory
+                .selectFrom(QRecipe.recipe)
+                .join(QRecipe.recipe.tags, tag).fetchJoin()
+                .where(QRecipe.recipe.id.eq(id))
+                .fetchOne();
+        return Optional.ofNullable(recipe);
     }
 
 

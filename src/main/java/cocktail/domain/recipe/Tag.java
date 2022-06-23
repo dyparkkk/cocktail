@@ -27,6 +27,10 @@ public class Tag {
         setRecipe(recipe);
     }
 
+    public String getName() {
+        return name;
+    }
+
     private void setRecipe(Recipe recipe) {
         this.recipe = recipe;
         recipe.getTags().add(this);

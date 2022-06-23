@@ -2,6 +2,7 @@ package cocktail.application;
 
 import cocktail.domain.recipe.*;
 import cocktail.dto.RecipeRequestDto;
+import cocktail.dto.RecipeResponseDto;
 import cocktail.infra.recipe.RecipeRepository;
 import cocktail.infra.recipe.TagRepository;
 import org.junit.jupiter.api.Test;
@@ -12,13 +13,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static cocktail.dto.RecipeRequestDto.*;
+import static cocktail.dto.RecipeResponseDto.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -85,7 +84,7 @@ class RecipeServiceTest {
     @Test
     void updateTest() {
         // data
-        Recipe recipe = persistRecipe();
+        Recipe recipe = createRecipe();
         Tag tag = new Tag("전태그", recipe);
 
         RecipeRequestDto dto = createDto();
@@ -113,6 +112,36 @@ class RecipeServiceTest {
                 .contains("드라이 진", "IBA", "젓지말고 흔들어서");
     }
 
+    @Test
+    void findById_Success_Test() {
+        Recipe recipe = createRecipe();
+        Long id = 1l;
+        DetailDto dto = DetailDto.from(recipe);
+
+        given(recipeRepository.fetchFindById(any()))
+                .willReturn(Optional.ofNullable(recipe));
+
+        //when
+        DetailDto resultDto = recipeService.findById(id);
+
+        //then
+        assertThat(resultDto.getName()).isEqualTo(recipe.getName());
+        assertThat(resultDto.getBrewing()).isEqualTo(recipe.getBrewing());
+        assertThat(resultDto.getOrders()).extracting("content").containsExactly("1111");
+    }
+
+    @Test
+    void findById_ID를_찾지_못함_Test(){
+        // given
+        Long id = 123L;
+
+        given(recipeRepository.fetchFindById(any()))
+                    .willReturn(Optional.empty());
+
+        // when, then
+        assertThatThrownBy(()-> recipeService.findById(id))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
     private RecipeRequestDto createDto() {
         String name = "마티니";
         String dosu = "30.0";
@@ -145,7 +174,7 @@ class RecipeServiceTest {
         return dto.getTags().stream().map(s -> new Tag(s, recipe)).collect(Collectors.toList());
     }
 
-    private Recipe persistRecipe() {
+    private Recipe createRecipe() {
         return Recipe.builder()
                 .name("before")
                 .dosu(BigDecimal.TEN)

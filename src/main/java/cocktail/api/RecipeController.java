@@ -4,9 +4,9 @@ import cocktail.application.RecipeService;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -17,11 +17,11 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
-import static cocktail.dto.RecipeResponseDto.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/recipe")
+@Api(tags = "recipe")
 public class RecipeController {
 
     private final RecipeService recipeService;
@@ -44,8 +44,8 @@ public class RecipeController {
             @ApiImplicitParam(name="page",dataType ="int", value="몇 페이지 (0부터 시장)"),
             @ApiImplicitParam(name="size",dataType ="int", value="페이지의 요소 수(default 10)")
     })
-    public ResponseEntity<List<RecipeListDto>> viewAllRecipe(@ApiIgnore @PageableDefault Pageable pageable) {
-        List<RecipeListDto> list = recipeService.findAllPageable(pageable);
+    public ResponseEntity<List<RecipeResponseDto>> viewAllRecipe(@ApiIgnore @PageableDefault Pageable pageable) {
+        List<RecipeResponseDto> list = recipeService.findAllPageable(pageable);
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -60,4 +60,6 @@ public class RecipeController {
         List<RecipeResponseDto> resList = recipeService.filterSearch(condition, pageable);
         return new ResponseEntity<>(resList, HttpStatus.OK);
     }
+
+
 }
