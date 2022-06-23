@@ -17,6 +17,7 @@ public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
 
+
     // 참고 : https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

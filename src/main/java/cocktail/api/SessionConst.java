@@ -4,4 +4,6 @@ package cocktail.api;
 
 public interface SessionConst {
     String LOGIN_MEMBER = "loginUser";
+
+
 }

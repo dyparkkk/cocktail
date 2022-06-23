@@ -2,7 +2,7 @@ package cocktail.application;
 
 import cocktail.domain.User;
 import cocktail.dto.OAuthAttributes;
-import cocktail.dto.SessionDto;
+import cocktail.dto.SessionUser;
 import cocktail.infra.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,10 +22,12 @@ import java.util.Collections;
 public class CustomOAuth2UserService  extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
-    private final HttpSession session;
+    private final HttpSession httpSession;
+
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
@@ -33,20 +35,27 @@ public class CustomOAuth2UserService  extends DefaultOAuth2UserService {
         // OAuth2 서비스 id 구분코드 ( 구글, 카카오, 네이버 )
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
+        //테스트
+        System.out.println("==================== "+registrationId +" ==================");
+
         // OAuth2 로그인 진행시 키가 되는 필드 값 (PK) (구글의 기본 코드는 "sub")
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
 
+        //테스트
+        System.out.println("================ "+userNameAttributeName+" =================");
+
+        // OAuthAttributes: attribute를 담을 클래스 (개발자가 생성)
         // OAuth2UserService를 통해 가져온 OAuth2User의 attribute를 담을 클래스(네이버로그인시사용)
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
         User user = saveOrUpdate(attributes);
 
         // 세션 정보를 저장하는 직렬화된 dto 클래스
-        session.setAttribute("LOGIN_MEMBER", new SessionDto(user));
+        httpSession.setAttribute("user", new SessionUser(user));
 
         return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
+                Collections.singleton(new SimpleGrantedAuthority(user.getRoles())),
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey());
     }
@@ -56,6 +65,8 @@ public class CustomOAuth2UserService  extends DefaultOAuth2UserService {
         User user = userRepository.findByUsername(attributes.getUsername())
                 .map(entity->entity.update(attributes.getUsername(), attributes.getNickname()))
                 .orElse(attributes.toEntity());
+
+
 
         return userRepository.save(user);
     }

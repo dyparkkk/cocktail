@@ -2,15 +2,18 @@ package cocktail.application;
 
 
 import cocktail.domain.User;
-import cocktail.infra.UserDetailsImpl;
 import cocktail.infra.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,25 +29,25 @@ public class MyUserDetailsService implements UserDetailsService {
     // 만약 다른 값으로 설정해주고 싶다면 WebSecurityConfig에서 .usernameParameter()를 설정해줘야한다.
     // 아래 함수 실행 결과로 @AuthenticationPrincipal 어노테이션이 만들어진다.
     @Override
-    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        User users = userRepository.findByUsername(name)
-                .orElseThrow(()->new UsernameNotFoundException("Could not found user" + name));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User users = userRepository.findByUsername(username)
+                .orElseThrow(()->new UsernameNotFoundException("Could not found user" + username));
 
         log.info("Succes find user {}",users);
 
-        return new UserDetailsImpl(users);
+        return createUserDetails(users);
     }
 
 
-//    private UserDetails createUserDetails(User user) {
-//        List<SimpleGrantedAuthority> grantedAuthorities = user.getRoleList().stream()
-//                .map(authority -> new SimpleGrantedAuthority(authority))
-//                .collect(Collectors.toList());
-//
-//        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-//                user.getPw(),
-//                grantedAuthorities);
-//    }
+    private UserDetails createUserDetails(User user) {
+        List<SimpleGrantedAuthority> grantedAuthorities = user.getRoleList().stream()
+                .map(authority -> new SimpleGrantedAuthority(authority))
+                .collect(Collectors.toList());
+
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),
+                user.getPw(),
+                grantedAuthorities);
+    }
 
 
 

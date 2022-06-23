@@ -1,8 +1,8 @@
 package cocktail.domain;
 
 
-import cocktail.global.BaseTimeEntity;
 import cocktail.domain.recipe.Recipe;
+import cocktail.global.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,16 +38,29 @@ public class User extends BaseTimeEntity {
 
     private String roles;
 
+    private String provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
+    private String providerId;  // oauth2를 이용할 경우 아이디값
+
     @OneToMany(mappedBy = "user")
     private List<Recipe> post = new ArrayList<Recipe>();
 
     @Builder
-    public User(String username, String pw, String nickname){
+    public User(String username, String pw, String nickname,String roles) {
         this.username = username;
         this.pw = pw;
         this.nickname = nickname;
         this.roles = "ROLE_USER";
     }
+
+//    @Builder
+//    public User(String username, String pw, String nickname, String provider, String providerId){
+//        this.username = username;
+//        this.pw = pw;
+//        this.nickname = nickname;
+//        this.roles = "ROLE_USER";
+//        this.provider = provider;
+//        this.providerId = providerId;
+//    }
 
     public List<String> getRoleList() {
         if(roles.length() > 0) {

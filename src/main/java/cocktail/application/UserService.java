@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static cocktail.dto.UserDto.LoginRequestDto;
@@ -23,6 +24,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MyUserDetailsService myUserDetailsService;
+    private final HttpSession httpSession;
 
 
     @Transactional
@@ -34,7 +36,7 @@ public class UserService {
 
         // member 생성 후 저장
         return userRepository
-                .save(new User(dto.getUsername(),encodePw, dto.getNickname()))
+                .save(new User(dto.getUsername(),encodePw, dto.getNickname(),dto.getRoles()))
                 .getId();
     }
 

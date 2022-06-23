@@ -3,8 +3,6 @@ package cocktail.api;
 import cocktail.application.UserService;
 import cocktail.domain.User;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,11 +35,6 @@ public class UserController {
 
     @RequestMapping(value = "/signup", method = {RequestMethod.GET,RequestMethod.POST})
     @ApiOperation(value = "회원가입", notes = "회원가입 기능.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="username",dataType ="String(이메일형식)", value="유저 아이디"),
-            @ApiImplicitParam(name="pw",dataType ="String", value="유저 비밀번호"),
-            @ApiImplicitParam(name="nickname",dataType ="String", value="유저 닉네임")
-    })
     public SignUpResponseDto signUp(@Validated @RequestBody SignUpRequestDto dto){
         userService.signUp(dto);
         return new SignUpResponseDto();
@@ -49,10 +42,6 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation(value = "로그인", notes = "로그인 기능.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="username",dataType ="String(이메일형식)", value="유저 아이디"),
-            @ApiImplicitParam(name="pw",dataType ="String", value="유저 비밀번호")
-    })
     public SuccessResponseDto login(@Validated @RequestBody LoginRequestDto dto,
                                     HttpServletRequest req) {
         String userId = userService.signIn(dto);
@@ -67,7 +56,6 @@ public class UserController {
 
     @GetMapping("/signup/userid")
     @ApiOperation(value = "아이디 중복 확인", notes = "아이디 중복 확인 기능.")
-    @ApiImplicitParam(name="username",dataType ="String(이메일형식)", value="유저 아이디")
     public SuccessResponseDto userIdCheck(@Validated @RequestBody UserIdCheckDto dto) {
         userService.validateDuplicateUser(dto.getUsername());
         return new SuccessResponseDto();
@@ -89,4 +77,5 @@ public class UserController {
     public List<User> listUser(){
         return userService.findAll();
     }
+
 }

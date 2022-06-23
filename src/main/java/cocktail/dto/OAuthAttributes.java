@@ -13,23 +13,25 @@ import java.util.Map;
 @Builder
 @Getter
 public class OAuthAttributes {
-    private Map<String, Object> attributes;
+    private Map<String, Object> attributes;  // OAuth2 반환하는 유저 정보 Map
     private String nameAttributeKey;
     private String username;
     private String nickname;
     private String email;
     private String picture;
+    private String role;
 
     @Builder
     public OAuthAttributes(Map<String, Object> attributes,
                            String nameAttributeKey, String username,
-                           String email, String picture) {
+                           String email, String picture, String role) {
 
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.username = username;
         this.email = email;
         this.picture = picture;
+        this.role = "ROLE_USER";
     }
 
     //of() OAuth2User에서 반환하는 사용자 정보는Map이기에 값 하나하나를 변환해야 한다
@@ -47,7 +49,7 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
-                .username((String) attributes.get("email"))
+                .username((String) attributes.get("nickname"))
                 .email((String) attributes.get("email"))
                 .picture((String) attributes.get("picture"))
                 .attributes(attributes)
@@ -72,6 +74,7 @@ public class OAuthAttributes {
         return User.builder()
                 .username(email)
                 .nickname(nickname)
+                .roles("ROLE_USER")
                 .build();
     }
 
