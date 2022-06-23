@@ -147,5 +147,6 @@ class RecipeRepositoryImplTest {
         // when, then
         assertThatThrownBy(()->recipeRepository.fetchFindById(id).get())
                 .isInstanceOf(NoSuchElementException.class);
+
     }
 }

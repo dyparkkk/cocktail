@@ -70,7 +70,7 @@ public class RecipeService {
 
     @Transactional
     public Long update(Long id, RecipeRequestDto dto){
-        Recipe recipe = recipeRepository.findById(id)
+        Recipe recipe = recipeRepository.fetchFindById(id)
                 .orElseThrow(() -> new IllegalArgumentException("RecipeService.update : id값을 찾을 수 없습니다."));
 
         // 값 바꿔주기
@@ -89,8 +89,8 @@ public class RecipeService {
 
     @Transactional
     public DetailDto findById(Long id) {
-        Recipe recipe = recipeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("RecipeService.update : id값을 찾을 수 없습니다."));
+        Recipe recipe = recipeRepository.fetchFindById(id)
+                .orElseThrow(() -> new IllegalArgumentException("RecipeService.findById : id값을 찾을 수 없습니다."));
 
         return DetailDto.from(recipe);
     }
