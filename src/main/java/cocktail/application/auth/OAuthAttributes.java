@@ -1,5 +1,6 @@
-package cocktail.dto;
+package cocktail.application.auth;
 
+import cocktail.domain.Role;
 import cocktail.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +11,6 @@ import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
 public class OAuthAttributes {
     private Map<String, Object> attributes;  // OAuth2 반환하는 유저 정보 Map
@@ -19,19 +19,17 @@ public class OAuthAttributes {
     private String nickname;
     private String email;
     private String picture;
-    private String role;
 
     @Builder
     public OAuthAttributes(Map<String, Object> attributes,
                            String nameAttributeKey, String username,
-                           String email, String picture, String role) {
+                           String email, String picture) {
 
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.username = username;
         this.email = email;
         this.picture = picture;
-        this.role = "ROLE_USER";
     }
 
     //of() OAuth2User에서 반환하는 사용자 정보는Map이기에 값 하나하나를 변환해야 한다
@@ -74,7 +72,7 @@ public class OAuthAttributes {
         return User.builder()
                 .username(email)
                 .nickname(nickname)
-                .roles("ROLE_USER")
+                .roles(Role.USER)
                 .build();
     }
 

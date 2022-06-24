@@ -4,7 +4,6 @@ import cocktail.domain.recipe.Base;
 import cocktail.domain.recipe.Brewing;
 
 import cocktail.dto.QRecipeResponseDto;
-import cocktail.dto.QRecipeResponseDto_RecipeListDto;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
 import com.querydsl.core.BooleanBuilder;

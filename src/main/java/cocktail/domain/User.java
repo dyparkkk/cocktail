@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -36,7 +35,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_nickname")
     private String nickname;
 
-    private String roles;
+    private Role roles;
 
     private String provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
     private String providerId;  // oauth2를 이용할 경우 아이디값
@@ -45,11 +44,11 @@ public class User extends BaseTimeEntity {
     private List<Recipe> post = new ArrayList<Recipe>();
 
     @Builder
-    public User(String username, String pw, String nickname,String roles) {
+    public User(String username, String pw, String nickname,Role roles) {
         this.username = username;
         this.pw = pw;
         this.nickname = nickname;
-        this.roles = "ROLE_USER";
+        this.roles = roles;
     }
 
 //    @Builder
@@ -62,12 +61,6 @@ public class User extends BaseTimeEntity {
 //        this.providerId = providerId;
 //    }
 
-    public List<String> getRoleList() {
-        if(roles.length() > 0) {
-            return Arrays.asList(roles.split(","));
-        }
-        return new ArrayList<>();
-    }
 
     /* 회원정보 수정을 위한 set method*/
     public  User update (String username,String nickname) {
@@ -76,5 +69,8 @@ public class User extends BaseTimeEntity {
        return  this;
     }
 
+    public String getRolekey(){
+        return this.roles.getKey();
+    }
 
 }

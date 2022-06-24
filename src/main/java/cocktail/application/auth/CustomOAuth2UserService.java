@@ -1,7 +1,6 @@
-package cocktail.application;
+package cocktail.application.auth;
 
 import cocktail.domain.User;
-import cocktail.dto.OAuthAttributes;
 import cocktail.dto.SessionUser;
 import cocktail.infra.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.util.Collections;
+
+import static java.util.Collections.*;
 
 @RequiredArgsConstructor
 @Service
@@ -23,7 +23,6 @@ public class CustomOAuth2UserService  extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
     private final HttpSession httpSession;
-
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -55,7 +54,7 @@ public class CustomOAuth2UserService  extends DefaultOAuth2UserService {
         httpSession.setAttribute("user", new SessionUser(user));
 
         return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(user.getRoles())),
+                singleton(new SimpleGrantedAuthority(user.getRolekey())),
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey());
     }
@@ -65,8 +64,6 @@ public class CustomOAuth2UserService  extends DefaultOAuth2UserService {
         User user = userRepository.findByUsername(attributes.getUsername())
                 .map(entity->entity.update(attributes.getUsername(), attributes.getNickname()))
                 .orElse(attributes.toEntity());
-
-
 
         return userRepository.save(user);
     }

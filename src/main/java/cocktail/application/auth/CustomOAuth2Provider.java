@@ -1,4 +1,4 @@
-package cocktail.api;
+package cocktail.application.auth;
 
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
