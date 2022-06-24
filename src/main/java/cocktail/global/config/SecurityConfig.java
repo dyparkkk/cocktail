@@ -30,7 +30,6 @@ public class SecurityConfig {
                  .and()
                  .oauth2Login().userInfoEndpoint().userService(customOAuth2UserService);// 코드를 받지 않고 액세스 토큰 + 사용자 프로필 정보를 한번에 받음.
 
-
              return http.build();
     }
 

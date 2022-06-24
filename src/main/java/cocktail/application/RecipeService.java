@@ -49,7 +49,8 @@ public class RecipeService {
     }
 
     private List<Tag> dtosToTags(List<String> stringTags, Recipe recipe) {
-        return stringTags.stream().map(s -> new Tag(s, recipe))
+        return stringTags.stream()
+                .map(s -> new Tag(s, recipe))
                 .collect(Collectors.toList());
     }
 
@@ -59,7 +60,7 @@ public class RecipeService {
     }
 
     @Transactional
-    public List<RecipeListDto> findAllPageable(Pageable pageable){
+    public List<RecipeResponseDto> findAllPageable(Pageable pageable){
         return recipeRepository.findAllListDto(pageable);
     }
 
@@ -70,7 +71,7 @@ public class RecipeService {
 
     @Transactional
     public Long update(Long id, RecipeRequestDto dto){
-        Recipe recipe = recipeRepository.findById(id)
+        Recipe recipe = recipeRepository.fetchFindById(id)
                 .orElseThrow(() -> new IllegalArgumentException("RecipeService.update : id값을 찾을 수 없습니다."));
 
         // 값 바꿔주기
@@ -85,5 +86,13 @@ public class RecipeService {
         tagRepository.saveAll(tagList);
 
         return id;
+    }
+
+    @Transactional
+    public DetailDto findById(Long id) {
+        Recipe recipe = recipeRepository.fetchFindById(id)
+                .orElseThrow(() -> new IllegalArgumentException("RecipeService.findById : id값을 찾을 수 없습니다."));
+
+        return DetailDto.from(recipe);
     }
 }

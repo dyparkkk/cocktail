@@ -43,6 +43,7 @@ public class RecipeRequestDto {
         this.dosu = new BigDecimal(dosu.toUpperCase());
     }
 
+    @Getter
     @NoArgsConstructor
     public static class OrderDto{
         private int num;
