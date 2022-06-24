@@ -1,7 +1,6 @@
 package cocktail.application.auth;
 
 import cocktail.domain.User;
-import cocktail.dto.SessionUser;
 import cocktail.infra.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

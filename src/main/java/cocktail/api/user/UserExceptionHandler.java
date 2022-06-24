@@ -1,4 +1,4 @@
-package cocktail.api;
+package cocktail.api.user;
 
 import cocktail.global.exception.DuplicateUserIdException;
 import cocktail.global.exception.ErrorResponse;
@@ -44,8 +44,4 @@ public class UserExceptionHandler {
                 e.getMessage());
     }
 
-    @ExceptionHandler
-    public ErrorResponse exception(Exception e){
-        return ErrorResponse.createErrorResponse(false, "--"+"???","오류 : 메시지를 읽어보세요", e.getMessage());
-    }
 }

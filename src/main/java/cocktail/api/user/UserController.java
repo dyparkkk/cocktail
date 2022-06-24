@@ -1,4 +1,4 @@
-package cocktail.api;
+package cocktail.api.user;
 
 import cocktail.application.UserService;
 import cocktail.domain.User;
