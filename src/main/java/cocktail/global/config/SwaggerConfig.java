@@ -66,4 +66,19 @@ public class SwaggerConfig {
 //        argumentResolvers.add( new PageableHandlerMethodArgumentResolver());
 //    }
 
+    /**
+     * * 추가적으로 @WebMvcConfigurationSupport 에 대해 적어보자면..
+     *
+     * Spring Boot 의 경우 @EnableWebMvc 을 명시하게 되면 WebMvcConfigurationSupport 가 자동으로 빈으로
+     * 등록되기에 Spring boot Web 기본 설정을 잡아주는 WebMvcAutoConfiguration 이 동작하지 않는다고 한다.
+     *
+     * 이유는 이 WebMvcAutoConfiguration 에 @ConditionalOnMissingBean(WebMvcConfigurationSupport.class) 라고
+     * 명시되어 있기 때문이라고 한다.
+     * (WebMvcConfigurationSupport 클래스가 Bean 으로 등록되어있지 않을 경우에만 WebMvcAutoConfiguration 가 동작하라는 뜻이라고 한다.
+     *
+     * WebMvcAutoConfiguration 이 하는 Spring boot Web 기본 설정은 Spring MVC 에서의 <mvc:annotation-driven /> 과 같다고 한다.
+     * (RequestMappingHandler,RequestMappingHandlerAdapter,ExceptionHandlerExceptionResolver 등 Web 에 필요한 Bean 들을 자동으로 설정하주는..)
+     * 그렇기에 Spring boot Web 의 기본 설정이 필요없고 커스텀한 설정을 하고 싶을 때에만 @EnableWebMvc 를 명시하고
+     * 그렇지 않을 경우에는 자동설정 + WebMvcConfigurerAdapter 를 사용하면 된다고 한다.
+     */
 }
