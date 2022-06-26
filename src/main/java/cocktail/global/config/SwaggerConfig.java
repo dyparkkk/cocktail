@@ -1,21 +1,23 @@
 package cocktail.global.config;
 
+import com.google.common.collect.Lists;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger.web.UiConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -49,9 +51,32 @@ public class SwaggerConfig {
                 .apiInfo(this.apiInfo())//스웨거 설명
                 .select()//apis, paths를 사용하주기 위한 builder
                 .apis(RequestHandlerSelectors.any())//현재 RequestMapping으로 할당된 모든 URL 리스트를 추출
-                .paths(PathSelectors.any())//스웨거에서 보여줄 api 필터링
-                .build();
+                .paths(PathSelectors.any())//스웨거에서 보여줄 api 필터
+                .build()
+                .securitySchemes(Lists.newArrayList(apiKey()))
+                .securityContexts(Arrays.asList(securityContext()));
+
     }
+
+
+    private ApiKey apiKey() {
+        return new ApiKey("apiKey", "Authorization", "header");
+    }
+
+    private SecurityContext securityContext() {
+        return SecurityContext.builder().securityReferences(defaultAuth())
+                .forPaths(PathSelectors.any()).build();
+    }
+
+    private List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope = new AuthorizationScope(
+                "global", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return Arrays.asList(new SecurityReference("apiKey",
+                authorizationScopes));
+    }
+
     //swagger ui 설정.
     @Bean
     public UiConfiguration uiConfig() {
