@@ -29,12 +29,9 @@ dependencies {
 	implementation "io.springfox:springfox-swagger-ui:2.9.2"
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-
-
 	//querydsl
 	implementation "com.querydsl:querydsl-jpa:5.0.0"
 	implementation "com.querydsl:querydsl-apt:5.0.0"
-
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'

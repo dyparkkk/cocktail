@@ -1,4 +1,4 @@
-package cocktail.api;
+package cocktail.application.auth;
 
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -34,7 +34,7 @@ public enum CustomOAuth2Provider {
     GOOGLE {
         public ClientRegistration.Builder getBuilder(String registrationId) {
             ClientRegistration.Builder builder = getBuilder(registrationId, ClientAuthenticationMethod.POST, DEFAULT_LOGIN_REDIRECT_URL);
-            builder.scope(new String[]{"profile", "email"});
+            builder.scope("profile", "email");
             builder.authorizationUri("https://accounts.google.com/o/oauth2/v2/auth");
             builder.tokenUri("https://www.googleapis.com/oauth2/v4/token");
             builder.userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo");
@@ -50,7 +50,7 @@ public enum CustomOAuth2Provider {
         ClientRegistration.Builder builder = ClientRegistration.withRegistrationId(registrationId);
         builder.clientAuthenticationMethod(method);
         builder.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE);
-        builder.redirectUriTemplate(redirectUri);
+        builder.redirectUri(redirectUri);
         return builder;
     }
 

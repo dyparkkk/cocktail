@@ -1,5 +1,6 @@
 package cocktail.application;
 
+import cocktail.domain.Role;
 import cocktail.domain.User;
 import cocktail.global.exception.DuplicateUserIdException;
 import cocktail.global.exception.PwNotMatchException;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static cocktail.dto.UserDto.LoginRequestDto;
@@ -22,7 +24,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final MyUserDetailsService myUserDetailsService;
+    private final HttpSession httpSession;
 
 
     @Transactional
@@ -34,7 +36,7 @@ public class UserService {
 
         // member 생성 후 저장
         return userRepository
-                .save(new User(dto.getUsername(),encodePw, dto.getNickname()))
+                .save(new User(dto.getUsername(),encodePw, dto.getNickname(), Role.USER))
                 .getId();
     }
 
@@ -42,14 +44,15 @@ public class UserService {
     public String signIn(LoginRequestDto dto) {
         // findMember
         // 예외처리 문제 있음 ....filter라서
-        UserDetails userDetails = myUserDetailsService.loadUserByUsername(dto.getUsername());
+        User user = userRepository.findByUsername(dto.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("userService.signIn : userId 확인 불가"));
 
         // pw 체크
-        if(!passwordEncoder.matches(dto.getPw(), userDetails.getPassword())){
-            throw new PwNotMatchException("userId : " + userDetails.getUsername() + " Invalid password");
+        if(!passwordEncoder.matches(dto.getPw(), user.getPw())){
+            throw new PwNotMatchException("userId : " + user.getUsername() + " Invalid password");
         }
 
-        return userDetails.getUsername();
+        return user.getUsername();
     }
 
     // 유저 중복 확인

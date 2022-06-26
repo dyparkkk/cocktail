@@ -23,6 +23,8 @@ public class UserDto {
 
         @NotBlank
         private String nickname;
+
+        private String roles;
     }
 
     @Data
