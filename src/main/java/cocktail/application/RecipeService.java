@@ -1,11 +1,13 @@
 package cocktail.application;
 
+import cocktail.domain.recipe.Ingredient;
 import cocktail.domain.recipe.Order;
 import cocktail.domain.recipe.Recipe;
 import cocktail.domain.recipe.Tag;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
+import cocktail.infra.recipe.IngredientRepository;
 import cocktail.infra.recipe.RecipeRepository;
 import cocktail.infra.recipe.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 
 import static cocktail.dto.RecipeRequestDto.*;
 import static cocktail.dto.RecipeResponseDto.*;
+import static java.util.stream.Collectors.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final TagRepository tagRepository;
+    private final IngredientRepository ingredientRepository;
 
     /**
      * 회원 정보 추가
@@ -38,6 +42,8 @@ public class RecipeService {
         Recipe recipe = Recipe.builder()
                 .name(dto.getName())
                 .dosu(dto.getDosu())
+                .brewing(dto.getBrewing())
+                .base(dto.getBase())
                 .orders(orderList).build();
         recipeRepository.save(recipe);
 
@@ -45,18 +51,11 @@ public class RecipeService {
         List<Tag> tagList = dtosToTags(dto.getTags(), recipe);
         tagRepository.saveAll(tagList);
 
+        // ingredient 생성해서 저장
+        List<Ingredient> ingredients = dtoToIngredients(dto.getIngredients(), recipe);
+        ingredientRepository.saveAll(ingredients);
+
         return recipe.getId();
-    }
-
-    private List<Tag> dtosToTags(List<String> stringTags, Recipe recipe) {
-        return stringTags.stream()
-                .map(s -> new Tag(s, recipe))
-                .collect(Collectors.toList());
-    }
-
-    private List<Order> dtosToOrders(List<OrderDto> orderDtos) {
-        return orderDtos.stream()
-                .map(OrderDto::toOrder).collect(Collectors.toList());
     }
 
     @Transactional
@@ -94,5 +93,22 @@ public class RecipeService {
                 .orElseThrow(() -> new IllegalArgumentException("RecipeService.findById : id값을 찾을 수 없습니다."));
 
         return DetailDto.from(recipe);
+    }
+
+    private List<Ingredient> dtoToIngredients(List<IngredientDto> dtos, Recipe recipe) {
+        return dtos.stream()
+                .map(ingredientDto -> ingredientDto.toEntity(recipe))
+                .collect(toList());
+    }
+
+    private List<Tag> dtosToTags(List<String> stringTags, Recipe recipe) {
+        return stringTags.stream()
+                .map(s -> new Tag(s, recipe))
+                .collect(toList());
+    }
+
+    private List<Order> dtosToOrders(List<OrderDto> orderDtos) {
+        return orderDtos.stream()
+                .map(OrderDto::toOrder).collect(toList());
     }
 }

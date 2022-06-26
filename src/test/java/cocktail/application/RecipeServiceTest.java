@@ -2,7 +2,7 @@ package cocktail.application;
 
 import cocktail.domain.recipe.*;
 import cocktail.dto.RecipeRequestDto;
-import cocktail.dto.RecipeResponseDto;
+import cocktail.infra.recipe.IngredientRepository;
 import cocktail.infra.recipe.RecipeRepository;
 import cocktail.infra.recipe.TagRepository;
 import org.junit.jupiter.api.Test;
@@ -14,10 +14,10 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static cocktail.dto.RecipeRequestDto.*;
 import static cocktail.dto.RecipeResponseDto.*;
+import static java.util.stream.Collectors.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -27,12 +27,13 @@ class RecipeServiceTest {
     @InjectMocks private RecipeService recipeService;
     @Mock RecipeRepository recipeRepository;
     @Mock TagRepository tagRepository;
+    @Mock IngredientRepository ingredientRepository;
 
     @Test
     void createRecipe_recipe생성() {
         // data
         RecipeRequestDto dto = createDto();
-        Recipe recipe = createRecipe(dto);
+        Recipe recipe = dtoToRecipe(dto);
 
         Long id = 1l;
         ReflectionTestUtils.setField(recipe, "id", id);
@@ -58,16 +59,11 @@ class RecipeServiceTest {
     void createRecipe_tag생성() {
         // data
         RecipeRequestDto dto = createDto();
-        Recipe recipe = createRecipe(dto);
-
-        Long id = 1l;
-        ReflectionTestUtils.setField(recipe, "id", id);
+        Recipe recipe = dtoToRecipe(dto);
 
         List<Tag> tagList = createTagList(dto, recipe);
 
         // BDDMockito
-        given(tagRepository.saveAll(any()))
-                .willReturn(tagList);
         given(tagRepository.findAll())
                 .willReturn(tagList);
 
@@ -76,9 +72,43 @@ class RecipeServiceTest {
 
         // then
         List<Tag> findTagList = tagRepository.findAll();
-
         assertThat(findTagList.size()).isEqualTo(3);
         assertThat(findTagList).contains(tagList.get(0));
+    }
+
+    @Test
+    void createRecipe_ingredient생성_test(){
+        RecipeRequestDto dto = createDto();
+        Recipe recipe = dtoToRecipe(dto);
+
+        Long id = 1l;
+        ReflectionTestUtils.setField(recipe, "id", id);
+
+        List<Ingredient> ingredients = dtoToIngredients(dto, recipe);
+
+        given(ingredientRepository.findAll())
+                .willReturn(ingredients);
+
+        //when
+        recipeService.createRecipe(dto);
+
+        // then
+        List<Ingredient> findIngredients = ingredientRepository.findAll();
+        assertThat(findIngredients.size()).isEqualTo(2);
+        assertThat(findIngredients).extracting("name").containsExactly("드라이 진", "베르무트");
+        assertThat(findIngredients).extracting("volume").containsExactly("60ml", "10ml");
+
+    }
+
+    private List<Ingredient> dtoToIngredients(RecipeRequestDto dto, Recipe recipe) {
+        return dto.getIngredients().stream()
+                .map(ingredientDto -> ingredientDto.toEntity(recipe))
+                .collect(toList());
+    }
+
+    @Test
+    void createRecipe_ingredientDto가_null일때_test(){
+
     }
 
     @Test
@@ -90,9 +120,9 @@ class RecipeServiceTest {
         RecipeRequestDto dto = createDto();
 
         List<Tag> newTagList = dto.getTags().stream()
-                .map(s -> new Tag(s, recipe)).collect(Collectors.toList());
+                .map(s -> new Tag(s, recipe)).collect(toList());
 
-        given(recipeRepository.findById(any()))
+        given(recipeRepository.fetchFindById(any()))
                 .willReturn(Optional.ofNullable(recipe));
         given(recipeRepository.deleteTags(recipe.getId()))
                 .willReturn(1L);
@@ -142,6 +172,7 @@ class RecipeServiceTest {
         assertThatThrownBy(()-> recipeService.findById(id))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
     private RecipeRequestDto createDto() {
         String name = "마티니";
         String dosu = "30.0";
@@ -151,18 +182,25 @@ class RecipeServiceTest {
                 new OrderDto(1, "드라이 진과 올리브를 넣는다."),
                 new OrderDto(2, "흔든다.")));
 
+        List<IngredientDto> ingredientDtoList = new ArrayList<>(Arrays.asList(
+                new IngredientDto(1, "드라이 진", "60ml"),
+                new IngredientDto(2, "베르무트", "10ml")
+        ));
+
         return RecipeRequestDto.builder()
                 .name(name)
                 .dosu(new BigDecimal("30.0"))
                 .brewing(Brewing.BLENDING)
                 .base(Base.NONE)
                 .orders(orderDtoList)
-                .tags(stringTagList).build();
+                .tags(stringTagList)
+                .ingredients(ingredientDtoList)
+                .build();
     }
 
-    private Recipe createRecipe(RecipeRequestDto dto) {
+    private Recipe dtoToRecipe(RecipeRequestDto dto) {
         List<Order> orderList = dto.getOrders().stream()
-                .map(OrderDto::toOrder).collect(Collectors.toList());
+                .map(OrderDto::toOrder).collect(toList());
         return Recipe.builder()
                 .name(dto.getName())
                 .dosu(dto.getDosu())
@@ -171,7 +209,7 @@ class RecipeServiceTest {
     }
 
     private List<Tag> createTagList(RecipeRequestDto dto, Recipe recipe) {
-        return dto.getTags().stream().map(s -> new Tag(s, recipe)).collect(Collectors.toList());
+        return dto.getTags().stream().map(s -> new Tag(s, recipe)).collect(toList());
     }
 
     private Recipe createRecipe() {

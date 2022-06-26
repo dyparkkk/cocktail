@@ -1,8 +1,6 @@
 package cocktail.dto;
 
-import cocktail.domain.recipe.Base;
-import cocktail.domain.recipe.Brewing;
-import cocktail.domain.recipe.Order;
+import cocktail.domain.recipe.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,15 +18,18 @@ public class RecipeRequestDto {
     private Base base;
     private List<String> tags;
     private List<OrderDto> orders;
+    private List<IngredientDto> ingredients;
 
     @Builder
-    public RecipeRequestDto(String name, BigDecimal dosu, Brewing brewing, Base base, List<String> tags, List<OrderDto> orders) {
+    public RecipeRequestDto(String name, BigDecimal dosu, Brewing brewing, Base base,
+                            List<String> tags, List<OrderDto> orders, List<IngredientDto> ingredients) {
         this.name = name;
         this.dosu = dosu;
         this.brewing = brewing;
         this.base = base;
         this.tags = tags;
         this.orders = orders;
+        this.ingredients = ingredients;
     }
 
     public void setBrewing(String brewing) {
@@ -58,4 +59,28 @@ public class RecipeRequestDto {
             return new Order(num, content);
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class IngredientDto {
+        private int num;
+        private String name;
+        private String volume;
+
+        public IngredientDto(int num, String name, String volume) {
+            this.num = num;
+            this.name = name;
+            this.volume = volume;
+        }
+
+        public Ingredient toEntity(Recipe recipe) {
+            return Ingredient.builder()
+                    .num(num)
+                    .name(name)
+                    .volume(volume)
+                    .recipe(recipe)
+                    .build();
+        }
+    }
+
 }
