@@ -16,7 +16,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -43,6 +45,9 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user")
     private List<Recipe> post = new ArrayList<Recipe>();
 
+    @OneToMany(mappedBy = "user")
+    private Set<Bookmark> bookmarks = new HashSet<>();
+
     @Builder
     public User(String username, String pw, String nickname,Role roles) {
         this.username = username;
@@ -50,17 +55,6 @@ public class User extends BaseTimeEntity {
         this.nickname = nickname;
         this.roles = roles;
     }
-
-//    @Builder
-//    public User(String username, String pw, String nickname, String provider, String providerId){
-//        this.username = username;
-//        this.pw = pw;
-//        this.nickname = nickname;
-//        this.roles = "ROLE_USER";
-//        this.provider = provider;
-//        this.providerId = providerId;
-//    }
-
 
     /* 회원정보 수정을 위한 set method*/
     public  User update (String username,String nickname) {
