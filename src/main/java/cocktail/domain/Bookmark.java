@@ -20,4 +20,10 @@ public class Bookmark {
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
+
+    public Bookmark(User user, Recipe recipe) {
+        this.user = user;
+        this.recipe = recipe;
+        user.getBookmarks().add(this);
+    }
 }

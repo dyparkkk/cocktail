@@ -1,24 +1,20 @@
 package cocktail.application.User;
 
-import cocktail.application.RecipeService;
 import cocktail.domain.User;
 import cocktail.domain.recipe.Recipe;
 import cocktail.dto.BookmarkDto;
-import cocktail.infra.UserRepository;
+import cocktail.infra.user.UserRepository;
 import cocktail.infra.recipe.RecipeRepository;
-import cocktail.infra.recipe.TagRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
