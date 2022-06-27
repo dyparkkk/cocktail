@@ -1,5 +1,6 @@
-package cocktail.dto;
+package cocktail.application.auth;
 
+import cocktail.domain.Role;
 import cocktail.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,10 +11,9 @@ import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
 public class OAuthAttributes {
-    private Map<String, Object> attributes;
+    private Map<String, Object> attributes;  // OAuth2 반환하는 유저 정보 Map
     private String nameAttributeKey;
     private String username;
     private String nickname;
@@ -47,7 +47,7 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
-                .username((String) attributes.get("email"))
+                .username((String) attributes.get("nickname"))
                 .email((String) attributes.get("email"))
                 .picture((String) attributes.get("picture"))
                 .attributes(attributes)
@@ -72,6 +72,7 @@ public class OAuthAttributes {
         return User.builder()
                 .username(email)
                 .nickname(nickname)
+                .roles(Role.USER)
                 .build();
     }
 

@@ -1,10 +1,8 @@
-package cocktail.api;
+package cocktail.api.user;
 
 import cocktail.application.UserService;
 import cocktail.domain.User;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,4 +77,5 @@ public class UserController {
     public List<User> listUser(){
         return userService.findAll();
     }
+
 }
