@@ -1,4 +1,4 @@
-package cocktail.infra;
+package cocktail.infra.user;
 
 import cocktail.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;

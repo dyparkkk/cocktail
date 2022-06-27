@@ -1,10 +1,9 @@
 package cocktail.application.User;
 
-import cocktail.domain.Bookmark;
 import cocktail.domain.User;
 import cocktail.domain.recipe.Recipe;
 import cocktail.dto.BookmarkDto;
-import cocktail.infra.UserRepository;
+import cocktail.infra.user.UserRepository;
 import cocktail.infra.recipe.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
