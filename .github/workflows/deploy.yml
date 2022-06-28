@@ -48,7 +48,7 @@ jobs:
 
       - name: deploy with AWS codeDeploy
         run: aws deploy create-deployment
-          --application-name cocktail-api
+          --application-name cocktail-api-codedeploy
           --deployment-config-name CodeDeployDefault.OneAtATime
           --deployment-group-name deploy-group
           --s3-location bucket=deploy-cocktail,bundleType=zip,key=public/cocktail.zip
