@@ -17,6 +17,8 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
+import static cocktail.dto.RecipeResponseDto.*;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @PostMapping
-    public ResponseEntity<RecipeResponseDto> createRecipe(@RequestBody RecipeRequestDto dto) {
+    public ResponseEntity<Long> createRecipe(@RequestBody RecipeRequestDto dto) {
         Long recipeId = recipeService.createRecipe(dto);
 
         /**
@@ -36,15 +38,24 @@ public class RecipeController {
          *    필드가 퍼블릭이거나 getter메서드가 필요 ( 그걸로 필드 값 주입)
          */
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new RecipeResponseDto(recipeId));
+                .body(recipeId);
+    }
+
+    @GetMapping("/{id}")
+    @ApiImplicitParam(name = "id", dataType = "int", value = "recipe_ID")
+    public ResponseEntity<DetailDto> findByIdApi(@PathVariable Long id) {
+        DetailDto res = recipeService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(res);
     }
 
     @GetMapping
     @ApiImplicitParams({
-            @ApiImplicitParam(name="page",dataType ="int", value="몇 페이지 (0부터 시장)"),
-            @ApiImplicitParam(name="size",dataType ="int", value="페이지의 요소 수(default 10)")
+            @ApiImplicitParam(name = "page", dataType = "int", value = "몇 페이지 (0부터 시장)"),
+            @ApiImplicitParam(name = "size", dataType = "int", value = "페이지의 요소 수(default 10)")
     })
     public ResponseEntity<List<RecipeResponseDto>> viewAllRecipe(@ApiIgnore @PageableDefault Pageable pageable) {
+
         List<RecipeResponseDto> list = recipeService.findAllPageable(pageable);
 
         return new ResponseEntity<>(list, HttpStatus.OK);
@@ -61,5 +72,12 @@ public class RecipeController {
         return new ResponseEntity<>(resList, HttpStatus.OK);
     }
 
-
+    @PutMapping("/{id}")
+    @ApiImplicitParam(name = "id", dataType = "int", value = "recipe_ID")
+    public ResponseEntity<Long> updateApi(@PathVariable Long id,
+                          @RequestBody RecipeRequestDto dto) {
+        Long recipeId = recipeService.update(id, dto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(recipeId);
+    }
 }

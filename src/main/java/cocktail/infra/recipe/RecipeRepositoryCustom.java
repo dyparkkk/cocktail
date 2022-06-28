@@ -16,4 +16,5 @@ public interface RecipeRepositoryCustom {
     List<RecipeResponseDto> filterSearch(SearchCondition condition, Pageable pageable);
     long deleteTags(Long id);
     Optional<Recipe> fetchFindById(Long id);
+    long deleteIngredients(Long id);
 }

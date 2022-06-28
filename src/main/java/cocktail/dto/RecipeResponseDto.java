@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import static cocktail.dto.RecipeRequestDto.*;
 import static java.util.stream.Collectors.*;
 
 @Getter
@@ -38,6 +39,7 @@ public class RecipeResponseDto {
         private Base base;
         private List<String> tags;
         private List<Order> orders;
+        private List<Ingredient> ingredients;
 
         public static DetailDto from(Recipe recipe) {
             return DetailDto.builder()
@@ -51,17 +53,20 @@ public class RecipeResponseDto {
                             .map(Tag::getName)
                             .collect(toList())
                     )
+                    .ingredients(recipe.getIngredients())
                     .build();
         }
 
         @Builder
-        public DetailDto(Long id, String name, String dosu, Brewing brewing, Base base, List<String> tags, List<Order> orders) {
+        public DetailDto(Long id, String name, String dosu, Brewing brewing, Base base,
+                         List<String> tags, List<Order> orders, List<Ingredient> ingredients) {
             super(id, name);
             this.dosu = dosu;
             this.brewing = brewing;
             this.base = base;
             this.tags = tags;
             this.orders = orders;
+            this.ingredients = ingredients;
         }
     }
 

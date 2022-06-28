@@ -77,12 +77,15 @@ public class RecipeService {
         List<Order> orders = dtosToOrders(dto.getOrders());
         recipe.update(dto.getName(), dto.getDosu(), dto.getBrewing(), dto.getBase(), orders);
 
-        // 전에 있던 태그 삭제
+        // 전에 있던 태그 삭제 후 저장
         recipeRepository.deleteTags(id);
-
-        // 태그 저장
         List<Tag> tagList = dtosToTags(dto.getTags(), recipe);
         tagRepository.saveAll(tagList);
+
+        // 전에 있던 재료 삭제 후 저장
+        recipeRepository.deleteIngredients(id);
+        List<Ingredient> ingredientList = dtoToIngredients(dto.getIngredients(), recipe);
+        ingredientRepository.saveAll(ingredientList);
 
         return id;
     }

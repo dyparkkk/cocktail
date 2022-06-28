@@ -5,6 +5,7 @@ import cocktail.dto.RecipeRequestDto;
 import cocktail.infra.recipe.IngredientRepository;
 import cocktail.infra.recipe.RecipeRepository;
 import cocktail.infra.recipe.TagRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -107,11 +108,7 @@ class RecipeServiceTest {
     }
 
     @Test
-    void createRecipe_ingredientDto가_null일때_test(){
-
-    }
-
-    @Test
+    @DisplayName("update메서드가 dto의 값들로 바뀐다.")
     void updateTest() {
         // data
         Recipe recipe = createRecipe();
@@ -124,10 +121,6 @@ class RecipeServiceTest {
 
         given(recipeRepository.fetchFindById(any()))
                 .willReturn(Optional.ofNullable(recipe));
-        given(recipeRepository.deleteTags(recipe.getId()))
-                .willReturn(1L);
-        given(tagRepository.saveAll(any()))
-                .willReturn(newTagList);
 
         //when
         recipeService.update(recipe.getId(), dto);
@@ -140,6 +133,8 @@ class RecipeServiceTest {
                 .containsExactly("드라이 진과 올리브를 넣는다.", "흔든다.");
         assertThat(recipe.getTags()).extracting("name")
                 .contains("드라이 진", "IBA", "젓지말고 흔들어서");
+        assertThat(recipe.getIngredients()).extracting("name")
+                .contains("드라이 진", "베르무트");
     }
 
     @Test

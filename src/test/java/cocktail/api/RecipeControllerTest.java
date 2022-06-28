@@ -38,9 +38,9 @@ class RecipeControllerTest {
 
         given(recipeService.createRecipe(reqDto)).willReturn(recipeId);
 
-        ResponseEntity<RecipeResponseDto> resEntity = recipeController.createRecipe(reqDto);
+        ResponseEntity<Long> resEntity = recipeController.createRecipe(reqDto);
         assertThat(resEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(resEntity.getBody().getId()).isEqualTo(recipeId);
+        assertThat(resEntity.getBody()).isEqualTo(recipeId);
     }
 
     @Test

@@ -1,15 +1,14 @@
 package cocktail.infra;
 
-import cocktail.domain.recipe.Base;
-import cocktail.domain.recipe.Brewing;
-import cocktail.domain.recipe.Recipe;
-import cocktail.domain.recipe.Tag;
+import cocktail.domain.recipe.*;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
+import cocktail.infra.recipe.IngredientRepository;
 import cocktail.infra.recipe.RecipeRepository;
 import cocktail.infra.recipe.TagRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -31,11 +30,9 @@ class RecipeRepositoryImplTest {
     @Autowired
     EntityManager em;
 
-    @Autowired
-    RecipeRepository recipeRepository;
-
-    @Autowired
-    TagRepository tagRepository;
+    @Autowired RecipeRepository recipeRepository;
+    @Autowired TagRepository tagRepository;
+    @Autowired IngredientRepository ingredientRepository;
 
     private JPAQueryFactory queryFactory;
 
@@ -52,6 +49,8 @@ class RecipeRepositoryImplTest {
 
         em.persist(new Tag("태그1", recipe1));
         em.persist(new Tag("맛있는1", recipe1));
+        em.persist(new Ingredient(1, "베르무트", "45ml", recipe1));
+        em.persist(new Ingredient(2, "레몬", "1pc", recipe1));
 
         Recipe recipe2 = Recipe.builder()
                 .name("name2")
@@ -62,6 +61,8 @@ class RecipeRepositoryImplTest {
 
         em.persist(new Tag("태그2", recipe2));
         em.persist(new Tag("맛있는2", recipe2));
+        em.persist(new Ingredient(1, "베르무트2", "45ml", recipe2));
+        em.persist(new Ingredient(2, "레몬2", "1pc", recipe2));
     }
 
     @Test
@@ -112,6 +113,7 @@ class RecipeRepositoryImplTest {
     }
 
     @Test
+    @DisplayName("deleteTags 메서드가 recipe와 연관된 tags를 전부 삭제한다.")
     void deleteTagsTest() {
         Recipe recipe = recipeRepository.findAll().get(0);
         Long id = recipe.getId();
@@ -126,6 +128,7 @@ class RecipeRepositoryImplTest {
     }
 
     @Test
+    @DisplayName("fetchFindById가 recipe 찾기에 성공한다.(query 한방으로) ")
     void fetchFindById_SuccessTest(){
         // given
         Recipe recipe = recipeRepository.findAll().get(0);
@@ -137,9 +140,12 @@ class RecipeRepositoryImplTest {
         // then
         assertThat(findRecipe.getTags().size()).isEqualTo(2);
         assertThat(findRecipe.getTags()).extracting("name").containsExactly("태그1", "맛있는1");
+        assertThat(findRecipe.getIngredients().size()).isEqualTo(2);
+        assertThat(findRecipe.getIngredients()).extracting("volume").containsExactly("45ml", "1pc");
     }
 
     @Test
+    @DisplayName("fetchFindById가 결과를 찾지 못하면 NoSuchElementException을 반환한다.")
     void fetchFindById_notFound_failTest(){
         // given
         Long id = 123L;
@@ -147,6 +153,25 @@ class RecipeRepositoryImplTest {
         // when, then
         assertThatThrownBy(()->recipeRepository.fetchFindById(id).get())
                 .isInstanceOf(NoSuchElementException.class);
+    }
 
+    @Test
+    @DisplayName("deleteIngredients 메서드가 recipe와 연관된 ingredients를 전부 삭제한다.")
+    void deleteIngredientsTest() {
+        Recipe recipe = recipeRepository.findAll().get(0);
+        Long id = recipe.getId();
+
+        // when
+        recipeRepository.deleteIngredients(id);
+        em.flush();
+        em.clear();
+
+        //then
+        List<Ingredient> findIngredients = ingredientRepository.findAll();
+        assertThat(findIngredients.size()).isEqualTo(2);
+        assertThat(findIngredients).extracting("name").containsExactly("베르무트2", "레몬2");
+
+        Recipe findRecipe1 = recipeRepository.findById(id).get();
+        assertThat(findRecipe1.getIngredients().size()).isEqualTo(0);
     }
 }
