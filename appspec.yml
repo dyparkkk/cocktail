@@ -1,8 +1,7 @@
-
 version: 0.0
 os: linux
 files:
-  - source:  /deploy-cocktail/public/cocktail.zip
+  - source:  /
     destination: /home/ubuntu/github_action
     overwrite: yes
 
