@@ -45,9 +45,10 @@ jobs:
 
       - name: upload to S3
         run: aws s3 cp --region ap-northeast-2 cocktail.zip s3://deploy-cocktail/public/
+
       - name: deploy with AWS codeDeploy
         run: aws deploy create-deployment
-          --application-name cocktail-api-codedeploy
+          --application-name cocktail-api
           --deployment-config-name CodeDeployDefault.OneAtATime
           --deployment-group-name deploy-group
           --s3-location bucket=deploy-cocktail,bundleType=zip,key=public/cocktail.zip
