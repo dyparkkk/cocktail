@@ -34,7 +34,7 @@ jobs:
         shell: bash
 
       - name: Make Zip File
-        run: zip cocktail.zip ./build/libs/cocktail-0.0.1-SNAPSHOT.jar
+        run: zip -r cocktail.zip ./build/libs/cocktail-0.0.1-SNAPSHOT.jar ./appspec.yml
 
       - name: AWS configure credentials
         uses: aws-actions/configure-aws-credentials@v1
