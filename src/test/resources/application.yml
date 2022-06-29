@@ -1,0 +1,56 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  properties:
+    active: test  # local, test, dev, real로 분류
+
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/test  # window
+    #    url: jdbc:h2:~/test           # mac
+    #    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1 # ?????
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  h2.console:
+    enabled: true
+    path: /h2-console
+    settings:
+      web-allow-others: true
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect   # H2Dialect, MySQL57Dialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+  output.ansi.enabled: always  # terminal color
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-name: google
+            client-id: test
+            client-secret: test
+            scope: profile,email
+#          naver:
+#            client-id: test
+#            client-secret: test
+#            redirect_uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            authorization_grant_type: authorization_code
+#            client-name: Naver
+#          kakao:
+#            client-name: Kakao
+#            client-id: test
+#            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            # http://localhost:8080/login/oauth2/code/kakao
+#            scope: profile_nickname, account_email
+#            authorization-grant-type: authorization_code
+#            client-authentication-method: POST
