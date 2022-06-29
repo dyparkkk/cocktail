@@ -31,6 +31,6 @@
  echo "> DEPLOY_JAR 배포" >> $DEPLOY_LOG_PATH
  nohup java -jar $DEPLOY_JAR &
 
- sleep 3
+ sleep 30
 
  echo "> 배포 종료 : $(date +%c)" >> $DEPLOY_LOG_PATH
