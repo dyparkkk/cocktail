@@ -1,7 +1,7 @@
 #!/bin/bash
  PROJECT_NAME="github_action"
  JAR_PATH="/home/ubuntu/github_action/*.jar"
- DEPLOY_PATH=/cocktail/
+ DEPLOY_PATH="/cocktail/"
  DEPLOY_LOG_PATH="/data/logs/deploy.log"
  DEPLOY_ERR_LOG_PATH="/data/logs/deploy_err.log"
  APPLICATION_LOG_PATH="/data/logs/application.log"
