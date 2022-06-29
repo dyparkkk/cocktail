@@ -3,6 +3,7 @@ package cocktail.api.user;
 import cocktail.application.User.UserService;
 import cocktail.application.auth.SessionUser;
 import cocktail.domain.User;
+import cocktail.dto.SuccessResponseDto;
 import cocktail.dto.UserDto;
 import cocktail.global.config.Login;
 import io.swagger.annotations.Api;
@@ -26,8 +27,6 @@ import java.util.List;
 import static cocktail.api.user.SessionConst.*;
 import static cocktail.dto.UserDto.LoginRequestDto;
 import static cocktail.dto.UserDto.SignUpRequestDto;
-import static cocktail.dto.UserDto.SignUpResponseDto;
-import static cocktail.dto.UserDto.SuccessResponseDto;
 import static cocktail.dto.UserDto.UserIdCheckDto;
 
 @Slf4j
@@ -41,14 +40,16 @@ public class UserController {
 
     @RequestMapping(value = "/signup", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "회원가입", notes = "회원가입 기능.")
-    public SignUpResponseDto signUp(@Validated @RequestBody SignUpRequestDto dto) {
-        userService.signUp(dto);
-        return new SignUpResponseDto();
+    public ResponseEntity<Long> signUp(@Validated @RequestBody SignUpRequestDto dto) {
+        Long id = userService.signUp(dto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(id);
+
     }
 
     @PostMapping("/login")
     @ApiOperation(value = "로그인", notes = "로그인 기능.")
-    public SuccessResponseDto login(@Validated @RequestBody LoginRequestDto dto,
+    public ResponseEntity<Long> login(@Validated @RequestBody LoginRequestDto dto,
                                     HttpServletRequest req) {
         UserDto userDto = userService.signIn(dto);
         SessionUser sessionUser = new SessionUser(userDto);
@@ -58,7 +59,8 @@ public class UserController {
         HttpSession session = req.getSession();
         session.setAttribute(LOGIN_USER, sessionUser);
 
-        return new SuccessResponseDto();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(userDto.getUserId());
     }
 
     @GetMapping("/signup/userid")

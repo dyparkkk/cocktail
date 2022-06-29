@@ -12,8 +12,14 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class UserDto {
 
+    @Email
+    @NotBlank
     private Long userId;
+
+    @NotBlank
     private String username;
+
+    @NotBlank
     private String nickname;
 
     public UserDto(Long userId, String username, String nickname) {
@@ -22,38 +28,28 @@ public class UserDto {
         this.nickname = nickname;
     }
 
-    @Data
-    @AllArgsConstructor
+    @Getter
     @NoArgsConstructor
-    public static class SignUpRequestDto {
-
+    public static class SignUpRequestDto{
         @Email
         @NotBlank
         private String username;
-
         @NotBlank
         private String pw;
-
         @NotBlank
         private String nickname;
-
         private String roles;
+
+        public SignUpRequestDto(String username, String pw, String nickname, String roles) {
+            this.username = username;
+            this.pw = pw;
+            this.nickname = nickname;
+            this.roles = roles;
+        }
     }
 
-    @Data
-    @AllArgsConstructor
-    public static class SuccessResponseDto{
-        private final Boolean success = true;
-    }
 
-    @Data
-    @NoArgsConstructor
-    public static class SignUpResponseDto {
-        private final Boolean success = true;
-    }
-
-    @Data
-    @AllArgsConstructor
+    @Getter
     @NoArgsConstructor
     public static class LoginRequestDto{
         @Email
@@ -61,9 +57,14 @@ public class UserDto {
         private String username;
         @NotBlank
         private String pw;
+
+        public LoginRequestDto(String username, String pw) {
+            this.username = username;
+            this.pw = pw;
+        }
     }
 
-    @Data
+    @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class UserIdCheckDto{
