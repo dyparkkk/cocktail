@@ -1,30 +1,26 @@
-package cocktail.application;
+package cocktail.application.recipe;
 
 import cocktail.domain.recipe.Ingredient;
 import cocktail.domain.recipe.Order;
 import cocktail.domain.recipe.Recipe;
 import cocktail.domain.recipe.Tag;
 import cocktail.dto.RecipeRequestDto;
-import cocktail.dto.RecipeResponseDto;
-import cocktail.dto.SearchCondition;
 import cocktail.infra.recipe.IngredientRepository;
 import cocktail.infra.recipe.RecipeRepository;
 import cocktail.infra.recipe.TagRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import static cocktail.dto.RecipeRequestDto.*;
-import static cocktail.dto.RecipeResponseDto.*;
 import static java.util.stream.Collectors.*;
 
 @Service
 @RequiredArgsConstructor
-public class RecipeService {
+public class MakeRecipeService {
 
     private final RecipeRepository recipeRepository;
     private final TagRepository tagRepository;
@@ -58,20 +54,15 @@ public class RecipeService {
         return recipe.getId();
     }
 
-    @Transactional
-    public List<RecipeResponseDto> findAllPageable(Pageable pageable){
-        return recipeRepository.findAllListDto(pageable);
-    }
 
-    @Transactional
-    public List<RecipeResponseDto> filterSearch(SearchCondition condition, Pageable pageable){
-        return recipeRepository.filterSearch(condition, pageable);
-    }
 
     @Transactional
     public Long update(Long id, RecipeRequestDto dto){
-        Recipe recipe = recipeRepository.fetchFindById(id)
-                .orElseThrow(() -> new IllegalArgumentException("RecipeService.update : id값을 찾을 수 없습니다."));
+//        Recipe recipe = recipeRepository.fetchFindById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("RecipeService.update : id값을 찾을 수 없습니다."));
+        Optional<Recipe> op = recipeRepository.fetchFindById(id);
+        Recipe recipe = op.orElseThrow(IllegalArgumentException::new);
+
 
         // 값 바꿔주기
         List<Order> orders = dtosToOrders(dto.getOrders());
@@ -88,14 +79,6 @@ public class RecipeService {
         ingredientRepository.saveAll(ingredientList);
 
         return id;
-    }
-
-    @Transactional
-    public DetailDto findById(Long id) {
-        Recipe recipe = recipeRepository.fetchFindById(id)
-                .orElseThrow(() -> new IllegalArgumentException("RecipeService.findById : id값을 찾을 수 없습니다."));
-
-        return DetailDto.from(recipe);
     }
 
     private List<Ingredient> dtoToIngredients(List<IngredientDto> dtos, Recipe recipe) {

@@ -1,10 +1,13 @@
 package cocktail.api;
 
 
+import cocktail.domain.Role;
+import cocktail.domain.User;
 import cocktail.domain.recipe.Order;
 import cocktail.domain.recipe.Recipe;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +30,10 @@ public class InitRecipe {
     }
 
     @Component
+    @RequiredArgsConstructor
     static class InitRecipeService{
+
+        private final PasswordEncoder passwordEncoder;
 
         @PersistenceContext
         private EntityManager em;
@@ -46,6 +52,10 @@ public class InitRecipe {
                         .dosu(new BigDecimal(i))
                         .orders(orderList).build());
             }
+
+            // user
+            String pw = passwordEncoder.encode("pw");
+            em.persist(new User("username@naver.com", pw, "nikname", Role.USER));
         }
     }
 }

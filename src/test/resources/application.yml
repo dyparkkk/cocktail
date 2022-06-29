@@ -1,4 +1,8 @@
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
   properties:
     active: test  # local, test, dev, real로 분류
 
@@ -26,3 +30,27 @@ spring:
         format_sql: true
 
   output.ansi.enabled: always  # terminal color
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-name: google
+            client-id: test
+            client-secret: test
+            scope: profile,email
+#          naver:
+#            client-id: test
+#            client-secret: test
+#            redirect_uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            authorization_grant_type: authorization_code
+#            client-name: Naver
+#          kakao:
+#            client-name: Kakao
+#            client-id: test
+#            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            # http://localhost:8080/login/oauth2/code/kakao
+#            scope: profile_nickname, account_email
+#            authorization-grant-type: authorization_code
+#            client-authentication-method: POST

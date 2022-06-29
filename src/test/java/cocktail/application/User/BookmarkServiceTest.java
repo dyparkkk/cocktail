@@ -43,8 +43,6 @@ class BookmarkServiceTest {
         Recipe recipe = Recipe.builder().build();
         BookmarkDto dto = new BookmarkDto(username, recipeId);
 
-        given(recipeRepository.findById(recipeId))
-                .willReturn(Optional.ofNullable(recipe));
         // when
         given(userRepository.findByUsername(username))
                 .willReturn(Optional.empty());

@@ -42,8 +42,8 @@ public class User extends BaseTimeEntity {
     private String provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
     private String providerId;  // oauth2를 이용할 경우 아이디값
 
-    @OneToMany(mappedBy = "user")
-    private List<Recipe> post = new ArrayList<Recipe>();
+//    @OneToMany(mappedBy = "user")
+//    private List<Recipe> recipe = new ArrayList<Recipe>();
 
     @OneToMany(mappedBy = "user")
     private Set<Bookmark> bookmarks = new HashSet<>();

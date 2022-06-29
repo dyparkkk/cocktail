@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 
+import static cocktail.api.user.SessionConst.LOGIN_USER;
 import static java.util.Collections.*;
 
 @RequiredArgsConstructor
@@ -50,7 +51,7 @@ public class CustomOAuth2UserService  extends DefaultOAuth2UserService {
         User user = saveOrUpdate(attributes);
 
         // 세션 정보를 저장하는 직렬화된 dto 클래스
-        httpSession.setAttribute("user", new SessionUser(user));
+        httpSession.setAttribute(LOGIN_USER, new SessionUser(user));
 
         return new DefaultOAuth2User(
                 singleton(new SimpleGrantedAuthority(user.getRolekey())),

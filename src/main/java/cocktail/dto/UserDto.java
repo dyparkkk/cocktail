@@ -2,12 +2,25 @@ package cocktail.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+@Getter
+@NoArgsConstructor
 public class UserDto {
+
+    private Long userId;
+    private String username;
+    private String nickname;
+
+    public UserDto(Long userId, String username, String nickname) {
+        this.userId = userId;
+        this.username = username;
+        this.nickname = nickname;
+    }
 
     @Data
     @AllArgsConstructor

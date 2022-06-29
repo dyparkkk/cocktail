@@ -1,6 +1,7 @@
 package cocktail.api;
 
-import cocktail.application.RecipeService;
+import cocktail.application.recipe.FindRecipeService;
+import cocktail.application.recipe.MakeRecipeService;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
@@ -26,11 +27,12 @@ import static cocktail.dto.RecipeResponseDto.*;
 @Api(tags = "recipe")
 public class RecipeController {
 
-    private final RecipeService recipeService;
+    private final MakeRecipeService makeRecipeService;
+    private final FindRecipeService findRecipeService;
 
     @PostMapping
     public ResponseEntity<Long> createRecipe(@RequestBody RecipeRequestDto dto) {
-        Long recipeId = recipeService.createRecipe(dto);
+        Long recipeId = makeRecipeService.createRecipe(dto);
 
         /**
          * ResponseEntity는 내부적으로 ObjectMapper를 사용함
@@ -44,7 +46,7 @@ public class RecipeController {
     @GetMapping("/{id}")
     @ApiImplicitParam(name = "id", dataType = "int", value = "recipe_ID")
     public ResponseEntity<DetailDto> findByIdApi(@PathVariable Long id) {
-        DetailDto res = recipeService.findById(id);
+        DetailDto res = findRecipeService.findById(id);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(res);
     }
@@ -56,7 +58,7 @@ public class RecipeController {
     })
     public ResponseEntity<List<RecipeResponseDto>> viewAllRecipe(@ApiIgnore @PageableDefault Pageable pageable) {
 
-        List<RecipeResponseDto> list = recipeService.findAllPageable(pageable);
+        List<RecipeResponseDto> list = findRecipeService.findAllPageable(pageable);
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -68,7 +70,7 @@ public class RecipeController {
     })
     public ResponseEntity<List<RecipeResponseDto>> searchRecipeApi(@RequestBody SearchCondition condition,
                                                                    @ApiIgnore @PageableDefault Pageable pageable) {
-        List<RecipeResponseDto> resList = recipeService.filterSearch(condition, pageable);
+        List<RecipeResponseDto> resList = findRecipeService.filterSearch(condition, pageable);
         return new ResponseEntity<>(resList, HttpStatus.OK);
     }
 
@@ -76,7 +78,7 @@ public class RecipeController {
     @ApiImplicitParam(name = "id", dataType = "int", value = "recipe_ID")
     public ResponseEntity<Long> updateApi(@PathVariable Long id,
                           @RequestBody RecipeRequestDto dto) {
-        Long recipeId = recipeService.update(id, dto);
+        Long recipeId = makeRecipeService.update(id, dto);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(recipeId);
     }

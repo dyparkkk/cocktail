@@ -1,6 +1,7 @@
 package cocktail.api;
 
-import cocktail.application.RecipeService;
+import cocktail.application.recipe.FindRecipeService;
+import cocktail.application.recipe.MakeRecipeService;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.RecipeResponseDto;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static cocktail.dto.RecipeResponseDto.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -24,8 +24,9 @@ import static org.mockito.BDDMockito.*;
 class RecipeControllerTest {
 
     @Mock
-    private RecipeService recipeService;
-
+    private MakeRecipeService makeRecipeService;
+    @Mock
+    private FindRecipeService findRecipeService;
     @InjectMocks
     private RecipeController recipeController;
 
@@ -36,7 +37,7 @@ class RecipeControllerTest {
                 .dosu(BigDecimal.ZERO).build();
         long recipeId = 1l;
 
-        given(recipeService.createRecipe(reqDto)).willReturn(recipeId);
+        given(makeRecipeService.createRecipe(reqDto)).willReturn(recipeId);
 
         ResponseEntity<Long> resEntity = recipeController.createRecipe(reqDto);
         assertThat(resEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -50,7 +51,7 @@ class RecipeControllerTest {
                 new RecipeResponseDto(2L,"name2"));
         Pageable pageable = PageRequest.of(2, 5);
 
-        given(recipeService.findAllPageable(any())).willReturn(recipeDtos);
+        given(findRecipeService.findAllPageable(any())).willReturn(recipeDtos);
 
         ResponseEntity<List<RecipeResponseDto>> resEntity = recipeController.viewAllRecipe(pageable);
         assertThat(resEntity.getStatusCode()).isEqualTo(HttpStatus.OK);

@@ -36,9 +36,8 @@ public class Recipe extends BaseTimeEntity {
     @OneToMany(mappedBy = "recipe")
     private List<Ingredient> ingredients  = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users_id")
-    private User user;
+    @Embedded
+    private Writer writer;
 
     // 값타입 컬렉션 사용
     @ElementCollection(fetch = FetchType.LAZY)

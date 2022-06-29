@@ -1,7 +1,8 @@
-package cocktail.application;
+package cocktail.application.User;
 
 import cocktail.domain.Role;
 import cocktail.domain.User;
+import cocktail.dto.UserDto;
 import cocktail.global.exception.DuplicateUserIdException;
 import cocktail.global.exception.PwNotMatchException;
 import cocktail.infra.user.UserRepository;
@@ -11,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static cocktail.dto.UserDto.LoginRequestDto;
@@ -23,7 +23,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final HttpSession httpSession;
 
 
     @Transactional
@@ -40,7 +39,7 @@ public class UserService {
     }
 
     @Transactional
-    public String signIn(LoginRequestDto dto) {
+    public UserDto signIn(LoginRequestDto dto) {
         // findMember
         // 예외처리 문제 있음 ....filter라서
         User user = userRepository.findByUsername(dto.getUsername())
@@ -51,7 +50,7 @@ public class UserService {
             throw new PwNotMatchException("userId : " + user.getUsername() + " Invalid password");
         }
 
-        return user.getUsername();
+        return new UserDto(user.getId(), user.getUsername(), user.getNickname());
     }
 
     // 유저 중복 확인

@@ -23,17 +23,8 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-
     //localhost:8080/swagger-ui.html  스웨거 주소
-
     // 참고 : https://velog.io/@mbsik6082/Spring-Boot-2.6.2에-Swagger-적용-시-오류
-
-//    @Override
-//    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("swagger-ui.html")
-//                .addResourceLocations("classpath:/META-INF/resources/");        registry.addResourceHandler("/webjars/**")
-//                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-//    }
 
     //스웨거 페이지에 소개될 설명들
     private ApiInfo apiInfo() {
@@ -85,11 +76,6 @@ public class SwaggerConfig {
                 .validatorUrl("")
                 .build();
     }
-
-//    @Override
-//    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-//        argumentResolvers.add( new PageableHandlerMethodArgumentResolver());
-//    }
 
     /**
      * * 추가적으로 @WebMvcConfigurationSupport 에 대해 적어보자면..
