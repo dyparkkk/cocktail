@@ -1,12 +1,12 @@
 #!/bin/bash
  PROJECT_NAME="github_action"
- JAR_PATH="/home/ubuntu/github_action/*.jar"
+ JAR_PATH="/home/ubuntu/github_action/build/libs/*.jar"
  DEPLOY_PATH="/cocktail/"
  DEPLOY_LOG_PATH="/data/logs/deploy.log"
  DEPLOY_ERR_LOG_PATH="/data/logs/deploy_err.log"
  APPLICATION_LOG_PATH="/data/logs/application.log"
  BUILD_JAR=$(ls $JAR_PATH)
- JAR_NAME=$(basename $BUILD_JAR)
+ JAR_NAME=$(basename $JAR_PATH)
 
  echo "===== 배포 시작 : $(date +%c) =====" >> $DEPLOY_LOG_PATH
 
