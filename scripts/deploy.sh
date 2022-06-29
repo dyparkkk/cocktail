@@ -29,7 +29,7 @@
 
  DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
  echo "> DEPLOY_JAR 배포" >> $DEPLOY_LOG_PATH
- nohup java -jar $DEPLOY_JAR &
+ nohup java -jar $DEPLOY_JAR > /dev/null 2> /dev/null < /dev/null &
 
  sleep 30
 
