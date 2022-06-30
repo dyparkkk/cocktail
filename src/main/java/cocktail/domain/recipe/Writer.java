@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Writer {
 

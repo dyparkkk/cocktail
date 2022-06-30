@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Recipe extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -36,8 +36,8 @@ public class Recipe extends BaseTimeEntity {
     @OneToMany(mappedBy = "recipe")
     private List<Ingredient> ingredients  = new ArrayList<>();
 
-    @Embedded
-    private Writer writer;
+//    @Embedded
+//    private Writer writer;
 
     // 값타입 컬렉션 사용
     @ElementCollection(fetch = FetchType.LAZY)

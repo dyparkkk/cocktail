@@ -27,13 +27,8 @@ spring:
       web-allow-others: true
 
   jpa:
-    database-platform: org.hibernate.dialect.MySQL57Dialect   # H2Dialect, MySQL57Dialect
     hibernate:
       ddl-auto: create
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
 
   security:
     oauth2:
