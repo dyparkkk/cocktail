@@ -8,6 +8,7 @@ import cocktail.dto.RecipeRequestDto;
 import cocktail.infra.recipe.IngredientRepository;
 import cocktail.infra.recipe.RecipeRepository;
 import cocktail.infra.recipe.TagRepository;
+import cocktail.infra.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class MakeRecipeService {
     private final RecipeRepository recipeRepository;
     private final TagRepository tagRepository;
     private final IngredientRepository ingredientRepository;
+    private final UserRepository userRepository;
 
     /**
      * 회원 정보 추가

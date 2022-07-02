@@ -18,7 +18,7 @@ public class Ingredient {
     private String name;
     private String volume; // ex) 45ml
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 

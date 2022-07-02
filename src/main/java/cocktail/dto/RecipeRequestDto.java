@@ -19,7 +19,6 @@ public class RecipeRequestDto {
     private List<String> tags;
     private List<OrderDto> orders;
     private List<IngredientDto> ingredients;
-    private Writer writer;
 
     @Builder
     public RecipeRequestDto(String name, BigDecimal dosu, Brewing brewing, Base base,
@@ -43,10 +42,6 @@ public class RecipeRequestDto {
 
     public void setDosu(String dosu) {
         this.dosu = new BigDecimal(dosu.toUpperCase());
-    }
-
-    public void setWriter(Writer writer) {
-        this.writer = writer;
     }
 
     @Getter
