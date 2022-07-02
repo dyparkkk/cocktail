@@ -66,6 +66,7 @@ class RecipeRepositoryImplTest {
     }
 
     @Test
+    @DisplayName("filter 검색이 태그에 맞게 걸러진다.")
     void filterSearchTagTest(){
         // given
         Pageable pageable = PageRequest.of(0, 3);
@@ -82,6 +83,7 @@ class RecipeRepositoryImplTest {
     }
 
     @Test
+    @DisplayName("filter 검색이 기주에 맞게 잘 걸러진다. ")
     void filterSearchBaseTest() {
         Pageable pageable = PageRequest.of(0, 3);
         SearchCondition condition = SearchCondition.builder()
@@ -98,6 +100,7 @@ class RecipeRepositoryImplTest {
     }
 
     @Test
+    @DisplayName("filter 검색이 조주법에 맞게 잘 걸러진다.")
     void filterSearchBrewingTest() {
         Pageable pageable = PageRequest.of(0, 3);
         SearchCondition condition = SearchCondition.builder()

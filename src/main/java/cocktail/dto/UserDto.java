@@ -14,16 +14,12 @@ public class UserDto {
 
     @Email
     @NotBlank
-    private Long userId;
-
-    @NotBlank
     private String username;
 
     @NotBlank
     private String nickname;
 
-    public UserDto(Long userId, String username, String nickname) {
-        this.userId = userId;
+    public UserDto(String username, String nickname) {
         this.username = username;
         this.nickname = nickname;
     }

@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static cocktail.dto.RecipeResponseDto.*;
+
 @Service
 @RequiredArgsConstructor
 public class FindRecipeService {
@@ -28,10 +30,10 @@ public class FindRecipeService {
     }
 
     @Transactional
-    public RecipeResponseDto.DetailDto findById(Long id) {
+    public DetailDto findById(Long id) {
         Recipe recipe = recipeRepository.fetchFindById(id)
                 .orElseThrow(() -> new IllegalArgumentException("RecipeService.findById : id값을 찾을 수 없습니다."));
 
-        return RecipeResponseDto.DetailDto.from(recipe);
+        return DetailDto.from(recipe);
     }
 }

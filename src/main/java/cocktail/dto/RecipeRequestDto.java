@@ -1,6 +1,8 @@
 package cocktail.dto;
 
 import cocktail.domain.recipe.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,13 +13,26 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class RecipeRequestDto {
+
     private String name;
+
     // 검증 xx.x 형식
+    @ApiParam(name = "도수", type = "string", required = true)
     private BigDecimal dosu;
+
+    @ApiParam(name = "조주법", type = "Brewing", required = true)
     private Brewing brewing;
+
+    @ApiParam(name = "기주", type = "Base", required = true)
     private Base base;
+
+    @ApiParam(name = "태그", type = "String 배열")
     private List<String> tags;
+
+    @ApiParam(name = "조리법 순서", type = "배열")
     private List<OrderDto> orders;
+
+    @ApiParam(name = "재료", type = "배열")
     private List<IngredientDto> ingredients;
 
     @Builder
@@ -47,7 +62,11 @@ public class RecipeRequestDto {
     @Getter
     @NoArgsConstructor
     public static class OrderDto{
+
+        @ApiParam(name = "번호")
         private int num;
+
+        @ApiParam(name = "내용")
         private String content;
 
         public OrderDto(int num, String content) {
@@ -63,8 +82,13 @@ public class RecipeRequestDto {
     @Getter
     @NoArgsConstructor
     public static class IngredientDto {
+        @ApiParam(name = "번호")
         private int num;
+
+        @ApiParam(name = "재료이름")
         private String name;
+
+        @ApiParam(name = "용량 ex) 45ml, 1/2oz 등")
         private String volume;
 
         public IngredientDto(int num, String name, String volume) {

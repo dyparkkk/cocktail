@@ -57,6 +57,11 @@ public class Recipe extends BaseTimeEntity {
         }
     }
 
+    public void setUser(User user) {
+        this.user = user;
+        user.getRecipe().add(this);
+    }
+
     public void update(String name, BigDecimal dosu, Brewing brewing, Base base, List<Order> orders){
         this.name = name;
         this.dosu = dosu;

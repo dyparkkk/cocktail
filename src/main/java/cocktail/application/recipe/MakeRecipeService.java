@@ -1,5 +1,7 @@
 package cocktail.application.recipe;
 
+import cocktail.application.auth.SessionUser;
+import cocktail.domain.User;
 import cocktail.domain.recipe.Ingredient;
 import cocktail.domain.recipe.Order;
 import cocktail.domain.recipe.Recipe;
@@ -14,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static cocktail.dto.RecipeRequestDto.*;
 import static java.util.stream.Collectors.*;
@@ -33,7 +34,7 @@ public class MakeRecipeService {
      * Brewing, Base 저장 추가
      */
     @Transactional
-    public Long createRecipe(RecipeRequestDto dto) {
+    public Long createRecipe(RecipeRequestDto dto, SessionUser sessionUser) {
         // Recipe 생성
         List<Order> orderList = dtosToOrders(dto.getOrders());
 
@@ -53,18 +54,20 @@ public class MakeRecipeService {
         List<Ingredient> ingredients = dtoToIngredients(dto.getIngredients(), recipe);
         ingredientRepository.saveAll(ingredients);
 
+        User user = userRepository.findByUsername(sessionUser.getUsername())
+                .orElseThrow(IllegalArgumentException::new);
+        recipe.setUser(user);
+
         return recipe.getId();
     }
 
-
-
     @Transactional
-    public Long update(Long id, RecipeRequestDto dto){
-//        Recipe recipe = recipeRepository.fetchFindById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("RecipeService.update : id값을 찾을 수 없습니다."));
-        Optional<Recipe> op = recipeRepository.fetchFindById(id);
-        Recipe recipe = op.orElseThrow(IllegalArgumentException::new);
+    public Long update(Long id, RecipeRequestDto dto, SessionUser user){
+        Recipe recipe = recipeRepository.fetchFindById(id)
+                .orElseThrow(IllegalArgumentException::new);
 
+        // 유저와 레시피 작성자가 맞는지 확인
+        isValid(user, recipe);
 
         // 값 바꿔주기
         List<Order> orders = dtosToOrders(dto.getOrders());
@@ -81,6 +84,24 @@ public class MakeRecipeService {
         ingredientRepository.saveAll(ingredientList);
 
         return id;
+    }
+
+    @Transactional
+    public void deleteRecipe(Long id, SessionUser user) {
+        Recipe recipe = recipeRepository.fetchFindById(id)
+                .orElseThrow(IllegalArgumentException::new);
+
+        // 유저와 레시피 작성자가 맞는지 확인
+        isValid(user, recipe);
+
+        // 레시피 삭제
+        recipeRepository.delete(recipe);
+    }
+
+    private void isValid(SessionUser user, Recipe recipe) {
+        if (!recipe.getUser().getUsername().equals(user.getUsername())) {
+            throw new IllegalArgumentException("작성자가 아님");
+        }
     }
 
     private List<Ingredient> dtoToIngredients(List<IngredientDto> dtos, Recipe recipe) {

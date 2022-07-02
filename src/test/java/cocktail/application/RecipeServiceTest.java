@@ -1,11 +1,14 @@
 package cocktail.application;
 
+import cocktail.application.auth.SessionUser;
 import cocktail.application.recipe.MakeRecipeService;
+import cocktail.domain.User;
 import cocktail.domain.recipe.*;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.infra.recipe.IngredientRepository;
 import cocktail.infra.recipe.RecipeRepository;
 import cocktail.infra.recipe.TagRepository;
+import cocktail.infra.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,25 +31,30 @@ class RecipeServiceTest {
     @Mock RecipeRepository recipeRepository;
     @Mock TagRepository tagRepository;
     @Mock IngredientRepository ingredientRepository;
+    @Mock UserRepository userRepository;
 
     @Spy
     RecipeTestUtil recipeTestUtil;
 
     @Test
+    @DisplayName("레시피 생성 시 유저를 참조한다. ")
     void createRecipe_recipe생성() {
         // data
         RecipeRequestDto dto = recipeTestUtil.createDto();
         Recipe recipe = recipeTestUtil.dtoToRecipe(dto);
+        User user = recipeTestUtil.createUser();
 
         Long id = 1l;
         ReflectionTestUtils.setField(recipe, "id", id);
 
         // BDDMockito
         given(recipeRepository.findById(id))
-                .willReturn(Optional.ofNullable(recipe));
+                .willReturn(Optional.of(recipe));
+        given(userRepository.findByUsername(user.getUsername()))
+                .willReturn(Optional.of(user));
 
         // when
-        makeRecipeService.createRecipe(dto);
+        makeRecipeService.createRecipe(dto, new SessionUser(user));
 
         // then
         Recipe findRecipe = recipeRepository.findById(id).get();
@@ -57,19 +65,23 @@ class RecipeServiceTest {
     }
 
     @Test
+    @DisplayName("레시피 생성 시 태그들이 생성되고 레시피의 참조가 그것들을 가리킨다. ")
     void createRecipe_tag생성() {
         // data
         RecipeRequestDto dto = recipeTestUtil.createDto();
         Recipe recipe = recipeTestUtil.dtoToRecipe(dto);
+        User user = recipeTestUtil.createUser();
 
         List<Tag> tagList = createTagList(dto, recipe);
 
         // BDDMockito
         given(tagRepository.findAll())
                 .willReturn(tagList);
+        given(userRepository.findByUsername(user.getUsername()))
+                .willReturn(Optional.of(user));
 
         // when
-        makeRecipeService.createRecipe(dto);
+        makeRecipeService.createRecipe(dto, new SessionUser(user));
 
         // then
         List<Tag> findTagList = tagRepository.findAll();
@@ -78,9 +90,11 @@ class RecipeServiceTest {
     }
 
     @Test
+    @DisplayName("레시피 생성 시 재료들이 생성되고 레시피의 참조가 그것들을 가리킨다. ")
     void createRecipe_ingredient생성_test(){
         RecipeRequestDto dto = recipeTestUtil.createDto();
         Recipe recipe = recipeTestUtil.dtoToRecipe(dto);
+        User user = recipeTestUtil.createUser();
 
         Long id = 1l;
         ReflectionTestUtils.setField(recipe, "id", id);
@@ -89,9 +103,11 @@ class RecipeServiceTest {
 
         given(ingredientRepository.findAll())
                 .willReturn(ingredients);
+        given(userRepository.findByUsername(user.getUsername()))
+                .willReturn(Optional.of(user));
 
         //when
-        makeRecipeService.createRecipe(dto);
+        makeRecipeService.createRecipe(dto, new SessionUser(user));
 
         // then
         List<Ingredient> findIngredients = ingredientRepository.findAll();
@@ -117,14 +133,16 @@ class RecipeServiceTest {
         Tag tag = new Tag("전태그", recipe);
 
         RecipeRequestDto dto = recipeTestUtil.createDto();
+        User user = recipeTestUtil.createUser();
 
         List<Tag> newTagList = dto.getTags().stream()
                 .map(s -> new Tag(s, recipe)).collect(toList());
+        recipe.setUser(user);
 
         given(recipeRepository.fetchFindById(any()))
-                .willReturn(Optional.ofNullable(recipe));
+                .willReturn(Optional.of(recipe));
         //when
-        makeRecipeService.update(1L, dto);
+        makeRecipeService.update(1L, dto, new SessionUser(user));
 
         //then
         assertThat(recipe.getName()).isEqualTo("마티니");

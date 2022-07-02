@@ -31,10 +31,12 @@ public class BookmarkService {
         // 이미 북마크인지 확인
         bookmarkRepository.findOptional(user, recipe)
                 .ifPresent(b -> {
-                    throw new IllegalStateException();
+                    throw new IllegalStateException("이미 북마크 되어있음");
                 });
 
         // 북마크 추가
         bookmarkRepository.save(new Bookmark(user, recipe));
     }
+
+
 }

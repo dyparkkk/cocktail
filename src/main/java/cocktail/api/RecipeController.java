@@ -1,10 +1,12 @@
 package cocktail.api;
 
+import cocktail.application.auth.SessionUser;
 import cocktail.application.recipe.FindRecipeService;
 import cocktail.application.recipe.MakeRecipeService;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
+import cocktail.global.config.Login;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -31,8 +33,9 @@ public class RecipeController {
     private final FindRecipeService findRecipeService;
 
     @PostMapping
-    public ResponseEntity<Long> createRecipe(@RequestBody RecipeRequestDto dto) {
-        Long recipeId = makeRecipeService.createRecipe(dto);
+    public ResponseEntity<Long> createRecipe(@RequestBody RecipeRequestDto dto,
+                                             @ApiIgnore @Login SessionUser sessionUser) {
+        Long recipeId = makeRecipeService.createRecipe(dto, sessionUser);
 
         /**
          * ResponseEntity는 내부적으로 ObjectMapper를 사용함
@@ -65,8 +68,8 @@ public class RecipeController {
 
     @GetMapping("/search")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="page",dataType ="int", value="몇 페이지 (0부터 시장)"),
-            @ApiImplicitParam(name="size",dataType ="int", value="페이지의 데이터 수(default 10)")
+            @ApiImplicitParam(name = "page", dataType = "int", value = "몇 페이지 (0부터 시장)"),
+            @ApiImplicitParam(name = "size", dataType = "int", value = "페이지의 데이터 수(default 10)")
     })
     public ResponseEntity<List<RecipeResponseDto>> searchRecipeApi(@RequestBody SearchCondition condition,
                                                                    @ApiIgnore @PageableDefault Pageable pageable) {
@@ -77,9 +80,21 @@ public class RecipeController {
     @PutMapping("/{id}")
     @ApiImplicitParam(name = "id", dataType = "int", value = "recipe_ID")
     public ResponseEntity<Long> updateApi(@PathVariable Long id,
-                          @RequestBody RecipeRequestDto dto) {
-        Long recipeId = makeRecipeService.update(id, dto);
+                                          @RequestBody RecipeRequestDto dto,
+                                          @ApiIgnore @Login SessionUser sessionUser) {
+        Long recipeId = makeRecipeService.update(id, dto, sessionUser);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(recipeId);
     }
+
+    @DeleteMapping("/{id}")
+    @ApiImplicitParam(name = "id", dataType = "int", value = "recipe_ID")
+    public ResponseEntity<String> deleteApi(@PathVariable Long id,
+                                            @ApiIgnore @Login SessionUser sessionUser) {
+        makeRecipeService.deleteRecipe(id, sessionUser);
+
+        return new ResponseEntity<>("delete", HttpStatus.ACCEPTED);
+    }
+
+
 }
