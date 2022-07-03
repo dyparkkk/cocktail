@@ -73,7 +73,7 @@ public class SwaggerConfig {
     public UiConfiguration uiConfig() {
         return UiConfigurationBuilder.builder()
                 .displayRequestDuration(true)
-                .validatorUrl("")
+                .validatorUrl(null)
                 .build();
     }
 
