@@ -66,6 +66,7 @@ class RecipeRepositoryImplTest {
     }
 
     @Test
+    @DisplayName("filter 검색이 태그에 맞게 걸러진다.")
     void filterSearchTagTest(){
         // given
         Pageable pageable = PageRequest.of(0, 3);
@@ -75,13 +76,15 @@ class RecipeRepositoryImplTest {
                 .build();
 
         //when
-        List<RecipeResponseDto> result = recipeRepository.filterSearch(condition, pageable);
+        List<Recipe> recipes = recipeRepository.filterSearch(condition, pageable);
 
         // then
-        assertThat(result.get(0).getName()).isEqualTo("name1");
+        assertThat(recipes.size()).isEqualTo(1);
+        assertThat(recipes.get(0).getName()).isEqualTo("name1");
     }
 
     @Test
+    @DisplayName("filter 검색이 기주에 맞게 잘 걸러진다. ")
     void filterSearchBaseTest() {
         Pageable pageable = PageRequest.of(0, 3);
         SearchCondition condition = SearchCondition.builder()
@@ -90,14 +93,16 @@ class RecipeRepositoryImplTest {
                 .build();
 
         //when
-        List<RecipeResponseDto> result = recipeRepository.filterSearch(condition, pageable);
+        List<Recipe> recipes = recipeRepository.filterSearch(condition, pageable);
 
         // then
-        assertThat(result.get(0).getName()).isEqualTo("name2");
+        assertThat(recipes.size()).isEqualTo(1);
+        assertThat(recipes.get(0).getName()).isEqualTo("name2");
 
     }
 
     @Test
+    @DisplayName("filter 검색이 조주법에 맞게 잘 걸러진다.")
     void filterSearchBrewingTest() {
         Pageable pageable = PageRequest.of(0, 3);
         SearchCondition condition = SearchCondition.builder()
@@ -106,10 +111,11 @@ class RecipeRepositoryImplTest {
                 .build();
 
         //when
-        List<RecipeResponseDto> result = recipeRepository.filterSearch(condition, pageable);
+        List<Recipe> recipes = recipeRepository.filterSearch(condition, pageable);
 
         // then
-        assertThat(result.get(0).getName()).isEqualTo("name1");
+        assertThat(recipes.size()).isEqualTo(1);
+        assertThat(recipes.get(0).getName()).isEqualTo("name1");
     }
 
     @Test

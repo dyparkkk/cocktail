@@ -3,12 +3,11 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   profiles:
-    active: dev  # local, test, dev, real로 분류
+    active: local  # local, test, dev, real로 분류
 
 #  datasource:
-##    url: jdbc:h2:tcp://localhost/~/test  # window
+#    url: jdbc:h2:tcp://localhost/~/test  # window
 #    #    url: jdbc:h2:~/test           # mac
-#    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1 # dev
 #    username: sa
 #    password:
 #    driver-class-name: org.h2.Driver
@@ -29,6 +28,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
 
   security:
     oauth2:

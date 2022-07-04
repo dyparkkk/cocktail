@@ -23,11 +23,11 @@ public class QuerydslTest {
     void JPQL_세팅확인() {
         User user = saveMember();
 
-        List resultList = em.createQuery("select u from User u where u.username =: username")
+        User singleResult = (User) em.createQuery("select u from User u where u.username =: username")
                 .setParameter("username", "name")
-                .getResultList();
+                .getSingleResult();
 
-        assertThat(resultList).containsExactly(user);
+        assertThat(singleResult.getUsername()).isEqualTo(user.getUsername());
     }
 
     @Test

@@ -49,7 +49,7 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation(value = "로그인", notes = "로그인 기능.")
-    public ResponseEntity<Long> login(@Validated @RequestBody LoginRequestDto dto,
+    public ResponseEntity<String> login(@Validated @RequestBody LoginRequestDto dto,
                                     HttpServletRequest req) {
         UserDto userDto = userService.signIn(dto);
         SessionUser sessionUser = new SessionUser(userDto);
@@ -60,7 +60,7 @@ public class UserController {
         session.setAttribute(LOGIN_USER, sessionUser);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(userDto.getUserId());
+                .body(userDto.getUsername());
     }
 
     @GetMapping("/signup/userid")

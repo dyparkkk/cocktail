@@ -4,6 +4,6 @@ package cocktail.api.user;
 
 public interface SessionConst {
     String LOGIN_USER = "loginUser";
-
+    String TEST_USER = "testUser";
 
 }

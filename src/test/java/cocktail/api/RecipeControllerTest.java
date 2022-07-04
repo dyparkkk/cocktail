@@ -1,9 +1,12 @@
 package cocktail.api;
 
+import cocktail.application.auth.SessionUser;
 import cocktail.application.recipe.FindRecipeService;
 import cocktail.application.recipe.MakeRecipeService;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.RecipeResponseDto;
+import cocktail.dto.UserDto;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,24 +34,27 @@ class RecipeControllerTest {
     private RecipeController recipeController;
 
     @Test
+    @DisplayName("레시피 생성 api 유닛테스트 : 성공한다. ")
     void createRecipeSuccessTest(){
         RecipeRequestDto reqDto = RecipeRequestDto.builder()
                 .name("name")
                 .dosu(BigDecimal.ZERO).build();
         long recipeId = 1l;
+        SessionUser sessionUser = new SessionUser(new UserDto("username", "nickname"));
 
-        given(makeRecipeService.createRecipe(reqDto)).willReturn(recipeId);
+        given(makeRecipeService.createRecipe(reqDto, sessionUser)).willReturn(recipeId);
 
-        ResponseEntity<Long> resEntity = recipeController.createRecipe(reqDto);
+        ResponseEntity<Long> resEntity = recipeController.createRecipe(reqDto, sessionUser);
         assertThat(resEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(resEntity.getBody()).isEqualTo(recipeId);
     }
 
     @Test
+    @DisplayName("레시피 목록 보기 api 유닛테스트 : 성공한다. ")
     void viewRecipeSuccessTest() {
         List<RecipeResponseDto> recipeDtos =
-                List.of(new RecipeResponseDto(1L, "name1"),
-                new RecipeResponseDto(2L,"name2"));
+                List.of(RecipeResponseDto.builder().id(1L).name("name1").build(),
+                        RecipeResponseDto.builder().id(2L).name("name2").build());
         Pageable pageable = PageRequest.of(2, 5);
 
         given(findRecipeService.findAllPageable(any())).willReturn(recipeDtos);

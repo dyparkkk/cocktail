@@ -1,10 +1,14 @@
 package cocktail.application;
 
+import cocktail.application.auth.SessionUser;
+import cocktail.domain.Role;
+import cocktail.domain.User;
 import cocktail.domain.recipe.Base;
 import cocktail.domain.recipe.Brewing;
 import cocktail.domain.recipe.Order;
 import cocktail.domain.recipe.Recipe;
 import cocktail.dto.RecipeRequestDto;
+import cocktail.dto.UserDto;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -60,5 +64,9 @@ public class RecipeTestUtil {
                 .dosu(dto.getDosu())
                 .orders(orderList)
                 .build();
+    }
+
+    User createUser() {
+        return new User("username", "pw", "nickname", Role.USER);
     }
 }

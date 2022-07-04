@@ -30,14 +30,17 @@ public class Recipe extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Base base;
 
+    private String star;
+
     @OneToMany(mappedBy = "recipe")
     private List<Tag> tags  = new ArrayList<>();
 
     @OneToMany(mappedBy = "recipe")
     private List<Ingredient> ingredients  = new ArrayList<>();
 
-//    @Embedded
-//    private Writer writer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     // 값타입 컬렉션 사용
     @ElementCollection(fetch = FetchType.LAZY)
@@ -50,10 +53,16 @@ public class Recipe extends BaseTimeEntity {
         this.dosu = dosu;
         this.brewing = brewing;
         this.base = base;
+        this.star = "0.00";
         if(orders != null){
             this.orders.addAll(orders);
             sortOrders();
         }
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+        user.getRecipe().add(this);
     }
 
     public void update(String name, BigDecimal dosu, Brewing brewing, Base base, List<Order> orders){

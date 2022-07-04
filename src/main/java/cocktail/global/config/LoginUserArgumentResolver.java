@@ -2,6 +2,7 @@ package cocktail.global.config;
 
 import cocktail.api.user.SessionConst;
 import cocktail.application.auth.SessionUser;
+import cocktail.dto.UserDto;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -10,6 +11,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import static cocktail.api.user.SessionConst.*;
 
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
@@ -27,9 +30,12 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         HttpSession session = req.getSession(false);
 
         if (session == null) {
-            return null;
+            HttpSession testSession = req.getSession();
+            testSession.setAttribute(TEST_USER,
+                    new SessionUser(new UserDto("username@naver.com", "nikname")));
+            return testSession.getAttribute(TEST_USER);
         }
 
-        return session.getAttribute(SessionConst.LOGIN_USER);
+        return session.getAttribute(LOGIN_USER);
     }
 }

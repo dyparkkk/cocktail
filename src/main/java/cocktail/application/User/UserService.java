@@ -50,7 +50,7 @@ public class UserService {
             throw new PwNotMatchException("userId : " + user.getUsername() + " Invalid password");
         }
 
-        return new UserDto(user.getId(), user.getUsername(), user.getNickname());
+        return new UserDto(user.getUsername(), user.getNickname());
     }
 
     // 유저 중복 확인

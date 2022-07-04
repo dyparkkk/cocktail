@@ -8,20 +8,18 @@ import lombok.ToString;
 import java.io.Serializable;
 
 @ToString
+@Getter
 public class SessionUser implements Serializable {
-    private Long id;
-    private String name;
-    private String email;
+    private String nickname;
+    private String username;
 
     public SessionUser(User user) {
-        this.id = user.getId();
-        this.name = user.getNickname();
-        this.email = user.getUsername();
+        this.nickname = user.getNickname();
+        this.username = user.getUsername();
     }
 
     public SessionUser(UserDto dto) {
-        this.id = dto.getUserId();
-        this.name = dto.getNickname();
-        this.email = dto.getUsername();
+        this.nickname = dto.getNickname();
+        this.username = dto.getUsername();
     }
 }
