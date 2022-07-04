@@ -1,8 +1,8 @@
 package cocktail.infra.recipe;
 
+import cocktail.domain.QUser;
 import cocktail.domain.recipe.*;
 
-import cocktail.dto.QRecipeResponseDto;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
 import com.querydsl.core.BooleanBuilder;
@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import static cocktail.domain.QUser.*;
 import static cocktail.domain.recipe.QIngredient.*;
 import static cocktail.domain.recipe.QRecipe.*;
 import static cocktail.domain.recipe.QTag.*;
@@ -29,27 +30,23 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
     private final int TAG_LIMIT_NUM = 3;
 
     @Override
-    public List<RecipeResponseDto> findAllListDto(Pageable pageable) {
+    public List<Recipe> findAllRecipe(Pageable pageable) {
         return queryFactory
-                .select(new QRecipeResponseDto(
-                        recipe.id,
-                        recipe.name
-                ))
-                .from(recipe)
+                .selectFrom(recipe)
+                .distinct()
+                .join(recipe.user, user)
+                .join(recipe.tags, tag).fetchJoin()
                 .offset(pageable.getOffset()) // 몇번째부터 시작
                 .limit(pageable.getPageSize()) // 한 페이지에 몇개 가져옴
                 .fetch();
     }
 
     @Override
-    public List<RecipeResponseDto> filterSearch(SearchCondition condition, Pageable pageable) {
-        return queryFactory
-                .select(new QRecipeResponseDto(
-                        recipe.id,
-                        recipe.name
-                ))
-                .from(tag)
-                .join(tag.recipe, recipe)
+    public List<Recipe> filterSearch(SearchCondition condition, Pageable pageable) {
+         return queryFactory
+                .selectFrom(recipe)
+                .distinct()
+                .join(recipe.tags, tag).fetchJoin()
                 .where(
                         tagEq(condition.getTagList()),
                         brewingEq(condition.getBrewing()),

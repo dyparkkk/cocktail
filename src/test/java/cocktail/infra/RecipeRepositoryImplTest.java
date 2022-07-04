@@ -76,10 +76,11 @@ class RecipeRepositoryImplTest {
                 .build();
 
         //when
-        List<RecipeResponseDto> result = recipeRepository.filterSearch(condition, pageable);
+        List<Recipe> recipes = recipeRepository.filterSearch(condition, pageable);
 
         // then
-        assertThat(result.get(0).getName()).isEqualTo("name1");
+        assertThat(recipes.size()).isEqualTo(1);
+        assertThat(recipes.get(0).getName()).isEqualTo("name1");
     }
 
     @Test
@@ -92,10 +93,11 @@ class RecipeRepositoryImplTest {
                 .build();
 
         //when
-        List<RecipeResponseDto> result = recipeRepository.filterSearch(condition, pageable);
+        List<Recipe> recipes = recipeRepository.filterSearch(condition, pageable);
 
         // then
-        assertThat(result.get(0).getName()).isEqualTo("name2");
+        assertThat(recipes.size()).isEqualTo(1);
+        assertThat(recipes.get(0).getName()).isEqualTo("name2");
 
     }
 
@@ -109,10 +111,11 @@ class RecipeRepositoryImplTest {
                 .build();
 
         //when
-        List<RecipeResponseDto> result = recipeRepository.filterSearch(condition, pageable);
+        List<Recipe> recipes = recipeRepository.filterSearch(condition, pageable);
 
         // then
-        assertThat(result.get(0).getName()).isEqualTo("name1");
+        assertThat(recipes.size()).isEqualTo(1);
+        assertThat(recipes.get(0).getName()).isEqualTo("name1");
     }
 
     @Test

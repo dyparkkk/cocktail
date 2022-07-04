@@ -82,17 +82,16 @@ public class RecipeController {
     public ResponseEntity<Long> updateApi(@PathVariable Long id,
                                           @RequestBody RecipeRequestDto dto,
                                           @ApiIgnore @Login SessionUser sessionUser) {
-        Long recipeId = makeRecipeService.update(id, dto);
+        Long recipeId = makeRecipeService.update(id, dto, sessionUser);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(recipeId);
     }
 
     @DeleteMapping("/{id}")
     @ApiImplicitParam(name = "id", dataType = "int", value = "recipe_ID")
-    public ResponseEntity<String> deleteApi(@PathVariable Long id
-//                                            @ApiIgnore @Login SessionUser sessionUser
-                                            ) {
-        makeRecipeService.deleteRecipe(id);
+    public ResponseEntity<String> deleteApi(@PathVariable Long id,
+                                            @ApiIgnore @Login SessionUser sessionUser) {
+        makeRecipeService.deleteRecipe(id, sessionUser);
 
         return new ResponseEntity<>("delete", HttpStatus.ACCEPTED);
     }

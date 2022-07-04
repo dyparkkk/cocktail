@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static cocktail.dto.RecipeResponseDto.*;
+import static java.util.stream.Collectors.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,12 +22,14 @@ public class FindRecipeService {
 
     @Transactional
     public List<RecipeResponseDto> findAllPageable(Pageable pageable){
-        return recipeRepository.findAllListDto(pageable);
+        return recipeRepository.findAllRecipe(pageable)
+                .stream().map(r -> RecipeResponseDto.fromEntity(r)).collect(toList());
     }
 
     @Transactional
     public List<RecipeResponseDto> filterSearch(SearchCondition condition, Pageable pageable){
-        return recipeRepository.filterSearch(condition, pageable);
+        return recipeRepository.filterSearch(condition, pageable)
+                .stream().map(r -> RecipeResponseDto.fromEntity(r)).collect(toList());
     }
 
     @Transactional

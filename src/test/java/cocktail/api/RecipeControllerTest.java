@@ -53,8 +53,8 @@ class RecipeControllerTest {
     @DisplayName("레시피 목록 보기 api 유닛테스트 : 성공한다. ")
     void viewRecipeSuccessTest() {
         List<RecipeResponseDto> recipeDtos =
-                List.of(new RecipeResponseDto(1L, "name1"),
-                new RecipeResponseDto(2L,"name2"));
+                List.of(RecipeResponseDto.builder().id(1L).name("name1").build(),
+                        RecipeResponseDto.builder().id(2L).name("name2").build());
         Pageable pageable = PageRequest.of(2, 5);
 
         given(findRecipeService.findAllPageable(any())).willReturn(recipeDtos);

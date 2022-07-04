@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static cocktail.dto.RecipeRequestDto.*;
 import static java.util.stream.Collectors.*;
@@ -16,24 +18,32 @@ import static java.util.stream.Collectors.*;
 public class RecipeResponseDto {
     private Long id;
     private String name;
-    // 추가예정
-    //사진
-//    private String userNickname;
-    // 별점, 뷰카운트
+    private String star;
+    private String writer; // 유저닉네임
+    private List<String> tags;
+    // 추가예정 - 사진
 
-    public RecipeResponseDto(Long id) {
-        this.id = id;
+    public static RecipeResponseDto fromEntity(Recipe recipe) {
+        List<String> tagList = recipe.getTags().stream()
+                .map(t -> t.getName()).collect(toList());
+        return new RecipeResponseDto(recipe.getId(), recipe.getName(), recipe.getStar(),
+                recipe.getUser().getNickname(), tagList);
     }
 
-    @QueryProjection
-    public RecipeResponseDto(Long id, String name) {
+    @Builder
+    public RecipeResponseDto(Long id, String name, String star, String writer, List<String> tags) {
         this.id = id;
         this.name = name;
+        this.star = star;
+        this.writer = writer;
+        this.tags = tags;
     }
 
     @Getter
     @NoArgsConstructor
-    public static class DetailDto extends RecipeResponseDto{
+    public static class DetailDto{
+        private Long id;
+        private String name;
         private String dosu;
         private Brewing brewing;
         private Base base;
@@ -60,7 +70,8 @@ public class RecipeResponseDto {
         @Builder
         public DetailDto(Long id, String name, String dosu, Brewing brewing, Base base,
                          List<String> tags, List<Order> orders, List<Ingredient> ingredients) {
-            super(id, name);
+            this.id = id;
+            this.name = name;
             this.dosu = dosu;
             this.brewing = brewing;
             this.base = base;

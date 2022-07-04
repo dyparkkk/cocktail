@@ -30,6 +30,8 @@ public class Recipe extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Base base;
 
+    private String star;
+
     @OneToMany(mappedBy = "recipe")
     private List<Tag> tags  = new ArrayList<>();
 
@@ -51,6 +53,7 @@ public class Recipe extends BaseTimeEntity {
         this.dosu = dosu;
         this.brewing = brewing;
         this.base = base;
+        this.star = "0.00";
         if(orders != null){
             this.orders.addAll(orders);
             sortOrders();
