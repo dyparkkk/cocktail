@@ -47,7 +47,7 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    @ApiImplicitParam(name = "id", dataType = "int", value = "recipe_ID")
+    @ApiImplicitParam(name = "id", dataType = "int",example = "3",value = "recipe_ID")
     public ResponseEntity<DetailDto> findByIdApi(@PathVariable Long id) {
         DetailDto res = findRecipeService.findById(id);
         return ResponseEntity.status(HttpStatus.OK)
@@ -56,8 +56,8 @@ public class RecipeController {
 
     @GetMapping
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", dataType = "int", value = "몇 페이지 (0부터 시장)"),
-            @ApiImplicitParam(name = "size", dataType = "int", value = "페이지의 요소 수(default 10)")
+            @ApiImplicitParam(name = "page", dataType = "int",example = "0", value = "몇 페이지 (0부터 시장)"),
+            @ApiImplicitParam(name = "size", dataType = "int",example = "3", value = "페이지의 요소 수(default 10)")
     })
     public ResponseEntity<List<RecipeResponseDto>> viewAllRecipe(@ApiIgnore @PageableDefault Pageable pageable) {
 
@@ -68,8 +68,8 @@ public class RecipeController {
 
     @GetMapping("/search")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", dataType = "int", value = "몇 페이지 (0부터 시장)"),
-            @ApiImplicitParam(name = "size", dataType = "int", value = "페이지의 데이터 수(default 10)")
+            @ApiImplicitParam(name = "page", dataType = "int",example = "0", value = "몇 페이지 (0부터 시장)"),
+            @ApiImplicitParam(name = "size", dataType = "int",example = "3", value = "페이지의 데이터 수(default 10)")
     })
     public ResponseEntity<List<RecipeResponseDto>> searchRecipeApi(@RequestBody SearchCondition condition,
                                                                    @ApiIgnore @PageableDefault Pageable pageable) {
@@ -78,7 +78,7 @@ public class RecipeController {
     }
 
     @PutMapping("/{id}")
-    @ApiImplicitParam(name = "id", dataType = "int", value = "recipe_ID")
+    @ApiImplicitParam(name = "id", dataType = "int",example = "3", value = "recipe_ID")
     public ResponseEntity<Long> updateApi(@PathVariable Long id,
                                           @RequestBody RecipeRequestDto dto,
                                           @ApiIgnore @Login SessionUser sessionUser) {
@@ -88,7 +88,7 @@ public class RecipeController {
     }
 
     @DeleteMapping("/{id}")
-    @ApiImplicitParam(name = "id", dataType = "int", value = "recipe_ID")
+    @ApiImplicitParam(name = "id", dataType = "int",example = "3", value = "recipe_ID")
     public ResponseEntity<String> deleteApi(@PathVariable Long id,
                                             @ApiIgnore @Login SessionUser sessionUser) {
         makeRecipeService.deleteRecipe(id, sessionUser);
