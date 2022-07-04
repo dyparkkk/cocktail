@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -35,7 +34,6 @@ public class InitRecipe {
     static class InitRecipeService{
 
         private final PasswordEncoder passwordEncoder;
-        private final HttpSession httpSession;
 
         @PersistenceContext
         private EntityManager em;
