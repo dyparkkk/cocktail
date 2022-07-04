@@ -1,7 +1,6 @@
 package cocktail.api;
 
 
-import cocktail.application.auth.SessionUser;
 import cocktail.domain.Role;
 import cocktail.domain.User;
 import cocktail.domain.recipe.*;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static cocktail.api.user.SessionConst.TEST_USER;
 
 @Profile("local")
 @Component
@@ -47,7 +45,6 @@ public class InitRecipe {
             // user
             String pw = passwordEncoder.encode("pw");
             User user = new User("username@naver.com", pw, "nikname", Role.USER);
-//            httpSession.setAttribute(TEST_USER, new SessionUser(user));
             em.persist(user);
 
             // recipe
