@@ -23,13 +23,13 @@ public class FindRecipeService {
     @Transactional
     public List<RecipeResponseDto> findAllPageable(Pageable pageable){
         return recipeRepository.findAllRecipe(pageable)
-                .stream().map(r -> RecipeResponseDto.fromEntity(r)).collect(toList());
+                .stream().map(RecipeResponseDto::fromEntity).collect(toList());
     }
 
     @Transactional
     public List<RecipeResponseDto> filterSearch(SearchCondition condition, Pageable pageable){
         return recipeRepository.filterSearch(condition, pageable)
-                .stream().map(r -> RecipeResponseDto.fromEntity(r)).collect(toList());
+                .stream().map(RecipeResponseDto::fromEntity).collect(toList());
     }
 
     @Transactional

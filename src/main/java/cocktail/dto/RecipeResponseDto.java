@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,22 +22,27 @@ public class RecipeResponseDto {
     private String star;
     private String writer; // 유저닉네임
     private List<String> tags;
+    private String createdDate;
+    private String lastModifiedDate;
     // 추가예정 - 사진
 
     public static RecipeResponseDto fromEntity(Recipe recipe) {
         List<String> tagList = recipe.getTags().stream()
                 .map(t -> t.getName()).collect(toList());
         return new RecipeResponseDto(recipe.getId(), recipe.getName(), recipe.getStar(),
-                recipe.getUser().getNickname(), tagList);
+                recipe.getUser().getNickname(), tagList,
+                recipe.getCreatedDate().toString(), recipe.getLastModifiedDate().toString());
     }
 
     @Builder
-    public RecipeResponseDto(Long id, String name, String star, String writer, List<String> tags) {
+    public RecipeResponseDto(Long id, String name, String star, String writer, List<String> tags, String createdDate, String lastModifiedDate) {
         this.id = id;
         this.name = name;
         this.star = star;
         this.writer = writer;
         this.tags = tags;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
     }
 
     @Getter
@@ -50,6 +56,8 @@ public class RecipeResponseDto {
         private List<String> tags;
         private List<Order> orders;
         private List<Ingredient> ingredients;
+        private String createdDate;
+        private String lastModifiedDate;
 
         public static DetailDto from(Recipe recipe) {
             return DetailDto.builder()
@@ -64,12 +72,15 @@ public class RecipeResponseDto {
                             .collect(toList())
                     )
                     .ingredients(recipe.getIngredients())
+                    .createdDate(recipe.getCreatedDate().toString())
+                    .lastModifiedDate(recipe.getLastModifiedDate().toString())
                     .build();
         }
 
         @Builder
         public DetailDto(Long id, String name, String dosu, Brewing brewing, Base base,
-                         List<String> tags, List<Order> orders, List<Ingredient> ingredients) {
+                         List<String> tags, List<Order> orders, List<Ingredient> ingredients,
+                         String createdDate, String lastModifiedDate) {
             this.id = id;
             this.name = name;
             this.dosu = dosu;
@@ -78,6 +89,8 @@ public class RecipeResponseDto {
             this.tags = tags;
             this.orders = orders;
             this.ingredients = ingredients;
+            this.createdDate = createdDate;
+            this.lastModifiedDate = lastModifiedDate;
         }
     }
 

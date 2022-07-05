@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class RecipeControllerTest {
+class RecipeControllerUnitTest {
 
     @Mock
     private MakeRecipeService makeRecipeService;
