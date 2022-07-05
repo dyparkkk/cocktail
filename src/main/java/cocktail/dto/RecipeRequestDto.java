@@ -8,7 +8,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -27,6 +30,14 @@ public class RecipeRequestDto {
     @ApiModelProperty(name = "기주", dataType = "Base", required = true)
     private Base base;
 
+    private String star;
+
+    private int voter;
+
+    private int viewCnt;
+
+    private Official official;
+
     @ApiModelProperty(name = "태그", dataType = "String 배열")
     private List<String> tags;
 
@@ -36,17 +47,26 @@ public class RecipeRequestDto {
     @ApiModelProperty(name = "재료", dataType = "배열")
     private List<IngredientDto> ingredients;
 
+    private LocalDateTime created;
+
     @Builder
-    public RecipeRequestDto(String name, BigDecimal dosu, Brewing brewing, Base base,
-                            List<String> tags, List<OrderDto> orders, List<IngredientDto> ingredients) {
+    public RecipeRequestDto(String name, BigDecimal dosu, Brewing brewing,
+                            Base base, String star, int voter, int viewCnt,
+                            Official official, List<String> tags, List<OrderDto> orders,
+                            List<IngredientDto> ingredients) {
         this.name = name;
         this.dosu = dosu;
         this.brewing = brewing;
         this.base = base;
+        this.star = star;
+        this.voter = voter;
+        this.viewCnt = viewCnt;
+        this.official = official;
         this.tags = tags;
         this.orders = orders;
         this.ingredients = ingredients;
     }
+
 
     public void setBrewing(String brewing) {
         this.brewing = Brewing.valueOf(brewing.toUpperCase());

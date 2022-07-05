@@ -15,6 +15,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.persistence.EntityManager;
 
@@ -30,14 +32,17 @@ class RecipeRepositoryImplTest {
     @Autowired
     EntityManager em;
 
-    @Autowired RecipeRepository recipeRepository;
-    @Autowired TagRepository tagRepository;
-    @Autowired IngredientRepository ingredientRepository;
+    @Autowired
+    RecipeRepository recipeRepository;
+    @Autowired
+    TagRepository tagRepository;
+    @Autowired
+    IngredientRepository ingredientRepository;
 
     private JPAQueryFactory queryFactory;
 
     @BeforeEach
-    void before(){
+    void before() {
         queryFactory = new JPAQueryFactory(em);
 
         Recipe recipe1 = Recipe.builder()
@@ -67,7 +72,7 @@ class RecipeRepositoryImplTest {
 
     @Test
     @DisplayName("filter 검색이 태그에 맞게 걸러진다.")
-    void filterSearchTagTest(){
+    void filterSearchTagTest() {
         // given
         Pageable pageable = PageRequest.of(0, 3);
         SearchCondition condition = SearchCondition.builder()
@@ -135,7 +140,7 @@ class RecipeRepositoryImplTest {
 
     @Test
     @DisplayName("fetchFindById가 recipe 찾기에 성공한다.(query 한방으로) ")
-    void fetchFindById_SuccessTest(){
+    void fetchFindById_SuccessTest() {
         // given
         Recipe recipe = recipeRepository.findAll().get(0);
         Long id = recipe.getId();
@@ -152,12 +157,12 @@ class RecipeRepositoryImplTest {
 
     @Test
     @DisplayName("fetchFindById가 결과를 찾지 못하면 NoSuchElementException을 반환한다.")
-    void fetchFindById_notFound_failTest(){
+    void fetchFindById_notFound_failTest() {
         // given
         Long id = 123L;
 
         // when, then
-        assertThatThrownBy(()->recipeRepository.fetchFindById(id).get())
+        assertThatThrownBy(() -> recipeRepository.fetchFindById(id).get())
                 .isInstanceOf(NoSuchElementException.class);
     }
 
@@ -179,5 +184,41 @@ class RecipeRepositoryImplTest {
 
         Recipe findRecipe1 = recipeRepository.findById(id).get();
         assertThat(findRecipe1.getIngredients().size()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("findAllRecipe가 최신순의 레시피를 반환한다. ")
+    void findAllRecipe_created_orderBy() {
+        Pageable pageable = PageRequest.of(0, 3);
+
+        // when
+        List<Recipe> recipes = recipeRepository.findAllRecipe(pageable);
+
+        // then
+        assertThat(recipes.get(0).getCreatedDate().isAfter(recipes.get(1).getCreatedDate())).isTrue();
+    }
+
+    @Test
+    @DisplayName("findAllRecipe가 별점순의 레시피를 반환한다. ")
+    void findAllRecipe_star_orderBy() {
+        //given
+        Pageable pageable = PageRequest.of(0, 4, Sort.by("star").descending());
+
+        Recipe recipe = Recipe.builder()
+                .name("name3").build();
+        ReflectionTestUtils.setField(recipe, "star", "3.35");
+        em.persist(recipe);
+
+        Recipe recipe2 = Recipe.builder()
+                .name("name4").build();
+        ReflectionTestUtils.setField(recipe2, "star", "4.46");
+        em.persist(recipe2);
+
+        // when
+        List<Recipe> recipes = recipeRepository.findAllRecipe(pageable);
+
+        // then
+        assertThat(recipes.get(0).getName()).isEqualTo("name4");
+        assertThat(recipes.get(0).getStar()).isEqualTo("4.46");
     }
 }

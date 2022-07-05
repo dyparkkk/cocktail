@@ -31,6 +31,11 @@ public class Recipe extends BaseTimeEntity {
     private Base base;
 
     private String star;
+    private int voter;
+    private int viewCnt;
+
+    @Enumerated(EnumType.STRING)
+    private Official official;
 
     @OneToMany(mappedBy = "recipe")
     private List<Tag> tags  = new ArrayList<>();
@@ -53,16 +58,23 @@ public class Recipe extends BaseTimeEntity {
         this.dosu = dosu;
         this.brewing = brewing;
         this.base = base;
-        this.star = "0.00";
         if(orders != null){
             this.orders.addAll(orders);
             sortOrders();
         }
+        this.star = "0.00";
+        voter = 0;
+        viewCnt = 0;
+        official = Official.NONE;
     }
 
     public void setUser(User user) {
         this.user = user;
         user.getRecipe().add(this);
+    }
+
+    public void setOfficial(Official official) {
+        this.official = official;
     }
 
     public void update(String name, BigDecimal dosu, Brewing brewing, Base base, List<Order> orders){

@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Locale;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
@@ -21,6 +22,12 @@ public class Tag {
     public Tag(String name, Recipe recipe) {
         this.name = name;
         setRecipe(recipe);
+        if(name.toUpperCase().equals("KBMA")){
+            recipe.setOfficial(Official.KBMA);
+        }
+        if(name.toUpperCase().equals("IBA")){
+            recipe.setOfficial(Official.IBA);
+        }
     }
 
     public String getName() {

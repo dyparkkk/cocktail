@@ -30,10 +30,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
 
   output.ansi.enabled: always  # terminal color
 
