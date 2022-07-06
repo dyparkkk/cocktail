@@ -37,6 +37,7 @@ public class FindRecipeService {
         Recipe recipe = recipeRepository.fetchFindById(id)
                 .orElseThrow(() -> new IllegalArgumentException("RecipeService.findById : id값을 찾을 수 없습니다."));
 
+        recipeRepository.viewCntPlus(id);
         return DetailDto.from(recipe);
     }
 }

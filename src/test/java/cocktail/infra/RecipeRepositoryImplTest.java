@@ -221,4 +221,21 @@ class RecipeRepositoryImplTest {
         assertThat(recipes.get(0).getName()).isEqualTo("name4");
         assertThat(recipes.get(0).getStar()).isEqualTo("4.46");
     }
+
+    @Test
+    @DisplayName("recipe의 viewCnt를 1 올린다. ")
+    void plusViewCnt() {
+        Recipe recipe = Recipe.builder().build();
+        int viewCnt = recipe.getViewCnt();
+        em.persist(recipe);
+        em.flush();
+        em.clear();
+
+        // when
+        recipeRepository.viewCntPlus(recipe.getId());
+
+        //then
+        Recipe findRecipe = recipeRepository.findById(recipe.getId()).get();
+        assertThat(findRecipe.getViewCnt()).isEqualTo(viewCnt+1);
+    }
 }

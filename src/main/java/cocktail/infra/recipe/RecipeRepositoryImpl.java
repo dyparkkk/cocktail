@@ -95,6 +95,17 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 .execute();
     }
 
+    @Override
+    public long viewCntPlus(Long id) {
+        return queryFactory
+                .update(recipe)
+                .set(recipe.viewCnt, recipe.viewCnt.add(1))
+                .where(recipe.id.eq(id))
+                .execute();
+
+    }
+
+
     private List<OrderSpecifier> starSort(Pageable pageable) {
         List<OrderSpecifier> orders = new ArrayList<>();
         if(! pageable.getSort().isEmpty()) {
