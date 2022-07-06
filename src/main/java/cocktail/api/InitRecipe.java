@@ -1,7 +1,6 @@
 package cocktail.api;
 
 
-import cocktail.application.auth.SessionUser;
 import cocktail.domain.Role;
 import cocktail.domain.User;
 import cocktail.domain.recipe.*;
@@ -14,11 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static cocktail.api.user.SessionConst.TEST_USER;
 
 @Profile("local")
 @Component
@@ -37,7 +34,6 @@ public class InitRecipe {
     static class InitRecipeService{
 
         private final PasswordEncoder passwordEncoder;
-        private final HttpSession httpSession;
 
         @PersistenceContext
         private EntityManager em;
@@ -47,7 +43,6 @@ public class InitRecipe {
             // user
             String pw = passwordEncoder.encode("pw");
             User user = new User("username@naver.com", pw, "nikname", Role.USER);
-//            httpSession.setAttribute(TEST_USER, new SessionUser(user));
             em.persist(user);
 
             // recipe

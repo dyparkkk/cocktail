@@ -1,7 +1,6 @@
 package cocktail.dto;
 
 
-import cocktail.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

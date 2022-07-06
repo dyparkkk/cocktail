@@ -10,8 +10,10 @@ import cocktail.domain.recipe.Recipe;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.UserDto;
 import org.springframework.stereotype.Component;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,13 +24,17 @@ import static java.util.stream.Collectors.toList;
 public class RecipeTestUtil {
 
     Recipe createRecipe() {
-        return Recipe.builder()
+        Recipe recipe = Recipe.builder()
                 .name("before")
                 .dosu(BigDecimal.TEN)
                 .brewing(Brewing.THROWING)
                 .base(Base.RUM)
                 .orders(List.of(new Order(1, "1111")))
                 .build();
+
+        ReflectionTestUtils.setField(recipe, "createdDate", LocalDateTime.now());
+        ReflectionTestUtils.setField(recipe, "lastModifiedDate", LocalDateTime.now());
+        return recipe;
     }
 
     RecipeRequestDto createDto() {
