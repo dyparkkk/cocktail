@@ -75,7 +75,7 @@ public class InitRecipe {
                 em.persist(new Tag("맛있는"+String.valueOf(i%2), recipe));
 
                 em.persist(new Ingredient(1, "재료1", "45ml", recipe));
-                em.persist(new Ingredient(1, "재료2", "1/2oz", recipe));
+                em.persist(new Ingredient(2, "재료2", "1/2oz", recipe));
             }
 
 
