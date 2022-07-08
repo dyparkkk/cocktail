@@ -65,8 +65,10 @@ class RecipeControllerSpringTest {
         //then
         assertThat(response.getBody().length).isEqualTo(3);
         String date1 = response.getBody()[0].getCreatedDate();
+        System.out.println(date1);
         String date2 = response.getBody()[1].getCreatedDate();
-        assertThat(date1.compareTo(date2)).isEqualTo(1);
+        System.out.println(date2);
+        assertThat(date1.compareTo(date2)).isPositive();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 

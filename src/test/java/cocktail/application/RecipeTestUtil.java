@@ -25,6 +25,8 @@ import static java.util.stream.Collectors.toList;
 public class RecipeTestUtil {
 
     Recipe createRecipe() {
+        User user = User.builder().nickname("nickname").username("username").build();
+
         Recipe recipe = Recipe.builder()
                 .name("before")
                 .dosu(BigDecimal.TEN)
@@ -36,6 +38,7 @@ public class RecipeTestUtil {
                 .soft(2)
                 .garnishes(Set.of("레몬", "콜라"))
                 .build();
+        recipe.setUser(user);
 
         ReflectionTestUtils.setField(recipe, "createdDate", LocalDateTime.now());
         ReflectionTestUtils.setField(recipe, "lastModifiedDate", LocalDateTime.now());

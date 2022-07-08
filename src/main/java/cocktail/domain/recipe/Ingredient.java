@@ -1,15 +1,12 @@
 package cocktail.domain.recipe;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@ToString
+@Getter
 public class Ingredient {
 
     @Id
