@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -18,10 +19,14 @@ public class SearchCondition {
     private String name;
 
     public void setBrewing(String brewing) {
-        this.brewing = Brewing.valueOf(brewing.toUpperCase());
+        if (StringUtils.hasText(brewing)){
+            this.brewing = Brewing.valueOf(brewing.toUpperCase());
+        }
     }
     public void setBase(String base){
-        this.base = Base.valueOf(base.toUpperCase());
+        if (StringUtils.hasText(base)) {
+            this.base = Base.valueOf(base.toUpperCase());
+        }
     }
 
     @Builder

@@ -1,5 +1,6 @@
 package cocktail.domain.recipe;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -7,7 +8,7 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 @NoArgsConstructor
-@ToString
+@Getter
 public class Order implements Comparable<Order> {
     private int num;
     private String content;

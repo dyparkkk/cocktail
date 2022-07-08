@@ -97,6 +97,11 @@ public class RecipeRequestDto {
                     .recipe(recipe)
                     .build();
         }
+
+        public static IngredientDto fromEntity(Ingredient ingredient){
+            return new IngredientDto(ingredient.getNum(), ingredient.getName(), ingredient.getVolume());
+        }
+
     }
 
 }
