@@ -3,11 +3,13 @@ package cocktail.domain.recipe;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@ToString
 public class Ingredient {
 
     @Id

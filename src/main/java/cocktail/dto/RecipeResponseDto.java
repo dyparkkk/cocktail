@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static cocktail.dto.RecipeRequestDto.*;
@@ -56,6 +57,10 @@ public class RecipeResponseDto {
         private List<String> tags;
         private List<Order> orders;
         private List<Ingredient> ingredients;
+        private String glass;
+        private Integer soft;
+        private Integer sweet;
+        private Set<String> garnishes;
         private String createdDate;
         private String lastModifiedDate;
 
@@ -72,15 +77,17 @@ public class RecipeResponseDto {
                             .collect(toList())
                     )
                     .ingredients(recipe.getIngredients())
+                    .glass(recipe.getGlass())
+                    .soft(recipe.getSoft())
+                    .sweet(recipe.getSweet())
+                    .garnishes(recipe.getGarnishes())
                     .createdDate(recipe.getCreatedDate().toString())
                     .lastModifiedDate(recipe.getLastModifiedDate().toString())
                     .build();
         }
 
         @Builder
-        public DetailDto(Long id, String name, String dosu, Brewing brewing, Base base,
-                         List<String> tags, List<Order> orders, List<Ingredient> ingredients,
-                         String createdDate, String lastModifiedDate) {
+        public DetailDto(Long id, String name, String dosu, Brewing brewing, Base base, List<String> tags, List<Order> orders, List<Ingredient> ingredients, String glass, Integer soft, Integer sweet, Set<String> garnishes, String createdDate, String lastModifiedDate) {
             this.id = id;
             this.name = name;
             this.dosu = dosu;
@@ -89,6 +96,10 @@ public class RecipeResponseDto {
             this.tags = tags;
             this.orders = orders;
             this.ingredients = ingredients;
+            this.glass = glass;
+            this.soft = soft;
+            this.sweet = sweet;
+            this.garnishes = garnishes;
             this.createdDate = createdDate;
             this.lastModifiedDate = lastModifiedDate;
         }

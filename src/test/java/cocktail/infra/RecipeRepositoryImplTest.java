@@ -7,6 +7,7 @@ import cocktail.infra.recipe.IngredientRepository;
 import cocktail.infra.recipe.RecipeRepository;
 import cocktail.infra.recipe.TagRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import javax.persistence.EntityManager;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -49,6 +51,8 @@ class RecipeRepositoryImplTest {
                 .name("name1")
                 .base(Base.GIN)
                 .brewing(Brewing.BLENDING)
+                .orders(List.of(new Order(1, "order1"), new Order(2, "order2")))
+                .garnishes(Set.of("레몬", "콜라"))
                 .build();
         em.persist(recipe1);
 
@@ -139,7 +143,7 @@ class RecipeRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("fetchFindById가 recipe 찾기에 성공한다.(query 한방으로) ")
+    @DisplayName("fetchFindById가 recipe 찾기에 성공한다. ")
     void fetchFindById_SuccessTest() {
         // given
         Recipe recipe = recipeRepository.findAll().get(0);
@@ -164,6 +168,32 @@ class RecipeRepositoryImplTest {
         // when, then
         assertThatThrownBy(() -> recipeRepository.fetchFindById(id).get())
                 .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    @DisplayName("fetchFindById가 batch_size 사용해서 쿼리 1+M번으로 order와 garnishes, tag를 찾는다. ")
+    void fetchFindById_query_num_Test() {
+        // given
+        Recipe recipe = recipeRepository.findAll().get(0);
+        Long id = recipe.getId();
+        em.flush();
+        em.clear();
+        System.out.println("-------------");
+
+        // when, then
+        Recipe findRecipe = recipeRepository.fetchFindById(id).get();
+        for(Order order : findRecipe.getOrders()){
+            System.out.println("order = " + order.toString());
+        }
+        for (String s : findRecipe.getGarnishes()){
+            System.out.println("garnish = " + s);
+        }
+        for(Tag tag : findRecipe.getTags()){
+            System.out.println("tag = " + tag.getName());
+        }
+        for (Ingredient ingredient : findRecipe.getIngredients()) {
+            System.out.println("ingredient = " + ingredient.toString());
+        }
     }
 
     @Test
