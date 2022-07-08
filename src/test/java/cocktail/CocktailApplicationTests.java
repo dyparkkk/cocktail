@@ -10,8 +10,4 @@ class CocktailApplicationTests {
 	void contextLoads() {
 	}
 
-
-
-
-
 }

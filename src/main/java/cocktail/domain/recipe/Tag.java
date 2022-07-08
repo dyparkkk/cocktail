@@ -10,7 +10,7 @@ import java.util.Locale;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Tag {
     
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;

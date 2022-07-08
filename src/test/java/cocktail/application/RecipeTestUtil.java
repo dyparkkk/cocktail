@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 
@@ -24,13 +25,20 @@ import static java.util.stream.Collectors.toList;
 public class RecipeTestUtil {
 
     Recipe createRecipe() {
+        User user = User.builder().nickname("nickname").username("username").build();
+
         Recipe recipe = Recipe.builder()
                 .name("before")
                 .dosu(BigDecimal.TEN)
                 .brewing(Brewing.THROWING)
                 .base(Base.RUM)
                 .orders(List.of(new Order(1, "1111")))
+                .glass("glass")
+                .sweet(1)
+                .soft(2)
+                .garnishes(Set.of("레몬", "콜라"))
                 .build();
+        recipe.setUser(user);
 
         ReflectionTestUtils.setField(recipe, "createdDate", LocalDateTime.now());
         ReflectionTestUtils.setField(recipe, "lastModifiedDate", LocalDateTime.now());
@@ -59,16 +67,27 @@ public class RecipeTestUtil {
                 .orders(orderDtoList)
                 .tags(stringTagList)
                 .ingredients(ingredientDtoList)
+                .glass("glass")
+                .garnish(List.of("셀러드 스틱", "레몬 웨지"))
+                .soft(3)
+                .sweet(10)
                 .build();
     }
 
     Recipe dtoToRecipe(RecipeRequestDto dto) {
         List<Order> orderList = dto.getOrders().stream()
                 .map(RecipeRequestDto.OrderDto::toOrder).collect(toList());
+        Set<String> garnishes = Set.copyOf(dto.getGarnish());
         return Recipe.builder()
                 .name(dto.getName())
                 .dosu(dto.getDosu())
                 .orders(orderList)
+                .garnishes(garnishes)
+                .soft(dto.getSoft())
+                .sweet(dto.getSweet())
+                .glass(dto.getGlass())
+                .base(dto.getBase())
+                .brewing(dto.getBrewing())
                 .build();
     }
 

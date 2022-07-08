@@ -5,6 +5,7 @@ import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
 import cocktail.infra.recipe.RecipeRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,8 @@ public class FindRecipeService {
         Recipe recipe = recipeRepository.fetchFindById(id)
                 .orElseThrow(() -> new IllegalArgumentException("RecipeService.findById : id값을 찾을 수 없습니다."));
 
+        recipeRepository.viewCntPlus(id);
+//        Hibernate.initialize(recipe);
         return DetailDto.from(recipe);
     }
 }

@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import static cocktail.domain.QUser.*;
 import static cocktail.domain.recipe.QIngredient.*;
+import static cocktail.domain.recipe.QOrder.*;
 import static cocktail.domain.recipe.QRecipe.*;
 import static cocktail.domain.recipe.QTag.*;
 import static org.springframework.util.StringUtils.hasText;
@@ -80,8 +81,10 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
     public Optional<Recipe> fetchFindById(Long id) {
         Recipe result = queryFactory
                 .selectFrom(recipe)
+                .distinct()
                 .innerJoin(recipe.tags, tag)
                 .innerJoin(recipe.ingredients, ingredient).fetchJoin()
+                .join(recipe.orders, order)
                 .where(recipe.id.eq(id))
                 .fetchOne();
         return Optional.ofNullable(result);
@@ -94,6 +97,16 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 .where(ingredient.recipe.id.eq(id))
                 .execute();
     }
+
+    @Override
+    public long viewCntPlus(Long id) {
+        return queryFactory
+                .update(recipe)
+                .set(recipe.viewCnt, recipe.viewCnt.add(1))
+                .where(recipe.id.eq(id))
+                .execute();
+    }
+
 
     private List<OrderSpecifier> starSort(Pageable pageable) {
         List<OrderSpecifier> orders = new ArrayList<>();

@@ -35,7 +35,7 @@ class RecipeControllerSpringTest {
     @Autowired private TagRepository tagRepository;
 
     @BeforeEach
-    void before() {
+    void before() throws InterruptedException {
         for(int i=0; i<10; i++){
             User user = User.builder().nickname("user" + i).build();
             userRepository.save(user);
@@ -48,6 +48,7 @@ class RecipeControllerSpringTest {
             recipeRepository.save(recipe);
 
             tagRepository.save(new Tag("태그" + i, recipe));
+            Thread.sleep(100);
         }
     }
 
@@ -63,7 +64,11 @@ class RecipeControllerSpringTest {
 
         //then
         assertThat(response.getBody().length).isEqualTo(3);
-        assertThat(response.getBody()[0].getName()).isEqualTo("name9");
+        String date1 = response.getBody()[0].getCreatedDate();
+        System.out.println(date1);
+        String date2 = response.getBody()[1].getCreatedDate();
+        System.out.println(date2);
+        assertThat(date1.compareTo(date2)).isPositive();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 

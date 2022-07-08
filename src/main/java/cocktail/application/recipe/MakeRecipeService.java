@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 import static cocktail.dto.RecipeRequestDto.*;
 import static java.util.stream.Collectors.*;
@@ -29,21 +30,10 @@ public class MakeRecipeService {
     private final IngredientRepository ingredientRepository;
     private final UserRepository userRepository;
 
-    /**
-     * 회원 정보 추가
-     * Brewing, Base 저장 추가
-     */
     @Transactional
     public Long createRecipe(RecipeRequestDto dto, SessionUser sessionUser) {
         // Recipe 생성
-        List<Order> orderList = dtosToOrders(dto.getOrders());
-
-        Recipe recipe = Recipe.builder()
-                .name(dto.getName())
-                .dosu(dto.getDosu())
-                .brewing(dto.getBrewing())
-                .base(dto.getBase())
-                .orders(orderList).build();
+        Recipe recipe = dtoToRecipe(dto);
         recipeRepository.save(recipe);
 
         // dto로 부터 tag 생성해서 저장
@@ -61,6 +51,7 @@ public class MakeRecipeService {
         return recipe.getId();
     }
 
+
     @Transactional
     public Long update(Long id, RecipeRequestDto dto, SessionUser user){
         Recipe recipe = recipeRepository.fetchFindById(id)
@@ -71,7 +62,10 @@ public class MakeRecipeService {
 
         // 값 바꿔주기
         List<Order> orders = dtosToOrders(dto.getOrders());
-        recipe.update(dto.getName(), dto.getDosu(), dto.getBrewing(), dto.getBase(), orders);
+        Set<String> garnishes = Set.copyOf(dto.getGarnish());
+        recipe.update(dto.getName(), dto.getDosu(), dto.getBrewing(), dto.getBase(), garnishes,
+                dto.getGlass(), dto.getSoft(), dto.getSweet(), orders);
+
 
         // 전에 있던 태그 삭제 후 저장
         recipeRepository.deleteTags(id);
@@ -96,6 +90,24 @@ public class MakeRecipeService {
 
         // 레시피 삭제
         recipeRepository.delete(recipe);
+    }
+
+    private Recipe dtoToRecipe(RecipeRequestDto dto) {
+        List<Order> orderList = dtosToOrders(dto.getOrders());
+        Set<String> garnishes = Set.copyOf(dto.getGarnish());
+
+        Recipe recipe = Recipe.builder()
+                .name(dto.getName())
+                .dosu(dto.getDosu())
+                .brewing(dto.getBrewing())
+                .base(dto.getBase())
+                .orders(orderList)
+                .garnishes(garnishes)
+                .glass(dto.getGlass())
+                .sweet(dto.getSweet())
+                .soft(dto.getSoft())
+                .build();
+        return recipe;
     }
 
     private void isValid(SessionUser user, Recipe recipe) {

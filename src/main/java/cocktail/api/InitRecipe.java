@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 
 @Profile("local")
@@ -42,7 +43,7 @@ public class InitRecipe {
         public void init() {
             // user
             String pw = passwordEncoder.encode("pw");
-            User user = new User("username@naver.com", pw, "nikname", Role.USER);
+            User user = new User("username@naver.com", pw, "nickname", Role.USER);
             em.persist(user);
 
             // recipe
@@ -54,12 +55,17 @@ public class InitRecipe {
             for (int i = 0; i < 10; i++) {
                 Base[] bases = Base.values();
                 Brewing[] brewings = Brewing.values();
+                String[] garnishes = {"콜라", "레몬", "설탕", "치킨무"};
 
                 Recipe recipe = Recipe.builder()
                         .name("name" + i)
                         .dosu(new BigDecimal(i))
                         .base(bases[i % bases.length])
                         .brewing(brewings[i % brewings.length])
+                        .soft(i)
+                        .sweet(i)
+                        .glass(String.valueOf(i)+"번 글래스")
+                        .garnishes(Set.of(garnishes[i%4]))
                         .orders(orderList).build();
 
                 recipe.setUser(user);

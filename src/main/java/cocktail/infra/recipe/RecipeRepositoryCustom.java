@@ -17,4 +17,5 @@ public interface RecipeRepositoryCustom {
     long deleteTags(Long id);
     Optional<Recipe> fetchFindById(Long id);
     long deleteIngredients(Long id);
+    long viewCntPlus(Long id);
 }

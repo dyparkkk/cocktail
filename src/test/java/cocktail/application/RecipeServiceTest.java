@@ -154,6 +154,8 @@ class RecipeServiceTest {
                 .contains("드라이 진", "IBA", "젓지말고 흔들어서");
         assertThat(recipe.getIngredients()).extracting("name")
                 .contains("드라이 진", "베르무트");
+        assertThat(recipe.getGarnishes()).containsOnly("셀러드 스틱", "레몬 웨지");
+        assertThat(recipe.getGlass()).isEqualTo("glass");
     }
 
     private List<Tag> createTagList(RecipeRequestDto dto, Recipe recipe) {
