@@ -1,6 +1,7 @@
 package cocktail.infra;
 
 import cocktail.domain.*;
+import cocktail.domain.recipe.Recipe;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.util.List;
 
+import static cocktail.domain.recipe.QRecipe.recipe;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
@@ -43,6 +46,26 @@ public class QuerydslTest {
                 .fetch();
 
         assertThat(result).containsExactly(user);
+    }
+
+    @Test
+    void querydslBetweenTest(){
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+
+        em.persist(Recipe.builder().dosu(BigDecimal.ZERO).build());
+        em.persist(Recipe.builder().dosu(BigDecimal.TEN).build());
+        em.persist(Recipe.builder().dosu(new BigDecimal("15.15")).build());
+        em.persist(Recipe.builder().dosu(new BigDecimal("30.0")).build());
+        em.persist(Recipe.builder().dosu(new BigDecimal("40.0")).build());
+        em.flush();
+        em.clear();
+
+        List<Recipe> result = queryFactory.selectFrom(recipe)
+                .where(recipe.dosu.loe(new BigDecimal("30.0")),
+                        recipe.dosu.goe(new BigDecimal("10.0")))
+                .fetch();
+
+        assertThat(result.size()).isEqualTo(3);
     }
 
     private User saveMember() {

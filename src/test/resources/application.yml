@@ -31,11 +31,10 @@ spring:
     hibernate:
       ddl-auto: create-drop
     properties:
-      hibernate.default_batch_fetch_size: 20
-#    properties:
-#      hibernate:
-#        show_sql: true
-#        format_sql: true
+      hibernate:
+        default_batch_fetch_size: 20
+        show_sql: true
+        format_sql: true
 
   output.ansi.enabled: always  # terminal color
 

@@ -59,7 +59,7 @@ public class InitRecipe {
 
                 Recipe recipe = Recipe.builder()
                         .name("name" + i)
-                        .dosu(new BigDecimal(i))
+                        .dosu(new BigDecimal(i*10))
                         .base(bases[i % bases.length])
                         .brewing(brewings[i % brewings.length])
                         .soft(i)

@@ -21,6 +21,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.persistence.EntityManager;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -49,6 +50,7 @@ class RecipeRepositoryImplTest {
 
         Recipe recipe1 = Recipe.builder()
                 .name("name1")
+                .dosu(BigDecimal.TEN)
                 .base(Base.GIN)
                 .brewing(Brewing.BLENDING)
                 .orders(List.of(new Order(1, "order1"), new Order(2, "order2")))
@@ -63,6 +65,7 @@ class RecipeRepositoryImplTest {
 
         Recipe recipe2 = Recipe.builder()
                 .name("name2")
+                .dosu(BigDecimal.ZERO)
                 .base(Base.BRANDY)
                 .brewing(Brewing.FLOATING)
                 .build();
@@ -126,6 +129,72 @@ class RecipeRepositoryImplTest {
         assertThat(recipes.size()).isEqualTo(1);
         assertThat(recipes.get(0).getName()).isEqualTo("name1");
     }
+
+    @Test
+    @DisplayName("filter 검색이 Dosu 사이의 값을 가진 레시피를 성공적으로 검색한다. ")
+    void filterSearchDosuBetweenTest() {
+        em.persist(Recipe.builder().name("test").dosu(new BigDecimal("15.15")).build());
+        em.persist(Recipe.builder().name("test").dosu(new BigDecimal("20.0")).build());
+        em.persist(Recipe.builder().name("test").dosu(new BigDecimal("9")).build());
+        em.flush();
+        em.clear();
+
+        Pageable pageable = PageRequest.of(0, 5);
+        SearchCondition condition = SearchCondition.builder()
+                .leastDosu(BigDecimal.TEN)
+                .maxDosu(new BigDecimal("20"))
+                .build();
+
+        //when
+        List<Recipe> recipes = recipeRepository.filterSearch(condition, pageable);
+
+        //then
+        assertThat(recipes.size()).isEqualTo(3);
+        assertThat(recipes).extracting("dosu")
+                .contains(new BigDecimal("10.00"), new BigDecimal("15.15"), new BigDecimal("20.00"));
+    }
+
+    @Test
+    @DisplayName("filter 검색이 Dosu Max 값이하의 레시피를 성공적으로 검색한다. ")
+    void filterSearchDosuMaxTest() {
+        em.persist(Recipe.builder().name("test").dosu(new BigDecimal("15.15")).build());
+        em.persist(Recipe.builder().name("test").dosu(new BigDecimal("20.0")).build());
+        em.persist(Recipe.builder().name("test").dosu(new BigDecimal("9")).build());
+        em.flush();
+        em.clear();
+
+        Pageable pageable = PageRequest.of(0, 5);
+        SearchCondition condition = SearchCondition.builder()
+                .maxDosu(new BigDecimal("19"))
+                .build();
+
+        //when
+        List<Recipe> recipes = recipeRepository.filterSearch(condition, pageable);
+
+        //then
+        assertThat(recipes.size()).isEqualTo(4);
+        assertThat(recipes).extracting("dosu").contains(
+                new BigDecimal("10.00"),
+                new BigDecimal("15.15"),
+                new BigDecimal("9.00"),
+                new BigDecimal("0.00"));
+    }
+
+    @Test
+    void filterSearchIngredientTest() {
+        Pageable pageable = PageRequest.of(0, 5);
+        SearchCondition condition = SearchCondition.builder()
+                .ingredientList(List.of("베르무트2"))
+                .build();
+
+        //when
+        List<Recipe> recipes = recipeRepository.filterSearch(condition, pageable);
+
+        //then
+        assertThat(recipes.size()).isEqualTo(1);
+        assertThat(recipes.get(0).getName()).isEqualTo("name2");
+    }
+
 
     @Test
     @DisplayName("deleteTags 메서드가 recipe와 연관된 tags를 전부 삭제한다.")
