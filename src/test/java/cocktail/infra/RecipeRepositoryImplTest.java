@@ -305,12 +305,12 @@ class RecipeRepositoryImplTest {
 
         Recipe recipe = Recipe.builder()
                 .name("name3").build();
-        ReflectionTestUtils.setField(recipe, "star", "3.35");
+        ReflectionTestUtils.setField(recipe, "star", new BigDecimal("3.35"));
         em.persist(recipe);
 
         Recipe recipe2 = Recipe.builder()
                 .name("name4").build();
-        ReflectionTestUtils.setField(recipe2, "star", "4.46");
+        ReflectionTestUtils.setField(recipe2, "star", new BigDecimal("4.46"));
         em.persist(recipe2);
 
         // when
@@ -318,7 +318,7 @@ class RecipeRepositoryImplTest {
 
         // then
         assertThat(recipes.get(0).getName()).isEqualTo("name4");
-        assertThat(recipes.get(0).getStar()).isEqualTo("4.46");
+        assertThat(recipes.get(0).getStar().toString()).isEqualTo("4.46");
     }
 
     @Test

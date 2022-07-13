@@ -1,7 +1,7 @@
 package cocktail.application;
 
 import cocktail.application.auth.SessionUser;
-import cocktail.application.recipe.MakeRecipeService;
+import cocktail.application.recipe.RecipeService;
 import cocktail.domain.User;
 import cocktail.domain.recipe.*;
 import cocktail.dto.RecipeRequestDto;
@@ -27,7 +27,7 @@ import static org.mockito.BDDMockito.*;
 @ExtendWith(MockitoExtension.class)
 class RecipeServiceTest {
 
-    @InjectMocks private MakeRecipeService makeRecipeService;
+    @InjectMocks private RecipeService recipeService;
     @Mock RecipeRepository recipeRepository;
     @Mock TagRepository tagRepository;
     @Mock IngredientRepository ingredientRepository;
@@ -54,7 +54,7 @@ class RecipeServiceTest {
                 .willReturn(Optional.of(user));
 
         // when
-        makeRecipeService.createRecipe(dto, new SessionUser(user));
+        recipeService.createRecipe(dto, new SessionUser(user));
 
         // then
         Recipe findRecipe = recipeRepository.findById(id).get();
@@ -81,7 +81,7 @@ class RecipeServiceTest {
                 .willReturn(Optional.of(user));
 
         // when
-        makeRecipeService.createRecipe(dto, new SessionUser(user));
+        recipeService.createRecipe(dto, new SessionUser(user));
 
         // then
         List<Tag> findTagList = tagRepository.findAll();
@@ -107,7 +107,7 @@ class RecipeServiceTest {
                 .willReturn(Optional.of(user));
 
         //when
-        makeRecipeService.createRecipe(dto, new SessionUser(user));
+        recipeService.createRecipe(dto, new SessionUser(user));
 
         // then
         List<Ingredient> findIngredients = ingredientRepository.findAll();
@@ -142,7 +142,7 @@ class RecipeServiceTest {
         given(recipeRepository.fetchFindById(any()))
                 .willReturn(Optional.of(recipe));
         //when
-        makeRecipeService.update(1L, dto, new SessionUser(user));
+        recipeService.update(1L, dto, new SessionUser(user));
 
         //then
         assertThat(recipe.getName()).isEqualTo("마티니");

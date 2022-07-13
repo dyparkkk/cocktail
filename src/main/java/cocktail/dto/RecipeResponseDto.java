@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +23,14 @@ import static java.util.stream.Collectors.*;
 public class RecipeResponseDto {
     private Long id;
     private String name;
-    private String star;
+    private BigDecimal star;
     private String writer; // 유저닉네임
     private List<String> tags;
     private Integer viewCnt;
     private String createdDate;
     private String lastModifiedDate;
     // 추가예정 - 사진
+    // official 여부
 
     public static RecipeResponseDto fromEntity(Recipe recipe) {
         List<String> tagList = recipe.getTags().stream()
@@ -38,7 +40,7 @@ public class RecipeResponseDto {
                 recipe.getCreatedDate().toString(), recipe.getLastModifiedDate().toString());
     }
 
-    public RecipeResponseDto(Long id, String name, String star, String writer, List<String> tags, Integer viewCnt, String createdDate, String lastModifiedDate) {
+    public RecipeResponseDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, String createdDate, String lastModifiedDate) {
         this.id = id;
         this.name = name;
         this.star = star;
@@ -90,7 +92,7 @@ public class RecipeResponseDto {
                     .build();
         }
 
-        public DetailDto(Long id, String name, String star, String writer, List<String> tags, Integer viewCnt, String createdDate, String lastModifiedDate, String dosu, Brewing brewing, Base base, List<Order> orders, List<IngredientDto> ingredients, String glass, Integer soft, Integer sweet, Set<String> garnishes) {
+        public DetailDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, String createdDate, String lastModifiedDate, String dosu, Brewing brewing, Base base, List<Order> orders, List<IngredientDto> ingredients, String glass, Integer soft, Integer sweet, Set<String> garnishes) {
             super(id, name, star, writer, tags, viewCnt, createdDate, lastModifiedDate);
             this.dosu = dosu;
             this.brewing = brewing;

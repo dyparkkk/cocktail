@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Entity
@@ -28,7 +29,7 @@ public class Recipe extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Base base;
 
-    private String star;
+    private BigDecimal star;
     private int voter;
     private int viewCnt;
 
@@ -74,7 +75,7 @@ public class Recipe extends BaseTimeEntity {
         this.glass = glass;
         this.soft = soft;
         this.sweet = sweet;
-        this.star = "0.00";
+        this.star = BigDecimal.ZERO;
         this.voter = 0;
         this.viewCnt = 0;
         this.official = Official.NONE;
@@ -108,6 +109,13 @@ public class Recipe extends BaseTimeEntity {
         this.glass = glass;
         this.soft = soft;
         this.sweet = sweet;
+    }
+
+    public void updateStar(BigDecimal rating) {
+        star = star.multiply(BigDecimal.valueOf(voter)).add(rating)
+                .divide(BigDecimal.valueOf(voter+1))
+                .setScale(2, RoundingMode.HALF_UP);
+        voter++;
     }
 
     private void sortOrders() {

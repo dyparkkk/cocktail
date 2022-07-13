@@ -2,7 +2,7 @@ package cocktail.api;
 
 import cocktail.application.auth.SessionUser;
 import cocktail.application.recipe.FindRecipeService;
-import cocktail.application.recipe.MakeRecipeService;
+import cocktail.application.recipe.RecipeService;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.UserDto;
@@ -27,7 +27,7 @@ import static org.mockito.BDDMockito.*;
 class RecipeControllerUnitTest {
 
     @Mock
-    private MakeRecipeService makeRecipeService;
+    private RecipeService recipeService;
     @Mock
     private FindRecipeService findRecipeService;
     @InjectMocks
@@ -42,7 +42,7 @@ class RecipeControllerUnitTest {
         long recipeId = 1l;
         SessionUser sessionUser = new SessionUser(new UserDto("username", "nickname"));
 
-        given(makeRecipeService.createRecipe(reqDto, sessionUser)).willReturn(recipeId);
+        given(recipeService.createRecipe(reqDto, sessionUser)).willReturn(recipeId);
 
         ResponseEntity<Long> resEntity = recipeController.createRecipe(reqDto, sessionUser);
         assertThat(resEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);

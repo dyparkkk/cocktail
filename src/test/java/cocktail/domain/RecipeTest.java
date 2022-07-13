@@ -32,4 +32,15 @@ class RecipeTest {
         List<Order> getOrders = recipe.getOrders();
         Assertions.assertThat(getOrders).containsExactly(orders.get(1), orders.get(0), orders.get(2));
     }
+
+    @Test
+    void updateStarTest() {
+        Recipe recipe = Recipe.builder().build();
+
+        // 4+2 / 2 = 3점
+        recipe.updateStar(new BigDecimal("4"));
+        recipe.updateStar(new BigDecimal("2"));
+
+        Assertions.assertThat(recipe.getStar().toString()).isEqualTo("3.00");
+    }
 }

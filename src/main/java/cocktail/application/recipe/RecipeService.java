@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.*;
 
 @Service
 @RequiredArgsConstructor
-public class MakeRecipeService {
+public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final TagRepository tagRepository;

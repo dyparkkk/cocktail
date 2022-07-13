@@ -20,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -44,7 +46,7 @@ class RecipeControllerSpringTest {
                     .name("name" + i)
                     .build();
             recipe.setUser(user);
-            ReflectionTestUtils.setField(recipe, "star", String.valueOf(i));
+            ReflectionTestUtils.setField(recipe, "star", BigDecimal.valueOf(i));
             recipeRepository.save(recipe);
 
             tagRepository.save(new Tag("태그" + i, recipe));
@@ -82,8 +84,8 @@ class RecipeControllerSpringTest {
         ResponseEntity<RecipeResponseDto[]> response = restTemplate.getForEntity(url + param, RecipeResponseDto[].class);
 
         //then
-        assertThat(response.getBody()[0].getStar()).isEqualTo("9");
-        assertThat(response.getBody()[1].getStar()).isEqualTo("8");
+        assertThat(response.getBody()[0].getStar().toString()).isEqualTo("9.00");
+        assertThat(response.getBody()[1].getStar().toString()).isEqualTo("8.00");
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
