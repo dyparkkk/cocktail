@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 import static cocktail.dto.RecipeRequestDto.*;
 import static java.util.stream.Collectors.*;
@@ -37,8 +36,10 @@ public class RecipeService {
         recipeRepository.save(recipe);
 
         // dto로 부터 tag 생성해서 저장
-        List<Tag> tagList = dtosToTags(dto.getTags(), recipe);
-        tagRepository.saveAll(tagList);
+        if(dto.getTags() != null){
+            List<Tag> tagList = dtosToTags(dto.getTags(), recipe);
+            tagRepository.saveAll(tagList);
+        }
 
         // ingredient 생성해서 저장
         List<Ingredient> ingredients = dtoToIngredients(dto.getIngredients(), recipe);
