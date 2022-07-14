@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Entity
@@ -28,7 +29,7 @@ public class Recipe extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Base base;
 
-    private String star;
+    private BigDecimal star;
     private int voter;
     private int viewCnt;
 
@@ -54,12 +55,10 @@ public class Recipe extends BaseTimeEntity {
     @CollectionTable(name = "orders", joinColumns = @JoinColumn(name = "recipe_id"))
     private List<Order> orders = new ArrayList<>();
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "garnishes", joinColumns = @JoinColumn(name = "recipe_id"))
-    private Set<String> garnishes = new HashSet<>();
+    private String garnish;
 
     @Builder
-    public Recipe(String name, BigDecimal dosu, Brewing brewing, Base base, Set<String> garnishes, String glass, Integer soft, Integer sweet, List<Order> orders) {
+    public Recipe(String name, BigDecimal dosu, Brewing brewing, Base base, String garnish, String glass, Integer soft, Integer sweet, List<Order> orders) {
         this.name = name;
         this.dosu = dosu;
         this.brewing = brewing;
@@ -68,13 +67,11 @@ public class Recipe extends BaseTimeEntity {
             this.orders.addAll(orders);
             sortOrders();
         }
-        if (garnishes != null) {
-            this.garnishes.addAll(garnishes);
-        }
+        this.garnish = garnish;
         this.glass = glass;
         this.soft = soft;
         this.sweet = sweet;
-        this.star = "0.00";
+        this.star = BigDecimal.ZERO;
         this.voter = 0;
         this.viewCnt = 0;
         this.official = Official.NONE;
@@ -89,7 +86,7 @@ public class Recipe extends BaseTimeEntity {
         this.official = official;
     }
 
-    public void update(String name, BigDecimal dosu, Brewing brewing, Base base, Set<String> garnishes, String glass, Integer soft, Integer sweet, List<Order> orders){
+    public void update(String name, BigDecimal dosu, Brewing brewing, Base base, String garnish, String glass, Integer soft, Integer sweet, List<Order> orders){
         this.name = name;
         this.dosu = dosu;
         this.brewing = brewing;
@@ -100,14 +97,17 @@ public class Recipe extends BaseTimeEntity {
             this.orders.addAll(orders);
             sortOrders();
         }
-        this.garnishes.clear();
-        if (garnishes != null) {
-            this.garnishes.addAll(garnishes);
-        }
-
+        this.garnish = garnish;
         this.glass = glass;
         this.soft = soft;
         this.sweet = sweet;
+    }
+
+    public void updateStar(BigDecimal rating) {
+        star = star.multiply(BigDecimal.valueOf(voter)).add(rating)
+                .divide(BigDecimal.valueOf(voter+1))
+                .setScale(2, RoundingMode.HALF_UP);
+        voter++;
     }
 
     private void sortOrders() {

@@ -2,7 +2,7 @@ package cocktail.api;
 
 import cocktail.application.auth.SessionUser;
 import cocktail.application.recipe.FindRecipeService;
-import cocktail.application.recipe.MakeRecipeService;
+import cocktail.application.recipe.RecipeService;
 import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
@@ -29,13 +29,13 @@ import static cocktail.dto.RecipeResponseDto.*;
 @Api(tags = "recipe")
 public class RecipeController {
 
-    private final MakeRecipeService makeRecipeService;
+    private final RecipeService recipeService;
     private final FindRecipeService findRecipeService;
 
     @PostMapping
     public ResponseEntity<Long> createRecipe(@RequestBody RecipeRequestDto dto,
                                              @ApiIgnore @Login SessionUser sessionUser) {
-        Long recipeId = makeRecipeService.createRecipe(dto, sessionUser);
+        Long recipeId = recipeService.createRecipe(dto, sessionUser);
 
         /**
          * ResponseEntity는 내부적으로 ObjectMapper를 사용함
@@ -85,7 +85,7 @@ public class RecipeController {
     public ResponseEntity<Long> updateApi(@PathVariable Long id,
                                           @RequestBody RecipeRequestDto dto,
                                           @ApiIgnore @Login SessionUser sessionUser) {
-        Long recipeId = makeRecipeService.update(id, dto, sessionUser);
+        Long recipeId = recipeService.update(id, dto, sessionUser);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(recipeId);
     }
@@ -94,7 +94,7 @@ public class RecipeController {
     @ApiImplicitParam(name = "id", dataType = "int",example = "3", value = "recipe_ID")
     public ResponseEntity<String> deleteApi(@PathVariable Long id,
                                             @ApiIgnore @Login SessionUser sessionUser) {
-        makeRecipeService.deleteRecipe(id, sessionUser);
+        recipeService.deleteRecipe(id, sessionUser);
 
         return new ResponseEntity<>("delete", HttpStatus.ACCEPTED);
     }

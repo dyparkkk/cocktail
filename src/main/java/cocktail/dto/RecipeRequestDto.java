@@ -22,17 +22,16 @@ public class RecipeRequestDto {
     private BigDecimal dosu;
     private Brewing brewing;
     private Base base;
-    private List<String> garnish;
+    private String garnish;
     private String glass;
     private Integer soft; // 0-9
     private Integer sweet; // 0-9
     private List<String> tags;
     private List<OrderDto> orders;
     private List<IngredientDto> ingredients;
-    private LocalDateTime created;
 
     @Builder
-    public RecipeRequestDto(String name, BigDecimal dosu, Brewing brewing, Base base, List<String> garnish, String glass, Integer soft, Integer sweet, List<String> tags, List<OrderDto> orders, List<IngredientDto> ingredients, LocalDateTime created) {
+    public RecipeRequestDto(String name, BigDecimal dosu, Brewing brewing, Base base, String garnish, String glass, Integer soft, Integer sweet, List<String> tags, List<OrderDto> orders, List<IngredientDto> ingredients) {
         this.name = name;
         this.dosu = dosu;
         this.brewing = brewing;
@@ -44,7 +43,6 @@ public class RecipeRequestDto {
         this.tags = tags;
         this.orders = orders;
         this.ingredients = ingredients;
-        this.created = created;
     }
 
     public void setBrewing(String brewing) {

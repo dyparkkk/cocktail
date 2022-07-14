@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -17,6 +20,14 @@ public class SearchCondition {
     private Base base;
     private List<String> tagList;
     private String name;
+    private List<String> ingredientList;
+
+    @DecimalMin("0")
+    private BigDecimal leastDosu;
+
+    @DecimalMax("100")
+    private BigDecimal maxDosu;
+
 
     public void setBrewing(String brewing) {
         if (StringUtils.hasText(brewing)){
@@ -30,10 +41,13 @@ public class SearchCondition {
     }
 
     @Builder
-    public SearchCondition(Brewing brewing, Base base, List<String> tagList, String name) {
+    public SearchCondition(Brewing brewing, Base base, List<String> tagList, String name, List<String> ingredientList, BigDecimal leastDosu, BigDecimal maxDosu) {
         this.brewing = brewing;
         this.base = base;
         this.tagList = tagList;
         this.name = name;
+        this.ingredientList = ingredientList;
+        this.leastDosu = leastDosu;
+        this.maxDosu = maxDosu;
     }
 }

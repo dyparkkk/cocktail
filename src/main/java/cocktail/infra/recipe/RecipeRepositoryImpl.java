@@ -15,8 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +32,6 @@ import static org.springframework.util.StringUtils.hasText;
 public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
-    private final int TAG_LIMIT_NUM = 3;
 
     @Override
     public List<Recipe> findAllRecipe(Pageable pageable) {
@@ -51,21 +50,24 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
 
     @Override
     public List<Recipe> filterSearch(SearchCondition condition, Pageable pageable) {
-         return queryFactory
+        return queryFactory
                 .selectFrom(recipe)
                 .distinct()
-                .join(recipe.tags, tag).fetchJoin()
+                .leftJoin(recipe.tags, tag).fetchJoin()
+                .leftJoin(recipe.ingredients, ingredient)
                 .where(
                         tagEq(condition.getTagList()),
                         brewingEq(condition.getBrewing()),
                         baseEq(condition.getBase()),
-                        nameContains(condition.getName())
+                        nameContains(condition.getName()),
+                        dosuBetween(condition.getLeastDosu(), condition.getMaxDosu()),
+                        ingredientEq(condition.getIngredientList())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                 .orderBy(
-                         starSort(pageable).stream()
-                                 .toArray(OrderSpecifier[]::new))
+                .orderBy(
+                        starSort(pageable).stream()
+                                .toArray(OrderSpecifier[]::new))
                 .fetch();
     }
 
@@ -107,7 +109,6 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 .execute();
     }
 
-
     private List<OrderSpecifier> starSort(Pageable pageable) {
         List<OrderSpecifier> orders = new ArrayList<>();
         if(! pageable.getSort().isEmpty()) {
@@ -134,13 +135,23 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
         if( tagList == null) return null;
 
         BooleanBuilder builder = new BooleanBuilder();
-        Iterator<String> iterator = tagList.iterator();
-        int cnt = 0;
-        while(iterator.hasNext() && cnt < TAG_LIMIT_NUM){
-            builder.and(tag.name.eq(iterator.next()));
-            cnt++;
+        for(String i : tagList){
+            if(hasText(i)){
+                builder.and(tag.name.eq(i));
+            }
         }
 
+        return builder;
+    }
+    private BooleanBuilder ingredientEq(List<String> ingredientList) {
+        if(ingredientList == null) return null;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        for(String i : ingredientList){
+            if(hasText(i)){
+                builder.and(ingredient.name.contains(i));
+            }
+        }
         return builder;
     }
 
@@ -154,6 +165,19 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
 
     private BooleanExpression nameContains(String name){
         return hasText(name) ? recipe.name.contains(name) : null;
+    }
+
+    private BooleanBuilder dosuBetween(BigDecimal leastDosu, BigDecimal maxDosu) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(dosuMax(maxDosu)).and(dosuMin(leastDosu));
+        return builder;
+    }
+
+    private BooleanExpression dosuMax(BigDecimal maxDosu) {
+        return maxDosu != null ? recipe.dosu.loe(maxDosu) : null;
+    }
+    private BooleanExpression dosuMin(BigDecimal leastDosu) {
+        return leastDosu != null ? recipe.dosu.goe(leastDosu) : null;
     }
 
 }

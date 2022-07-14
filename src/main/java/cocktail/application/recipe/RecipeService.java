@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.*;
 
 @Service
 @RequiredArgsConstructor
-public class MakeRecipeService {
+public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final TagRepository tagRepository;
@@ -62,10 +62,8 @@ public class MakeRecipeService {
 
         // 값 바꿔주기
         List<Order> orders = dtosToOrders(dto.getOrders());
-        Set<String> garnishes = Set.copyOf(dto.getGarnish());
-        recipe.update(dto.getName(), dto.getDosu(), dto.getBrewing(), dto.getBase(), garnishes,
+        recipe.update(dto.getName(), dto.getDosu(), dto.getBrewing(), dto.getBase(), dto.getGarnish(),
                 dto.getGlass(), dto.getSoft(), dto.getSweet(), orders);
-
 
         // 전에 있던 태그 삭제 후 저장
         recipeRepository.deleteTags(id);
@@ -94,7 +92,6 @@ public class MakeRecipeService {
 
     private Recipe dtoToRecipe(RecipeRequestDto dto) {
         List<Order> orderList = dtosToOrders(dto.getOrders());
-        Set<String> garnishes = Set.copyOf(dto.getGarnish());
 
         Recipe recipe = Recipe.builder()
                 .name(dto.getName())
@@ -102,7 +99,7 @@ public class MakeRecipeService {
                 .brewing(dto.getBrewing())
                 .base(dto.getBase())
                 .orders(orderList)
-                .garnishes(garnishes)
+                .garnish(dto.getGarnish())
                 .glass(dto.getGlass())
                 .sweet(dto.getSweet())
                 .soft(dto.getSoft())

@@ -36,7 +36,7 @@ public class RecipeTestUtil {
                 .glass("glass")
                 .sweet(1)
                 .soft(2)
-                .garnishes(Set.of("레몬", "콜라"))
+                .garnish("레몬, 콜라")
                 .build();
         recipe.setUser(user);
 
@@ -68,7 +68,7 @@ public class RecipeTestUtil {
                 .tags(stringTagList)
                 .ingredients(ingredientDtoList)
                 .glass("glass")
-                .garnish(List.of("셀러드 스틱", "레몬 웨지"))
+                .garnish("셀러드 스틱, 레몬 웨지")
                 .soft(3)
                 .sweet(10)
                 .build();
@@ -77,12 +77,11 @@ public class RecipeTestUtil {
     Recipe dtoToRecipe(RecipeRequestDto dto) {
         List<Order> orderList = dto.getOrders().stream()
                 .map(RecipeRequestDto.OrderDto::toOrder).collect(toList());
-        Set<String> garnishes = Set.copyOf(dto.getGarnish());
         return Recipe.builder()
                 .name(dto.getName())
                 .dosu(dto.getDosu())
                 .orders(orderList)
-                .garnishes(garnishes)
+                .garnish(dto.getGarnish())
                 .soft(dto.getSoft())
                 .sweet(dto.getSweet())
                 .glass(dto.getGlass())

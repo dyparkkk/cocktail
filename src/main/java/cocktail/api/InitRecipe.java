@@ -59,13 +59,13 @@ public class InitRecipe {
 
                 Recipe recipe = Recipe.builder()
                         .name("name" + i)
-                        .dosu(new BigDecimal(i))
+                        .dosu(new BigDecimal(i*10))
                         .base(bases[i % bases.length])
                         .brewing(brewings[i % brewings.length])
                         .soft(i)
                         .sweet(i)
                         .glass(String.valueOf(i)+"번 글래스")
-                        .garnishes(Set.of(garnishes[i%4]))
+                        .garnish(garnishes[i%4])
                         .orders(orderList).build();
 
                 recipe.setUser(user);

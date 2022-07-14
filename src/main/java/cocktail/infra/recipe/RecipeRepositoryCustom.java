@@ -5,6 +5,7 @@ import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 

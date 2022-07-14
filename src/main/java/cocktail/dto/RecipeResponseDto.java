@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +23,11 @@ import static java.util.stream.Collectors.*;
 public class RecipeResponseDto {
     private Long id;
     private String name;
-    private String star;
+    private BigDecimal star;
     private String writer; // 유저닉네임
     private List<String> tags;
     private Integer viewCnt;
+    private Official official;
     private String createdDate;
     private String lastModifiedDate;
     // 추가예정 - 사진
@@ -34,17 +36,18 @@ public class RecipeResponseDto {
         List<String> tagList = recipe.getTags().stream()
                 .map(t -> t.getName()).collect(toList());
         return new RecipeResponseDto(recipe.getId(), recipe.getName(), recipe.getStar(),
-                recipe.getUser().getNickname(), tagList, recipe.getViewCnt(),
+                recipe.getUser().getNickname(), tagList, recipe.getViewCnt(), recipe.getOfficial(),
                 recipe.getCreatedDate().toString(), recipe.getLastModifiedDate().toString());
     }
 
-    public RecipeResponseDto(Long id, String name, String star, String writer, List<String> tags, Integer viewCnt, String createdDate, String lastModifiedDate) {
+    public RecipeResponseDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, Official official, String createdDate, String lastModifiedDate) {
         this.id = id;
         this.name = name;
         this.star = star;
         this.writer = writer;
         this.tags = tags;
         this.viewCnt = viewCnt;
+        this.official = official;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
     }
@@ -61,7 +64,7 @@ public class RecipeResponseDto {
         private String glass;
         private Integer soft;
         private Integer sweet;
-        private Set<String> garnishes;
+        private String garnish;
 
         public static DetailDto from(Recipe recipe) {
             return DetailDto.builder()
@@ -81,7 +84,7 @@ public class RecipeResponseDto {
                     .glass(recipe.getGlass())
                     .soft(recipe.getSoft())
                     .sweet(recipe.getSweet())
-                    .garnishes(recipe.getGarnishes())
+                    .garnish(recipe.getGarnish())
                     .createdDate(recipe.getCreatedDate().toString())
                     .lastModifiedDate(recipe.getLastModifiedDate().toString())
                     .star(recipe.getStar())
@@ -90,8 +93,8 @@ public class RecipeResponseDto {
                     .build();
         }
 
-        public DetailDto(Long id, String name, String star, String writer, List<String> tags, Integer viewCnt, String createdDate, String lastModifiedDate, String dosu, Brewing brewing, Base base, List<Order> orders, List<IngredientDto> ingredients, String glass, Integer soft, Integer sweet, Set<String> garnishes) {
-            super(id, name, star, writer, tags, viewCnt, createdDate, lastModifiedDate);
+        public DetailDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, Official official, String createdDate, String lastModifiedDate, String dosu, Brewing brewing, Base base, List<Order> orders, List<IngredientDto> ingredients, String glass, Integer soft, Integer sweet, String garnish) {
+            super(id, name, star, writer, tags, viewCnt, official, createdDate, lastModifiedDate);
             this.dosu = dosu;
             this.brewing = brewing;
             this.base = base;
@@ -100,7 +103,7 @@ public class RecipeResponseDto {
             this.glass = glass;
             this.soft = soft;
             this.sweet = sweet;
-            this.garnishes = garnishes;
+            this.garnish = garnish;
         }
     }
 
