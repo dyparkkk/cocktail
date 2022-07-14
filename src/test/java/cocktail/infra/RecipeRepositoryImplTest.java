@@ -54,7 +54,7 @@ class RecipeRepositoryImplTest {
                 .base(Base.GIN)
                 .brewing(Brewing.BLENDING)
                 .orders(List.of(new Order(1, "order1"), new Order(2, "order2")))
-                .garnishes(Set.of("레몬", "콜라"))
+                .garnish("레몬, 콜라")
                 .build();
         em.persist(recipe1);
 
@@ -253,9 +253,6 @@ class RecipeRepositoryImplTest {
         Recipe findRecipe = recipeRepository.fetchFindById(id).get();
         for(Order order : findRecipe.getOrders()){
             System.out.println("order = " + order.toString());
-        }
-        for (String s : findRecipe.getGarnishes()){
-            System.out.println("garnish = " + s);
         }
         for(Tag tag : findRecipe.getTags()){
             System.out.println("tag = " + tag.getName());

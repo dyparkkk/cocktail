@@ -65,7 +65,7 @@ public class InitRecipe {
                         .soft(i)
                         .sweet(i)
                         .glass(String.valueOf(i)+"번 글래스")
-                        .garnishes(Set.of(garnishes[i%4]))
+                        .garnish(garnishes[i%4])
                         .orders(orderList).build();
 
                 recipe.setUser(user);

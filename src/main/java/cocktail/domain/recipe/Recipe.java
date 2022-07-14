@@ -55,12 +55,10 @@ public class Recipe extends BaseTimeEntity {
     @CollectionTable(name = "orders", joinColumns = @JoinColumn(name = "recipe_id"))
     private List<Order> orders = new ArrayList<>();
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "garnishes", joinColumns = @JoinColumn(name = "recipe_id"))
-    private Set<String> garnishes = new HashSet<>();
+    private String garnish;
 
     @Builder
-    public Recipe(String name, BigDecimal dosu, Brewing brewing, Base base, Set<String> garnishes, String glass, Integer soft, Integer sweet, List<Order> orders) {
+    public Recipe(String name, BigDecimal dosu, Brewing brewing, Base base, String garnish, String glass, Integer soft, Integer sweet, List<Order> orders) {
         this.name = name;
         this.dosu = dosu;
         this.brewing = brewing;
@@ -69,9 +67,7 @@ public class Recipe extends BaseTimeEntity {
             this.orders.addAll(orders);
             sortOrders();
         }
-        if (garnishes != null) {
-            this.garnishes.addAll(garnishes);
-        }
+        this.garnish = garnish;
         this.glass = glass;
         this.soft = soft;
         this.sweet = sweet;
@@ -90,7 +86,7 @@ public class Recipe extends BaseTimeEntity {
         this.official = official;
     }
 
-    public void update(String name, BigDecimal dosu, Brewing brewing, Base base, Set<String> garnishes, String glass, Integer soft, Integer sweet, List<Order> orders){
+    public void update(String name, BigDecimal dosu, Brewing brewing, Base base, String garnish, String glass, Integer soft, Integer sweet, List<Order> orders){
         this.name = name;
         this.dosu = dosu;
         this.brewing = brewing;
@@ -101,11 +97,7 @@ public class Recipe extends BaseTimeEntity {
             this.orders.addAll(orders);
             sortOrders();
         }
-        this.garnishes.clear();
-        if (garnishes != null) {
-            this.garnishes.addAll(garnishes);
-        }
-
+        this.garnish = garnish;
         this.glass = glass;
         this.soft = soft;
         this.sweet = sweet;
