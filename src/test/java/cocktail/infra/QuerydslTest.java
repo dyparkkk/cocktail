@@ -15,7 +15,7 @@ import java.util.List;
 import static cocktail.domain.recipe.QRecipe.recipe;
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 public class QuerydslTest {
 
