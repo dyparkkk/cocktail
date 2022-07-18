@@ -1,18 +1,12 @@
 package cocktail.dto;
 
 import cocktail.domain.recipe.*;
-import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static cocktail.dto.RecipeRequestDto.*;
 import static java.util.stream.Collectors.*;
@@ -33,8 +27,11 @@ public class RecipeResponseDto {
     // 추가예정 - 사진
 
     public static RecipeResponseDto fromEntity(Recipe recipe) {
-        List<String> tagList = recipe.getTags().stream()
-                .map(t -> t.getName()).collect(toList());
+        List<String> tagList = null;
+        if (recipe.getTags() != null){
+            tagList = recipe.getTags().stream()
+                    .map(Tag::getName).collect(toList());
+        }
         return new RecipeResponseDto(recipe.getId(), recipe.getName(), recipe.getStar(),
                 recipe.getUser().getNickname(), tagList, recipe.getViewCnt(), recipe.getOfficial(),
                 recipe.getCreatedDate().toString(), recipe.getLastModifiedDate().toString());
