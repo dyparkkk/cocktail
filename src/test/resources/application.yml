@@ -47,3 +47,17 @@ spring:
             client-id: test
             client-secret: test
             scope: profile,email
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIARR3F74E6UFD3M7PU
+      secretKey: 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
+      instanceProfile: true
+    s3:
+      bucket: cocktail-image
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false

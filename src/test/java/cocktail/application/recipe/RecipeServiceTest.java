@@ -1,7 +1,6 @@
-package cocktail.application;
+package cocktail.application.recipe;
 
 import cocktail.application.auth.SessionUser;
-import cocktail.application.recipe.RecipeService;
 import cocktail.domain.User;
 import cocktail.domain.recipe.*;
 import cocktail.dto.RecipeRequestDto;

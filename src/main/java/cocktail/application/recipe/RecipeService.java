@@ -105,6 +105,7 @@ public class RecipeService {
                 .glass(dto.getGlass())
                 .sweet(dto.getSweet())
                 .soft(dto.getSoft())
+                .imageUrls(dto.getImageUrls())
                 .build();
         return recipe;
     }
