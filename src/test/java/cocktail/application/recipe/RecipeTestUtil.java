@@ -1,4 +1,4 @@
-package cocktail.application;
+package cocktail.application.recipe;
 
 import cocktail.application.auth.SessionUser;
 import cocktail.domain.Role;

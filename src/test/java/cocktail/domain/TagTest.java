@@ -1,5 +1,8 @@
-package cocktail.domain.recipe;
+package cocktail.domain;
 
+import cocktail.domain.recipe.Official;
+import cocktail.domain.recipe.Recipe;
+import cocktail.domain.recipe.Tag;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

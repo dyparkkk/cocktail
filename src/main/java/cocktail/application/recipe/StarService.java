@@ -28,4 +28,5 @@ public class StarService {
 
         recipe.updateStar(dto.getRating());
     }
+
 }

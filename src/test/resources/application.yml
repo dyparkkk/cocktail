@@ -6,20 +6,20 @@ spring:
   properties:
     active: test  # local, test, dev, real로 분류
 
-#  datasource:
-#    url: jdbc:h2:tcp://localhost/~/test  # window
-#    #    url: jdbc:h2:~/test           # mac
-#    #    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1 # ?????
-#    username: sa
-#    password:
-#    driver-class-name: org.h2.Driver
-
   datasource:
-    hikari:
-      jdbc-url: jdbc:mariadb://cocktaildb.csmn3giwqma1.ap-northeast-2.rds.amazonaws.com:3306/cocktaildb
-      username: root
-      password: cocktailadmin135!
-      driver-class-name: org.mariadb.jdbc.Driver
+#    url: jdbc:h2:tcp://localhost/~/test  # window
+    #    url: jdbc:h2:~/test           # mac
+    #    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1 # ?????
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+#  datasource:
+#    hikari:
+#      jdbc-url: jdbc:mariadb://cocktaildb.csmn3giwqma1.ap-northeast-2.rds.amazonaws.com:3306/cocktaildb
+#      username: root
+#      password: cocktailadmin135!
+#      driver-class-name: org.mariadb.jdbc.Driver
 
   h2.console:
     enabled: true
@@ -29,7 +29,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         default_batch_fetch_size: 20
@@ -47,3 +47,17 @@ spring:
             client-id: test
             client-secret: test
             scope: profile,email
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIARR3F74E6UFD3M7PU
+      secretKey: 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
+      instanceProfile: true
+    s3:
+      bucket: cocktail-image
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false

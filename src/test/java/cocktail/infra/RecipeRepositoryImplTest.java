@@ -1,13 +1,12 @@
 package cocktail.infra;
 
 import cocktail.domain.recipe.*;
-import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
 import cocktail.infra.recipe.IngredientRepository;
 import cocktail.infra.recipe.RecipeRepository;
 import cocktail.infra.recipe.TagRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.aspectj.weaver.ast.Or;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +16,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.persistence.EntityManager;
@@ -24,12 +24,12 @@ import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
+@ActiveProfiles("test")
 @DataJpaTest
-@Import(TestConfig.class)
+@Import(BeanConfig.class)
 class RecipeRepositoryImplTest {
 
     @Autowired

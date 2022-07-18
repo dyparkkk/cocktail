@@ -1,6 +1,5 @@
-package cocktail.application;
+package cocktail.application.recipe;
 
-import cocktail.application.recipe.FindRecipeService;
 import cocktail.domain.recipe.Recipe;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.infra.recipe.RecipeRepository;
@@ -11,8 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
