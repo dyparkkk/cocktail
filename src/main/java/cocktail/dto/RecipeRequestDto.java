@@ -29,9 +29,10 @@ public class RecipeRequestDto {
     private List<String> tags;
     private List<OrderDto> orders;
     private List<IngredientDto> ingredients;
+    private List<String> imageUrls;
 
     @Builder
-    public RecipeRequestDto(String name, BigDecimal dosu, Brewing brewing, Base base, String garnish, String glass, Integer soft, Integer sweet, List<String> tags, List<OrderDto> orders, List<IngredientDto> ingredients) {
+    public RecipeRequestDto(String name, BigDecimal dosu, Brewing brewing, Base base, String garnish, String glass, Integer soft, Integer sweet, List<String> tags, List<OrderDto> orders, List<IngredientDto> ingredients, List<String> imageUrls) {
         this.name = name;
         this.dosu = dosu;
         this.brewing = brewing;
@@ -43,6 +44,7 @@ public class RecipeRequestDto {
         this.tags = tags;
         this.orders = orders;
         this.ingredients = ingredients;
+        this.imageUrls = imageUrls;
     }
 
     public void setBrewing(String brewing) {
@@ -53,9 +55,9 @@ public class RecipeRequestDto {
         this.base = Base.valueOf(base.toUpperCase());
     }
 
-    public void setDosu(String dosu) {
-        this.dosu = new BigDecimal(dosu.toUpperCase());
-    }
+//    public void setDosu(String dosu) {
+//        this.dosu = new BigDecimal(dosu.toUpperCase());
+//    }
 
     @Getter
     @NoArgsConstructor

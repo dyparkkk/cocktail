@@ -45,6 +45,7 @@ public class RecipeService {
         List<Ingredient> ingredients = dtoToIngredients(dto.getIngredients(), recipe);
         ingredientRepository.saveAll(ingredients);
 
+        System.out.println("username = "+sessionUser.getUsername());
         User user = userRepository.findByUsername(sessionUser.getUsername())
                 .orElseThrow(IllegalArgumentException::new);
         recipe.setUser(user);
@@ -104,6 +105,7 @@ public class RecipeService {
                 .glass(dto.getGlass())
                 .sweet(dto.getSweet())
                 .soft(dto.getSoft())
+                .imageUrls(dto.getImageUrls())
                 .build();
         return recipe;
     }
