@@ -40,7 +40,7 @@ public class S3Uploader {
 
     private String upload(File uploadFile) {
         String uploadImageUrl = putS3(uploadFile, uploadFile.getName());
-//        removeNewFile(uploadFile);
+        removeNewFile(uploadFile);
         return uploadImageUrl;
     }
 
@@ -59,7 +59,6 @@ public class S3Uploader {
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
-        System.out.println(path);
         File convertFile = new File( path+LocalDateTime.now().format(ofPattern(FILE_NAME_PATTERN)) + file.getOriginalFilename());
         if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
