@@ -38,6 +38,8 @@ spring:
 
   output.ansi.enabled: always  # terminal color
 
+  path: data/files/
+
   security:
     oauth2:
       client:
