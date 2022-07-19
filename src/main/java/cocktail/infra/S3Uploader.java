@@ -25,6 +25,9 @@ public class S3Uploader {
     private final AmazonS3Client amazonS3Client;
     private static final String FILE_NAME_PATTERN = "yyMMdd_HHmmssSS_";
 
+    @Value("${spring.path}")
+    private String path;
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
@@ -37,7 +40,7 @@ public class S3Uploader {
 
     private String upload(File uploadFile) {
         String uploadImageUrl = putS3(uploadFile, uploadFile.getName());
-        removeNewFile(uploadFile);
+//        removeNewFile(uploadFile);
         return uploadImageUrl;
     }
 
@@ -56,7 +59,8 @@ public class S3Uploader {
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File(LocalDateTime.now().format(ofPattern(FILE_NAME_PATTERN)) + file.getOriginalFilename());
+        System.out.println(path);
+        File convertFile = new File( path+LocalDateTime.now().format(ofPattern(FILE_NAME_PATTERN)) + file.getOriginalFilename());
         if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());
