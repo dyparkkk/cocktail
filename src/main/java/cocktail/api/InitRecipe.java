@@ -66,6 +66,7 @@ public class InitRecipe {
                         .sweet(i)
                         .glass(String.valueOf(i)+"번 글래스")
                         .garnish(garnishes[i%4])
+                        .imageUrls(List.of("https://cocktail-image.s3.ap-northeast-2.amazonaws.com/" + (i+1) + ".png"))
                         .orders(orderList).build();
 
                 recipe.setUser(user);
