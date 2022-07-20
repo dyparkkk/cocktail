@@ -24,7 +24,7 @@ public class RecipeResponseDto {
     private Official official;
     private String createdDate;
     private String lastModifiedDate;
-    // 추가예정 - 사진
+    private List<String> imageUrls;
 
     public static RecipeResponseDto fromEntity(Recipe recipe) {
         List<String> tagList = null;
@@ -34,10 +34,11 @@ public class RecipeResponseDto {
         }
         return new RecipeResponseDto(recipe.getId(), recipe.getName(), recipe.getStar(),
                 recipe.getUser().getNickname(), tagList, recipe.getViewCnt(), recipe.getOfficial(),
-                recipe.getCreatedDate().toString(), recipe.getLastModifiedDate().toString());
+                recipe.getCreatedDate().toString(), recipe.getLastModifiedDate().toString(),
+                recipe.getImageUrls());
     }
 
-    public RecipeResponseDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, Official official, String createdDate, String lastModifiedDate) {
+    public RecipeResponseDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, Official official, String createdDate, String lastModifiedDate, List<String> imageUrls) {
         this.id = id;
         this.name = name;
         this.star = star;
@@ -47,6 +48,7 @@ public class RecipeResponseDto {
         this.official = official;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
+        this.imageUrls = imageUrls;
     }
 
     @Getter
@@ -90,8 +92,8 @@ public class RecipeResponseDto {
                     .build();
         }
 
-        public DetailDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, Official official, String createdDate, String lastModifiedDate, String dosu, Brewing brewing, Base base, List<Order> orders, List<IngredientDto> ingredients, String glass, Integer soft, Integer sweet, String garnish) {
-            super(id, name, star, writer, tags, viewCnt, official, createdDate, lastModifiedDate);
+        public DetailDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, Official official, String createdDate, String lastModifiedDate, List<String> imageUrls, String dosu, Brewing brewing, Base base, List<Order> orders, List<IngredientDto> ingredients, String glass, Integer soft, Integer sweet, String garnish) {
+            super(id, name, star, writer, tags, viewCnt, official, createdDate, lastModifiedDate, imageUrls);
             this.dosu = dosu;
             this.brewing = brewing;
             this.base = base;
