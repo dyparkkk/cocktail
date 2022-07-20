@@ -93,12 +93,13 @@ public class Recipe extends BaseTimeEntity {
         this.official = official;
     }
 
-    public void update(String name, BigDecimal dosu, Brewing brewing, Base base, String garnish, String glass, Integer soft, Integer sweet, List<Order> orders){
+    public void update(String name, BigDecimal dosu, Brewing brewing, Base base, String garnish, String glass, Integer soft, Integer sweet, List<Order> orders, List<String> imageUrls){
         if(orders != null){
             this.orders.clear();
             this.orders.addAll(orders);
             sortOrders();
         }
+        this.imageUrls = imageUrls;
         this.name = name;
         this.dosu = dosu;
         this.brewing = brewing;

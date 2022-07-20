@@ -65,7 +65,7 @@ public class RecipeService {
         // 값 바꿔주기
         List<Order> orders = dtosToOrders(dto.getOrders());
         recipe.update(dto.getName(), dto.getDosu(), dto.getBrewing(), dto.getBase(), dto.getGarnish(),
-                dto.getGlass(), dto.getSoft(), dto.getSweet(), orders);
+                dto.getGlass(), dto.getSoft(), dto.getSweet(), orders, dto.getImageUrls());
 
         // 전에 있던 태그 삭제 후 저장
         recipeRepository.deleteTags(id);

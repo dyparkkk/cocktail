@@ -25,10 +25,8 @@ public class RecipeFucApi {
     }
 
     @PostMapping("/upload")
-    @ApiOperation(value = "이미지 업로드", notes = "복수 일 경우 여러번 호출")
+    @ApiOperation(value = "upload image", notes = "복수 일 경우 여러번 호출해야 함")
     public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
-        System.out.println("contentType = " + multipartFile.getContentType());
-        System.out.println("name = " + multipartFile.getName());
         return s3Uploader.upload(multipartFile);
     }
 }
