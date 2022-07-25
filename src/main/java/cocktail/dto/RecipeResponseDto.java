@@ -69,7 +69,7 @@ public class RecipeResponseDto {
             return DetailDto.builder()
                     .id(recipe.getId())
                     .name(recipe.getName())
-                    .dosu(recipe.getDosu().toString())
+                    .dosu(recipe.getDosu() == null ? null : recipe.getDosu().toString())
                     .brewing(recipe.getBrewing())
                     .base(recipe.getBase())
                     .orders(recipe.getOrders())
@@ -89,6 +89,8 @@ public class RecipeResponseDto {
                     .star(recipe.getStar())
                     .writer(recipe.getUser().getNickname())
                     .viewCnt(recipe.getViewCnt())
+                    .imageUrls(recipe.getImageUrls())
+                    .official(recipe.getOfficial())
                     .build();
         }
 
