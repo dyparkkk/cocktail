@@ -41,10 +41,10 @@ public class Recipe extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Official official;
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", orphanRemoval = true)
     private List<Tag> tags  = new ArrayList<>();
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", orphanRemoval = true)
     private List<Ingredient> ingredients  = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
