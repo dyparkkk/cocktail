@@ -64,6 +64,7 @@ public class RecipeResponseDto {
         private Integer soft;
         private Integer sweet;
         private String garnish;
+        private int voter;
 
         public static DetailDto from(Recipe recipe) {
             return DetailDto.builder()
@@ -91,10 +92,11 @@ public class RecipeResponseDto {
                     .viewCnt(recipe.getViewCnt())
                     .imageUrls(recipe.getImageUrls())
                     .official(recipe.getOfficial())
+                    .voter(recipe.getVoter())
                     .build();
         }
 
-        public DetailDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, Official official, String createdDate, String lastModifiedDate, List<String> imageUrls, String dosu, Brewing brewing, Base base, List<Order> orders, List<IngredientDto> ingredients, String glass, Integer soft, Integer sweet, String garnish) {
+        public DetailDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, Official official, String createdDate, String lastModifiedDate, List<String> imageUrls, String dosu, Brewing brewing, Base base, List<Order> orders, List<IngredientDto> ingredients, String glass, Integer soft, Integer sweet, String garnish, int voter) {
             super(id, name, star, writer, tags, viewCnt, official, createdDate, lastModifiedDate, imageUrls);
             this.dosu = dosu;
             this.brewing = brewing;

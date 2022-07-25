@@ -111,6 +111,9 @@ public class Recipe extends BaseTimeEntity {
     }
 
     public void updateStar(BigDecimal rating) {
+        if(rating == null) {
+            throw new IllegalArgumentException("rating is null");
+        }
         star = star.multiply(BigDecimal.valueOf(voter)).add(rating)
                 .divide(BigDecimal.valueOf(voter+1))
                 .setScale(2, RoundingMode.HALF_UP);
@@ -120,6 +123,5 @@ public class Recipe extends BaseTimeEntity {
     private void sortOrders() {
         Collections.sort(orders);
     }
-
 
 }

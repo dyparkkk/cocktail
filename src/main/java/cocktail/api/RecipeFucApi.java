@@ -1,15 +1,20 @@
 package cocktail.api;
 
+import cocktail.application.auth.SessionUser;
+import cocktail.application.recipe.StarService;
+import cocktail.dto.StarDto;
+import cocktail.global.config.Login;
 import cocktail.infra.S3Uploader;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -19,9 +24,15 @@ import java.io.IOException;
 public class RecipeFucApi {
 
     private final S3Uploader s3Uploader;
+    private final StarService starService;
 
-    public void giveStarApi() {
-
+    @PostMapping("/star/{id}")
+    @ApiOperation(value = "score recipe with stars")
+    public ResponseEntity<String> giveStarApi(@Valid @PathVariable Long id,
+                                              @RequestBody StarDto starDto,
+                                              @ApiIgnore @Login SessionUser sessionUser) {
+        starService.giveStar(starDto, id, sessionUser);
+        return new ResponseEntity<>("score recipe with stars", HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/upload")
