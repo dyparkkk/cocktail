@@ -35,7 +35,8 @@ dependencies {
 	implementation "com.querydsl:querydsl-apt:5.0.0"
 
 	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.1'
-	testImplementation 'io.findify:s3mock_2.13:0.2.6'
+    implementation 'org.jetbrains:annotations:20.1.0'
+    testImplementation 'io.findify:s3mock_2.13:0.2.6'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
