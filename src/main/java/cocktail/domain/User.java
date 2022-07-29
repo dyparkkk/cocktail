@@ -8,7 +8,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +42,10 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role roles;
 
+    private String title;
+
+    private String profileImgUrl;
+
     private String provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
     private String providerId;  // oauth2를 이용할 경우 아이디값
 
@@ -42,6 +54,12 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user")
     private Set<Bookmark> bookmarks = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Follow> fromUser = new ArrayList<Follow>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Follow> toUser = new ArrayList<Follow>();
 
     @Builder
     public User(String username, String pw, String nickname,Role roles) {
@@ -56,6 +74,13 @@ public class User extends BaseTimeEntity {
         this.username = username;
         this.nickname = nickname;
        return  this;
+    }
+
+    public void update(String pw, String nickname, String title, String profileImgUrl){
+        this.pw = pw;
+        this.nickname =nickname;
+        this.title = title;
+        this.profileImgUrl = profileImgUrl;
     }
 
     public String getRolekey(){

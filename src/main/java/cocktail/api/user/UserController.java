@@ -5,6 +5,7 @@ import cocktail.application.auth.SessionUser;
 import cocktail.domain.User;
 import cocktail.dto.SuccessResponseDto;
 import cocktail.dto.UserDto;
+import cocktail.dto.UserProfileDto;
 import cocktail.global.config.Login;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,19 +16,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static cocktail.api.user.SessionConst.*;
+import static cocktail.api.user.SessionConst.LOGIN_USER;
 import static cocktail.dto.UserDto.LoginRequestDto;
 import static cocktail.dto.UserDto.SignUpRequestDto;
 import static cocktail.dto.UserDto.UserIdCheckDto;
+import static cocktail.dto.UserDto.UserUpdateDto;
 
 @Slf4j
 @Api(tags = "user")
@@ -63,12 +68,13 @@ public class UserController {
                 .body(userDto.getUsername());
     }
 
-    @GetMapping("/signup/userid")
+    @RequestMapping(value ="/signup/userid", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "아이디 중복 확인", notes = "아이디 중복 확인 기능.")
     public SuccessResponseDto userIdCheck(@Validated @RequestBody UserIdCheckDto dto) {
         userService.validateDuplicateUser(dto.getUsername());
         return new SuccessResponseDto();
     }
+
 
     @PostMapping("/logout")
     @ApiOperation(value = "로그아웃", notes = "로그아웃 기능.")
@@ -86,6 +92,22 @@ public class UserController {
     public List<User> listUser() {
         return userService.findAll();
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<Long> userUpdate(@RequestParam Long id, @Validated @RequestBody UserUpdateDto userUpdateDto,
+                                           @ApiIgnore @Login SessionUser sessionUser){
+        Long userId = userService.userUpdate(id,userUpdateDto,sessionUser);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(userId);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserProfileDto> profile(@RequestParam Long id,@ApiIgnore @Login SessionUser sessionUser) {
+        UserProfileDto userProfileDto = userService.getProfile(id,sessionUser.getUsername());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userProfileDto);
+    }
+
 
     // ------- test ---------
     @GetMapping("/login")
