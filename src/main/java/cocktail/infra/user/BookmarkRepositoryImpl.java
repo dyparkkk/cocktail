@@ -10,8 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-import static cocktail.domain.QBookmark.*;
-
 @Repository
 @RequiredArgsConstructor
 public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
