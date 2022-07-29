@@ -1,18 +1,12 @@
 package cocktail.dto;
 
 import cocktail.domain.recipe.*;
-import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static cocktail.dto.RecipeRequestDto.*;
 import static java.util.stream.Collectors.*;
@@ -30,17 +24,21 @@ public class RecipeResponseDto {
     private Official official;
     private String createdDate;
     private String lastModifiedDate;
-    // 추가예정 - 사진
+    private List<String> imageUrls;
 
     public static RecipeResponseDto fromEntity(Recipe recipe) {
-        List<String> tagList = recipe.getTags().stream()
-                .map(t -> t.getName()).collect(toList());
+        List<String> tagList = null;
+        if (recipe.getTags() != null){
+            tagList = recipe.getTags().stream()
+                    .map(Tag::getName).collect(toList());
+        }
         return new RecipeResponseDto(recipe.getId(), recipe.getName(), recipe.getStar(),
                 recipe.getUser().getNickname(), tagList, recipe.getViewCnt(), recipe.getOfficial(),
-                recipe.getCreatedDate().toString(), recipe.getLastModifiedDate().toString());
+                recipe.getCreatedDate().toString(), recipe.getLastModifiedDate().toString(),
+                recipe.getImageUrls());
     }
 
-    public RecipeResponseDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, Official official, String createdDate, String lastModifiedDate) {
+    public RecipeResponseDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, Official official, String createdDate, String lastModifiedDate, List<String> imageUrls) {
         this.id = id;
         this.name = name;
         this.star = star;
@@ -50,6 +48,7 @@ public class RecipeResponseDto {
         this.official = official;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
+        this.imageUrls = imageUrls;
     }
 
     @Getter
@@ -65,12 +64,13 @@ public class RecipeResponseDto {
         private Integer soft;
         private Integer sweet;
         private String garnish;
+        private int voter;
 
         public static DetailDto from(Recipe recipe) {
             return DetailDto.builder()
                     .id(recipe.getId())
                     .name(recipe.getName())
-                    .dosu(recipe.getDosu().toString())
+                    .dosu(recipe.getDosu() == null ? null : recipe.getDosu().toString())
                     .brewing(recipe.getBrewing())
                     .base(recipe.getBase())
                     .orders(recipe.getOrders())
@@ -90,11 +90,14 @@ public class RecipeResponseDto {
                     .star(recipe.getStar())
                     .writer(recipe.getUser().getNickname())
                     .viewCnt(recipe.getViewCnt())
+                    .imageUrls(recipe.getImageUrls())
+                    .official(recipe.getOfficial())
+                    .voter(recipe.getVoter())
                     .build();
         }
 
-        public DetailDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, Official official, String createdDate, String lastModifiedDate, String dosu, Brewing brewing, Base base, List<Order> orders, List<IngredientDto> ingredients, String glass, Integer soft, Integer sweet, String garnish) {
-            super(id, name, star, writer, tags, viewCnt, official, createdDate, lastModifiedDate);
+        public DetailDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, Official official, String createdDate, String lastModifiedDate, List<String> imageUrls, String dosu, Brewing brewing, Base base, List<Order> orders, List<IngredientDto> ingredients, String glass, Integer soft, Integer sweet, String garnish, int voter) {
+            super(id, name, star, writer, tags, viewCnt, official, createdDate, lastModifiedDate, imageUrls);
             this.dosu = dosu;
             this.brewing = brewing;
             this.base = base;

@@ -23,8 +23,10 @@ public class FindRecipeService {
 
     @Transactional
     public List<RecipeResponseDto> findAllPageable(Pageable pageable){
-        return recipeRepository.findAllRecipe(pageable)
-                .stream().map(RecipeResponseDto::fromEntity).collect(toList());
+        List<Recipe> recipes = recipeRepository.findAllRecipe(pageable);
+        return recipes.stream()
+                .map(RecipeResponseDto::fromEntity)
+                .collect(toList());
     }
 
     @Transactional

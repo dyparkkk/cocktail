@@ -29,8 +29,9 @@
 
  DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
  echo "> DEPLOY_JAR 배포" >> $DEPLOY_LOG_PATH
- nohup java -jar $DEPLOY_JAR > /dev/null 2> /dev/null < /dev/null &
+ rm /data/logs/cocktail-api.log
+ nohup java -jar $DEPLOY_JAR > /data/logs/cocktail-api.log 2>&1 &
 
- sleep 30
+ sleep 3
 
  echo "> 배포 종료 : $(date +%c)" >> $DEPLOY_LOG_PATH

@@ -2,6 +2,7 @@ package cocktail.domain.recipe;
 
 import cocktail.domain.User;
 import cocktail.global.BaseTimeEntity;
+import cocktail.infra.recipe.ListToStringConverter;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,10 +41,10 @@ public class Recipe extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Official official;
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", orphanRemoval = true)
     private List<Tag> tags  = new ArrayList<>();
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", orphanRemoval = true)
     private List<Ingredient> ingredients  = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -57,16 +58,22 @@ public class Recipe extends BaseTimeEntity {
 
     private String garnish;
 
+    @Convert(converter = ListToStringConverter.class)
+    private List<String> imageUrls;
+
     @Builder
-    public Recipe(String name, BigDecimal dosu, Brewing brewing, Base base, String garnish, String glass, Integer soft, Integer sweet, List<Order> orders) {
-        this.name = name;
-        this.dosu = dosu;
-        this.brewing = brewing;
-        this.base = base;
+    public Recipe(String name, BigDecimal dosu, Brewing brewing, Base base, String garnish, String glass, Integer soft, Integer sweet, List<Order> orders, List<String> imageUrls) {
         if(orders != null){
             this.orders.addAll(orders);
             sortOrders();
         }
+        if(imageUrls != null){
+            this.imageUrls = imageUrls;
+        }
+        this.name = name;
+        this.dosu = dosu;
+        this.brewing = brewing;
+        this.base = base;
         this.garnish = garnish;
         this.glass = glass;
         this.soft = soft;
@@ -86,17 +93,17 @@ public class Recipe extends BaseTimeEntity {
         this.official = official;
     }
 
-    public void update(String name, BigDecimal dosu, Brewing brewing, Base base, String garnish, String glass, Integer soft, Integer sweet, List<Order> orders){
+    public void update(String name, BigDecimal dosu, Brewing brewing, Base base, String garnish, String glass, Integer soft, Integer sweet, List<Order> orders, List<String> imageUrls){
+        if(orders != null){
+            this.orders.clear();
+            this.orders.addAll(orders);
+            sortOrders();
+        }
+        this.imageUrls = imageUrls;
         this.name = name;
         this.dosu = dosu;
         this.brewing = brewing;
         this.base = base;
-
-        this.orders.clear();
-        if(orders != null){
-            this.orders.addAll(orders);
-            sortOrders();
-        }
         this.garnish = garnish;
         this.glass = glass;
         this.soft = soft;
@@ -104,6 +111,9 @@ public class Recipe extends BaseTimeEntity {
     }
 
     public void updateStar(BigDecimal rating) {
+        if(rating == null) {
+            throw new IllegalArgumentException("rating is null");
+        }
         star = star.multiply(BigDecimal.valueOf(voter)).add(rating)
                 .divide(BigDecimal.valueOf(voter+1))
                 .setScale(2, RoundingMode.HALF_UP);
@@ -113,6 +123,5 @@ public class Recipe extends BaseTimeEntity {
     private void sortOrders() {
         Collections.sort(orders);
     }
-
 
 }
