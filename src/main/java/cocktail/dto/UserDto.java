@@ -49,12 +49,16 @@ public class UserDto {
         private String pw;
         @NotBlank
         private String nickname;
+        private String title;
+        private String profileImgUrl;
         private String roles;
 
-        public SignUpRequestDto(String username, String pw, String nickname, String roles) {
+        public SignUpRequestDto(String username, String pw, String nickname,String title,String profileImgUrl, String roles) {
             this.username = username;
             this.pw = pw;
             this.nickname = nickname;
+            this.title = title;
+            this.profileImgUrl = profileImgUrl;
             this.roles = roles;
         }
     }
@@ -82,6 +86,14 @@ public class UserDto {
         @Email
         @NotBlank
         private String username;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class NicknameCheckDto{
+        @NotBlank
+        private String nickname;
     }
 
     @Getter

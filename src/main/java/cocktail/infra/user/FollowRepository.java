@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FollowRepository extends JpaRepository<Follow,Long>,FollowRepositoryCustom {
 
-    Follow findFollowByFromUserAndToUser(User fromUser, User toUser);
+    Follow findFollowByFromUserAndToUser(User user, User toUser);
     int findFollowerCountById(Long currentId);
     int findFollowingCountById(Long currentId);
 
