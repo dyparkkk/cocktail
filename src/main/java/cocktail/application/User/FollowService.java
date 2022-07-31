@@ -1,5 +1,6 @@
 package cocktail.application.User;
 
+import cocktail.application.auth.SessionUser;
 import cocktail.domain.Follow;
 import cocktail.domain.User;
 import cocktail.infra.user.FollowRepository;
@@ -33,11 +34,11 @@ public class FollowService {
     }
 
     @Transactional
-    public Follow save(String email, Long toUserId){
-        User formUser = userRepository.findByUsername(email)
+    public Follow save(SessionUser sessionUser, String toUsername){
+        User formUser = userRepository.findByUsername(sessionUser.getUsername())
                 .orElseThrow(IllegalArgumentException::new);
 
-        User toUser = userRepository.findById(toUserId).
+        User toUser = userRepository.findByUsername(toUsername).
                 orElseThrow(IllegalArgumentException::new);
 
         return followRepository.save(Follow.builder()
