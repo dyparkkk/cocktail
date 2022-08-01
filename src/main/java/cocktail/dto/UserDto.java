@@ -49,6 +49,7 @@ public class UserDto {
         private String pw;
         @NotBlank
         private String nickname;
+
         private String title;
         private String profileImgUrl;
         private String roles;

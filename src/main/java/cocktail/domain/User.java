@@ -62,10 +62,12 @@ public class User extends BaseTimeEntity {
     private List<Follow> toUser = new ArrayList<Follow>();
 
     @Builder
-    public User(String username, String pw, String nickname,Role roles) {
+    public User(String username, String pw, String nickname,String title, String profileImgUrl,Role roles) {
         this.username = username;
         this.pw = pw;
         this.nickname = nickname;
+        this.title = title;
+        this.profileImgUrl = profileImgUrl;
         this.roles = roles;
     }
 
