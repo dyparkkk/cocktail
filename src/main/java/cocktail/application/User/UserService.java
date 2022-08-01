@@ -68,6 +68,15 @@ public class UserService {
                 });
     }
 
+    // 닉네임 중복 확인
+    public void validateDuplicateNickname(String nickName) {
+        userRepository.findByNickname(nickName)
+                .ifPresent(member -> {
+                    log.debug("nickname : {}, 닉네임 중복 발생", nickName);
+                    throw new DuplicateUserIdException("닉네임 중복");
+                });
+    }
+
     public List<User> findAll() {
         return userRepository.findAll();
     }
@@ -80,8 +89,8 @@ public class UserService {
     }
 
     @Transactional
-    public Long userUpdate(Long id, UserUpdateDto userUpdateDto, SessionUser sessionUser){
-        User user =userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+    public String userUpdate(UserUpdateDto userUpdateDto, SessionUser sessionUser){
+        User user =userRepository.findByUsername(sessionUser.getUsername()).orElseThrow(IllegalArgumentException::new);
 
         isValid(sessionUser,user);
 
@@ -93,16 +102,16 @@ public class UserService {
                 userUpdateDto.getProfileImgUrl()
         );
 
-        return id;
+        return sessionUser.getUsername();
 
     }
 
     @Transactional
-    public UserProfileDto getProfile(Long profileId,String sessionId){
+    public UserProfileDto getProfile(String username,SessionUser sessionId){
         UserProfileDto userProfileDto = new UserProfileDto();
 
         //현재 id에 해당하는 user정보로 UserDto 생성
-        User user = userRepository.findById(profileId).orElseThrow(IllegalArgumentException::new);
+        User user = userRepository.findByUsername(username).orElseThrow(IllegalArgumentException::new);
         userProfileDto.setUserDto(UserDto.builder()
                         .username(user.getUsername())
                         .nickname(user.getNickname())
@@ -111,9 +120,9 @@ public class UserService {
                         .build());
 
         //sessionId로 profileId가 로그인된 유저인지 확인
-        User loginUser = userRepository.findByUsername(sessionId).orElseThrow(IllegalArgumentException::new);
-        userProfileDto.setLoginUser(loginUser.getId() == user.getId());
-        userProfileDto.setLoginId(loginUser.getId());
+        User loginUser = userRepository.findByUsername(sessionId.getUsername()).orElseThrow(IllegalArgumentException::new);
+        userProfileDto.setLoginUser(loginUser.getUsername() == user.getUsername());
+        userProfileDto.setLoginName(loginUser.getUsername());
 
         //profileId를 가진 유저가 sessionId을 가진 유저를 팔로우했는지 확인
         userProfileDto.setFollow(followRepository.findFollowByFromUserAndToUser(loginUser,user) != null);

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Data
 public class UserProfileDto {
-    private Long loginId;
+    private String loginName;
     private boolean loginUser;
     private boolean follow;
     private UserDto userDto;
