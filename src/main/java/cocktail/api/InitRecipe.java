@@ -3,7 +3,12 @@ package cocktail.api;
 
 import cocktail.domain.Role;
 import cocktail.domain.User;
-import cocktail.domain.recipe.*;
+import cocktail.domain.recipe.Base;
+import cocktail.domain.recipe.Brewing;
+import cocktail.domain.recipe.Ingredient;
+import cocktail.domain.recipe.Order;
+import cocktail.domain.recipe.Recipe;
+import cocktail.domain.recipe.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,7 +20,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 
 
 @Profile("local")
@@ -43,7 +47,7 @@ public class InitRecipe {
         public void init() {
             // user
             String pw = passwordEncoder.encode("pw");
-            User user = new User("username@naver.com", pw, "nickname", Role.USER);
+            User user = new User("username@naver.com", pw, "nickname","title","profileImgUrl", Role.USER);
             em.persist(user);
 
             // recipe

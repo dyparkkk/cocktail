@@ -40,7 +40,7 @@ public class UserService {
 
         // member 생성 후 저장
         return userRepository
-                .save(new User(dto.getUsername(),encodePw, dto.getNickname(), Role.USER))
+                .save(new User(dto.getUsername(),encodePw, dto.getNickname(),dto.getTitle(),dto.getProfileImgUrl(), Role.USER))
                 .getId();
     }
 
