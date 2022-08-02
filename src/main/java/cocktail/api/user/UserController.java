@@ -50,16 +50,15 @@ public class UserController {
 
     @RequestMapping(value = "/signup", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "회원가입", notes = "회원가입 기능.")
-    public ResponseEntity<Long> signUp(@Validated @RequestBody SignUpRequestDto dto) {
+    public SuccessResponseDto signUp(@Validated @RequestBody SignUpRequestDto dto) {
         Long id = userService.signUp(dto);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(id);
+        return new SuccessResponseDto();
 
     }
 
     @PostMapping("/login")
     @ApiOperation(value = "로그인", notes = "로그인 기능.")
-    public ResponseEntity<String> login(@Validated @RequestBody LoginRequestDto dto,
+    public SuccessResponseDto login(@Validated @RequestBody LoginRequestDto dto,
                                     HttpServletRequest req) {
         UserDto userDto = userService.signIn(dto);
         SessionUser sessionUser = new SessionUser(userDto);
@@ -69,8 +68,7 @@ public class UserController {
         HttpSession session = req.getSession();
         session.setAttribute(LOGIN_USER, sessionUser);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(userDto.getUsername());
+        return new SuccessResponseDto();
     }
 
     @RequestMapping(value ="/signup/userid", method = {RequestMethod.GET, RequestMethod.POST})
@@ -107,11 +105,10 @@ public class UserController {
 
     @PutMapping("/update")
     @ApiOperation(value = "수정", notes = "프로필 수정 기능.")
-    public ResponseEntity<String> userUpdate(@Validated @RequestBody UserUpdateDto userUpdateDto,
+    public SuccessResponseDto userUpdate(@Validated @RequestBody UserUpdateDto userUpdateDto,
                                            @ApiIgnore @Login SessionUser sessionUser){
         String userId = userService.userUpdate(userUpdateDto,sessionUser);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(userId);
+        return new SuccessResponseDto();
     }
 
     @PostMapping("/profile/upload")

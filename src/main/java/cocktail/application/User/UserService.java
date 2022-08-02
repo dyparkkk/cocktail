@@ -6,7 +6,6 @@ import cocktail.domain.User;
 import cocktail.dto.UserDto;
 import cocktail.dto.UserProfileDto;
 import cocktail.global.exception.DuplicateUserIdException;
-import cocktail.global.exception.PwNotMatchException;
 import cocktail.infra.user.FollowRepository;
 import cocktail.infra.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static cocktail.dto.UserDto.*;
+import static cocktail.dto.UserDto.LoginRequestDto;
+import static cocktail.dto.UserDto.SignUpRequestDto;
+import static cocktail.dto.UserDto.UserUpdateDto;
 
 
 @Service
@@ -49,11 +50,11 @@ public class UserService {
         // findMember
         // 예외처리 문제 있음 ....filter라서
         User user = userRepository.findByUsername(dto.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("userService.signIn : userId 확인 불가"));
+                .orElseThrow(() -> new DuplicateUserIdException ("userService.signIn : userId 확인 불가"));
 
         // pw 체크
         if(!passwordEncoder.matches(dto.getPw(), user.getPw())){
-            throw new PwNotMatchException("userId : " + user.getUsername() + " Invalid password");
+            throw new DuplicateUserIdException("userId : " + user.getUsername() + "password 불일치");
         }
 
         return new UserDto(user.getUsername(), user.getNickname());
