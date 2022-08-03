@@ -33,7 +33,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         if (session == null) {
             HttpSession testSession = req.getSession();
             testSession.setAttribute(TEST_USER,
-                    new SessionUser(new UserDto("username@naver.com", "nikname")));
+                    new SessionUser(new UserDto("username@naver.com", "nickname")));
             return testSession.getAttribute(TEST_USER);
         }
         if(session.getAttribute(TEST_USER) != null){
