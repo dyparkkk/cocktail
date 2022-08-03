@@ -30,15 +30,15 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         HttpSession session = req.getSession(false);
 
         // login 기능이 만들어 지지 않음 ....
-        if (session == null) {
-            HttpSession testSession = req.getSession();
-            testSession.setAttribute(TEST_USER,
-                    new SessionUser(new UserDto("username@naver.com", "nikname")));
-            return testSession.getAttribute(TEST_USER);
-        }
-        if(session.getAttribute(TEST_USER) != null){
-            return session.getAttribute(TEST_USER);
-        }
+//        if (session == null) {
+//            HttpSession testSession = req.getSession();
+//            testSession.setAttribute(TEST_USER,
+//                    new SessionUser(new UserDto("username@naver.com", "nickname")));
+//            return testSession.getAttribute(TEST_USER);
+//        }
+//        if(session.getAttribute(TEST_USER) != null){
+//            return session.getAttribute(TEST_USER);
+//        }
         // ......
 
         return session.getAttribute(LOGIN_USER);
