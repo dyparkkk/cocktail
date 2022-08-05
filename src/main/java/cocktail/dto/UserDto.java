@@ -1,6 +1,7 @@
 package cocktail.dto;
 
 import cocktail.domain.User;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -70,6 +71,7 @@ public class UserDto {
     public static class LoginRequestDto{
         @Email
         @NotBlank
+        @ApiModelProperty()
         private String username;
         @NotBlank
         private String pw;
