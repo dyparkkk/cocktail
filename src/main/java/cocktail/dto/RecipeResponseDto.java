@@ -65,6 +65,7 @@ public class RecipeResponseDto {
         private Integer sweet;
         private String garnish;
         private int voter;
+        private boolean isWriter;
 
         public static DetailDto from(Recipe recipe) {
             return DetailDto.builder()
@@ -93,10 +94,11 @@ public class RecipeResponseDto {
                     .imageUrls(recipe.getImageUrls())
                     .official(recipe.getOfficial())
                     .voter(recipe.getVoter())
+                    .isWriter(false)
                     .build();
         }
 
-        public DetailDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, Official official, String createdDate, String lastModifiedDate, List<String> imageUrls, String dosu, Brewing brewing, Base base, List<Order> orders, List<IngredientDto> ingredients, String glass, Integer soft, Integer sweet, String garnish, int voter) {
+        public DetailDto(Long id, String name, BigDecimal star, String writer, List<String> tags, Integer viewCnt, Official official, String createdDate, String lastModifiedDate, List<String> imageUrls, String dosu, Brewing brewing, Base base, List<Order> orders, List<IngredientDto> ingredients, String glass, Integer soft, Integer sweet, String garnish, int voter, boolean isWriter) {
             super(id, name, star, writer, tags, viewCnt, official, createdDate, lastModifiedDate, imageUrls);
             this.dosu = dosu;
             this.brewing = brewing;
@@ -107,6 +109,11 @@ public class RecipeResponseDto {
             this.soft = soft;
             this.sweet = sweet;
             this.garnish = garnish;
+            this.isWriter = isWriter;
+        }
+
+        public void setIsWriter(boolean isWriter){
+            this.isWriter = isWriter;
         }
     }
 

@@ -39,7 +39,6 @@ public class S3Uploader {
         System.out.println(cur.toString());
         System.out.println(cur.toAbsolutePath().toString());
 
-
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환이 실패했습니다. "));
 
