@@ -31,7 +31,7 @@ spring:
     properties:
       hibernate.default_batch_fetch_size: 20
 
-  path: C:/Users/qnaqn/Desktop/data/files/
+  path: /data/files
 
   security:
     oauth2:

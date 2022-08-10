@@ -51,8 +51,12 @@ public class RecipeController {
     @GetMapping("/{id}")
     @ApiOperation(value = "find detail recipe")
     @ApiImplicitParam(name = "id", dataType = "int",example = "3",value = "recipe_ID")
-    public ResponseEntity<DetailDto> findByIdApi(@PathVariable Long id) {
+    public ResponseEntity<DetailDto> findByIdApi(@PathVariable Long id,
+                                                 @Login SessionUser sessionUser) {
         DetailDto res = findRecipeService.findById(id);
+        if(sessionUser != null){
+            res.setIsWriter(findRecipeService.isWriter(id, sessionUser));
+        }
         return ResponseEntity.status(HttpStatus.OK)
                 .body(res);
     }

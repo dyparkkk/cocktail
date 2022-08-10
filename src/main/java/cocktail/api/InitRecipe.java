@@ -50,6 +50,8 @@ public class InitRecipe {
             User user = new User("username@naver.com", pw, "nickname","title","profileImgUrl", Role.USER);
             em.persist(user);
 
+            em.persist(new User("test@test.com", pw, "test", "title","profileImgUrl", Role.USER));
+
             // recipe
             List<Order> orderList = List.of(
                     new Order(1, "넣는다"),

@@ -91,6 +91,11 @@ public class RecipeTestUtil {
     }
 
     User createUser() {
-        return new User("username", "pw", "nickname", Role.USER);
+        return User.builder()
+                .username("username")
+                .pw("pw")
+                .nickname("nickname")
+                .roles(Role.USER)
+                .build();
     }
 }

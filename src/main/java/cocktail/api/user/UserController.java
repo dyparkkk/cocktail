@@ -42,18 +42,17 @@ import static cocktail.dto.UserDto.UserUpdateDto;
 @Api(tags = "user")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/v1/user")
+@RequestMapping(value = "/v1/user")
 public class UserController {
 
     private final UserService userService;
     private final S3Uploader s3Uploader;
 
-    @RequestMapping(value = "/signup", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping("/signup")
     @ApiOperation(value = "회원가입", notes = "회원가입 기능.")
     public SuccessResponseDto signUp(@Validated @RequestBody SignUpRequestDto dto) {
         Long id = userService.signUp(dto);
         return new SuccessResponseDto();
-
     }
 
     @PostMapping("/login")
@@ -124,8 +123,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userProfileDto);
     }
-
-
 
     // ------- test ---------
     @GetMapping("/login")
