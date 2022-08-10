@@ -119,9 +119,8 @@ public class UserController {
 
     @GetMapping("/profile")
     @ApiOperation(value = "프로필 조회", notes = "내 프로필 조회")
-    public ResponseEntity<UserProfileDto> profile(@RequestBody UserIdCheckDto dto,@ApiIgnore @Login SessionUser sessionUser) {
-            String username = dto.getUsername();
-        UserProfileDto userProfileDto = userService.getProfile(username,sessionUser);
+    public ResponseEntity<UserProfileDto> profile(@ApiIgnore @Login SessionUser sessionUser) {
+        UserProfileDto userProfileDto = userService.getProfile(sessionUser);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userProfileDto);
     }

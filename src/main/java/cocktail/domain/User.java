@@ -56,10 +56,10 @@ public class User extends BaseTimeEntity {
     private Set<Bookmark> bookmarks = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Follow> fromUser = new ArrayList<Follow>();
+    private List<Follow> fromUser = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Follow> toUser = new ArrayList<Follow>();
+    private List<Follow> toUser = new ArrayList<>();
 
     @Builder
     public User(String username, String pw, String nickname,String title, String profileImgUrl,Role roles) {

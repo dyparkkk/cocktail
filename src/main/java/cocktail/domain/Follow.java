@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "follow")
@@ -31,19 +32,26 @@ public class Follow {
     @ManyToOne
     private User toUser;
 
+    @Transient
+    private boolean followState;
+
     @ManyToOne
     @JoinColumn(name = "user_users_id")
     private User user;
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     @Builder
     public Follow(User fromUser, User toUser){
         this.fromUser = fromUser;
         this.toUser = toUser;
+
+    }
+
+    public void setUser(User user) {
+        this.user = user;
         user.getFromUser().add(this);
         user.getToUser().add(this);
+    }
+
+    public void setFollowState(boolean followState) {
     }
 }

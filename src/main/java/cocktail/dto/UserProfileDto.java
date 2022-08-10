@@ -16,6 +16,6 @@ public class UserProfileDto {
     private boolean loginUser;
     private boolean follow;
     private UserDto userDto;
-    private int userFollowerCount;
-    private int userFollowingCount;
+    private long userFollowerCount;
+    private long userFollowingCount;
 }
