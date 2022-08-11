@@ -49,7 +49,7 @@ public class FindRecipeService {
     }
 
     @Transactional
-    public boolean isWriter(Long recipeId, SessionUser user) {
+    public boolean isMyRecipe(Long recipeId, SessionUser user) {
         if(user == null) return false;
         Recipe recipe = recipeRepository.fetchFindById(recipeId)
                 .orElseThrow(() -> new IllegalArgumentException("RecipeService.findById : id값을 찾을 수 없습니다."));

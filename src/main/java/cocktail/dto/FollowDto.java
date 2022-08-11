@@ -1,29 +1,29 @@
 package cocktail.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import cocktail.domain.user.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Builder
-@AllArgsConstructor
 @Getter
-@Data
+@NoArgsConstructor
 public class FollowDto {
 
-    private Long id;
+    private String username;
     private String nickname;
     private String profileImgUrl;
-    private int followState;
-    private int loginUser;
+    private boolean myFollowing;
 
-    public FollowDto(Integer id, String nickname,String profileImgUrl,int followState,int loginUser){
-        this.id = id.longValue();
-        this.nickname= nickname;
-        this.profileImgUrl = profileImgUrl;
-        this.followState = followState;
-        this.loginUser= loginUser;
-
+    public static FollowDto fromUser(User user) {
+        return new FollowDto(user);
+    }
+    private FollowDto(User user) {
+        this.username = user.getUsername();
+        this.nickname = user.getNickname();
+        this.profileImgUrl = user.getProfileImgUrl();
+        this.myFollowing = false;
     }
 
+    public void setFollowing(boolean following) {
+        myFollowing = following;
+    }
 }

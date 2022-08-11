@@ -32,7 +32,7 @@ public class UserExceptionHandler {
     public ErrorResponse reqException(Exception e) {
         log.info("[ServletRequestBindingException] ex = {}", e.getMessage());
         return ErrorResponse.createErrorResponse(false, "--" + HttpStatus.BAD_REQUEST,
-                "[ServletRequestBindingException]:바인딩 에러 ex) JSESSIONID 확인 불가 등",
+                "[ServletRequestBindingException]",
                 e.getMessage());
     }
 
@@ -40,7 +40,7 @@ public class UserExceptionHandler {
     public ErrorResponse illegalStateException(Exception e) {
         log.info("[IllegalStateException] ex = {}", e.getMessage());
         return ErrorResponse.createErrorResponse(false, "--" + HttpStatus.BAD_REQUEST,
-                "[IllegalStateException]: 적절하지 않은 상태 ex) JSESSIONID 확인 불가 등",
+                "[IllegalStateException]",
                 e.getMessage());
     }
 

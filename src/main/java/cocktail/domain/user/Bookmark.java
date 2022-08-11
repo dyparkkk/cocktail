@@ -1,4 +1,4 @@
-package cocktail.domain;
+package cocktail.domain.user;
 
 import cocktail.domain.recipe.Recipe;
 import lombok.AccessLevel;

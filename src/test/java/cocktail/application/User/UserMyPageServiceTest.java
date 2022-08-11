@@ -1,6 +1,6 @@
 package cocktail.application.User;
 
-import cocktail.domain.User;
+import cocktail.domain.user.User;
 import cocktail.domain.recipe.Recipe;
 import cocktail.dto.BookmarkDto;
 import cocktail.infra.user.UserRepository;
@@ -18,10 +18,10 @@ import java.util.Optional;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class BookmarkServiceTest {
+class UserMyPageServiceTest {
 
     @InjectMocks
-    private BookmarkService bookmarkService;
+    private UserMyPageService userMyPageService;
     @Mock
     RecipeRepository recipeRepository;
     @Mock
@@ -48,7 +48,7 @@ class BookmarkServiceTest {
                 .willReturn(Optional.empty());
 
         // then
-        Assertions.assertThatThrownBy(() -> bookmarkService.createBookmark(dto))
+        Assertions.assertThatThrownBy(() -> userMyPageService.createBookmark(dto))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -69,7 +69,7 @@ class BookmarkServiceTest {
                 .willReturn(Optional.empty());
 
         // then
-        Assertions.assertThatThrownBy(() -> bookmarkService.createBookmark(dto))
+        Assertions.assertThatThrownBy(() -> userMyPageService.createBookmark(dto))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

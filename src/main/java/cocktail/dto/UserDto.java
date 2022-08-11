@@ -1,6 +1,6 @@
 package cocktail.dto;
 
-import cocktail.domain.User;
+import cocktail.domain.user.User;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

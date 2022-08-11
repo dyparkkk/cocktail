@@ -1,8 +1,10 @@
 package cocktail.application.User;
 
 import cocktail.application.auth.SessionUser;
-import cocktail.domain.Role;
-import cocktail.domain.User;
+import cocktail.domain.user.Role;
+import cocktail.domain.user.User;
+import cocktail.domain.recipe.Recipe;
+import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.UserDto;
 import cocktail.dto.UserProfileDto;
 import cocktail.global.exception.DuplicateUserIdException;
@@ -20,6 +22,7 @@ import java.util.List;
 import static cocktail.dto.UserDto.LoginRequestDto;
 import static cocktail.dto.UserDto.SignUpRequestDto;
 import static cocktail.dto.UserDto.UserUpdateDto;
+import static java.util.stream.Collectors.toList;
 
 
 @Service
@@ -134,5 +137,18 @@ public class UserService {
 
         return userProfileDto;
     }
+
+    @Transactional
+    public List<RecipeResponseDto> findMyRecipes(SessionUser sessionUser){
+        User user = userRepository.findByUsername(sessionUser.getUsername())
+                .orElseThrow(IllegalStateException::new);
+        List<Recipe> recipes = user.getRecipes();
+        return recipes.stream()
+                .sorted((a, b) -> b.getCreatedDate().compareTo(a.getCreatedDate()))
+                .map(RecipeResponseDto::fromEntity)
+                .collect(toList());
+    }
+
+
 
 }

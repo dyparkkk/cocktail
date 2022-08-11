@@ -1,8 +1,8 @@
 package cocktail.infra.user;
 
-import cocktail.domain.Bookmark;
-import cocktail.domain.QBookmark;
-import cocktail.domain.User;
+import cocktail.domain.user.Bookmark;
+import cocktail.domain.user.QBookmark;
+import cocktail.domain.user.User;
 import cocktail.domain.recipe.Recipe;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

@@ -1,14 +1,12 @@
 package cocktail.application.recipe;
 
-import cocktail.application.auth.SessionUser;
-import cocktail.domain.Role;
-import cocktail.domain.User;
+import cocktail.domain.user.Role;
+import cocktail.domain.user.User;
 import cocktail.domain.recipe.Base;
 import cocktail.domain.recipe.Brewing;
 import cocktail.domain.recipe.Order;
 import cocktail.domain.recipe.Recipe;
 import cocktail.dto.RecipeRequestDto;
-import cocktail.dto.UserDto;
 import org.springframework.stereotype.Component;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -17,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 

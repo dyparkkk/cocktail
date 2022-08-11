@@ -7,6 +7,7 @@ import cocktail.dto.RecipeRequestDto;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
 import cocktail.global.config.Login;
+import cocktail.global.config.LoginNullable;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -52,11 +53,9 @@ public class RecipeController {
     @ApiOperation(value = "find detail recipe")
     @ApiImplicitParam(name = "id", dataType = "int",example = "3",value = "recipe_ID")
     public ResponseEntity<DetailDto> findByIdApi(@PathVariable Long id,
-                                                 @Login SessionUser sessionUser) {
+                                                 @ApiIgnore @LoginNullable SessionUser sessionUser) {
         DetailDto res = findRecipeService.findById(id);
-        if(sessionUser != null){
-            res.setIsWriter(findRecipeService.isWriter(id, sessionUser));
-        }
+        res.setMyRecipe(findRecipeService.isMyRecipe(id, sessionUser));
         return ResponseEntity.status(HttpStatus.OK)
                 .body(res);
     }

@@ -1,7 +1,7 @@
 package cocktail.application.recipe;
 
 import cocktail.application.auth.SessionUser;
-import cocktail.domain.Star;
+import cocktail.domain.recipe.Star;
 import cocktail.domain.recipe.Recipe;
 import cocktail.dto.StarDto;
 import cocktail.infra.recipe.RecipeRepository;

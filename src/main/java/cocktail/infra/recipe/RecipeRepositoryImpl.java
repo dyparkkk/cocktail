@@ -2,6 +2,8 @@ package cocktail.infra.recipe;
 
 import cocktail.domain.recipe.*;
 
+import cocktail.domain.user.QUser;
+import cocktail.domain.user.User;
 import cocktail.dto.SearchCondition;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
@@ -20,11 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static cocktail.domain.QUser.*;
 import static cocktail.domain.recipe.QIngredient.*;
 import static cocktail.domain.recipe.QOrder.*;
 import static cocktail.domain.recipe.QRecipe.*;
 import static cocktail.domain.recipe.QTag.*;
+import static cocktail.domain.user.QUser.*;
 import static org.springframework.util.StringUtils.hasText;
 
 @Repository
@@ -107,6 +109,15 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 .set(recipe.viewCnt, recipe.viewCnt.add(1))
                 .where(recipe.id.eq(id))
                 .execute();
+    }
+
+    @Override
+    public List<Recipe> findAllByUser(User user) {
+        return queryFactory
+                .selectFrom(recipe)
+                .where(recipe.user.eq(user))
+                .orderBy(recipe.createdDate.desc())
+                .fetch();
     }
 
     private List<OrderSpecifier> starSort(Pageable pageable) {

@@ -1,6 +1,6 @@
 package cocktail.infra.user;
 
-import cocktail.domain.Star;
+import cocktail.domain.recipe.Star;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

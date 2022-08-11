@@ -2,31 +2,54 @@ package cocktail.api.user;
 
 import cocktail.application.User.FollowService;
 import cocktail.application.auth.SessionUser;
-import cocktail.domain.Follow;
+import cocktail.dto.FollowDto;
+import cocktail.dto.FollowReqDto;
 import cocktail.global.config.Login;
-import cocktail.infra.user.FollowRepository;
+import cocktail.global.config.LoginNullable;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping(value = "/v1/follow")
+@Api(tags = "follow")
 public class FollowController {
 
-    private final FollowRepository followRepository;
     private final FollowService followService;
 
-    @PostMapping("follow/{toUsername}")
-    public Follow followUser(@PathVariable String toUsername, @ApiIgnore @Login SessionUser sessionUser){
-        return followService.save(sessionUser, toUsername);
+    @PostMapping
+    @ApiOperation(value = "follow 하기", notes = "로그인 필수")
+    public String followUser(@RequestParam String username,
+                             @ApiIgnore @Login SessionUser sessionUser){
+        followService.follow(sessionUser, username);
+        return "ok";
     }
 
-    @DeleteMapping("follow/{toUserId}")
-    public void unFollowUser(@PathVariable Long toUserId, SessionUser sessionUser){
-        Long id = followService.getFollowIdByFromEmailToId(sessionUser.getUsername(),toUserId);
-        followRepository.deleteById(id);
+    @DeleteMapping
+    @ApiOperation(value = "unFollow 하기", notes = "로그인 필수")
+    public String unFollowUser(@RequestParam String username,
+                             @ApiIgnore @Login SessionUser sessionUser){
+        followService.unFollow(sessionUser , username);
+        return "ok";
     }
+
+    @GetMapping("/follower")
+    @ApiOperation(value = "user A의 팔로워 목록 조회", notes = "로그인 필수는 아님, 로그인시 내가 팔로워한 유저 확인 가능")
+    public List<FollowDto> getFollowerList(@RequestParam String username,
+                                  @ApiIgnore @LoginNullable SessionUser sessionUser) {
+        return followService.findFollowerList(username, sessionUser);
+    }
+
+    @GetMapping("/following")
+    @ApiOperation(value = "user A의 팔로잉 목록 조회", notes = "로그인 필수는 아님, 로그인시 내가 팔로워한 유저 확인 가능")
+    public List<FollowDto> getFollowingList(@RequestParam String username,
+                                           @ApiIgnore @LoginNullable SessionUser sessionUser) {
+        return followService.findFollowingList(username, sessionUser);
+    }
+
 }

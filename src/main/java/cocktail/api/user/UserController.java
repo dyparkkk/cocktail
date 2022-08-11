@@ -2,7 +2,7 @@ package cocktail.api.user;
 
 import cocktail.application.User.UserService;
 import cocktail.application.auth.SessionUser;
-import cocktail.domain.User;
+import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SuccessResponseDto;
 import cocktail.dto.UserDto;
 import cocktail.dto.UserProfileDto;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -70,14 +69,14 @@ public class UserController {
         return new SuccessResponseDto();
     }
 
-    @RequestMapping(value ="/signup/userid", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping(value ="/signup/userid")
     @ApiOperation(value = "아이디 중복 확인", notes = "아이디 중복 확인 기능.")
     public SuccessResponseDto userIdCheck(@Validated @RequestBody UserIdCheckDto dto) {
         userService.validateDuplicateUser(dto.getUsername());
         return new SuccessResponseDto();
     }
 
-    @RequestMapping(value ="/signup/nickname", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping(value ="/signup/nickname")
     @ApiOperation(value = "닉네임 중복 확인", notes = "닉네임 중복 확인 기능.")
     public SuccessResponseDto nicknameCheck(@Validated @RequestBody NicknameCheckDto dto) {
         userService.validateDuplicateNickname(dto.getNickname());
@@ -97,13 +96,8 @@ public class UserController {
         return new SuccessResponseDto();
     }
 
-    @GetMapping("/user")
-    public List<User> listUser() {
-        return userService.findAll();
-    }
-
     @PutMapping("/update")
-    @ApiOperation(value = "수정", notes = "프로필 수정 기능.")
+    @ApiOperation(value = "수정", notes = "로그인 필요")
     public SuccessResponseDto userUpdate(@Validated @RequestBody UserUpdateDto userUpdateDto,
                                            @ApiIgnore @Login SessionUser sessionUser){
         String userId = userService.userUpdate(userUpdateDto,sessionUser);
@@ -117,7 +111,7 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    @ApiOperation(value = "프로필 조회", notes = "내 프로필 조회")
+    @ApiOperation(value = "프로필 조회", notes = "로그인 필요")
     public ResponseEntity<UserProfileDto> profile(@RequestBody UserIdCheckDto dto,
                                                   @ApiIgnore @Login SessionUser sessionUser) {
         String username = dto.getUsername();
@@ -126,11 +120,10 @@ public class UserController {
                 .body(userProfileDto);
     }
 
-    // ------- test ---------
-    @GetMapping("/login")
-    @ApiOperation(value = "로그인", notes = "로그인 기능.")
-    public ResponseEntity<String> loginTest(@Login SessionUser sessionUser) {
-        System.out.println("login : " + sessionUser);
-        return ResponseEntity.status(HttpStatus.OK).body("ok");
+    @GetMapping("/recipes")
+    @ApiOperation(value = "내가 작성한 레시피 조회", notes = "로그인 필요")
+    public List<RecipeResponseDto> findMyRecipes(@ApiIgnore @Login SessionUser sessionUser) {
+        return userService.findMyRecipes(sessionUser);
     }
+
 }

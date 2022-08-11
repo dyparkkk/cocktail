@@ -10,12 +10,12 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import static cocktail.api.user.SessionConst.*;
+import static cocktail.api.user.SessionConst.LOGIN_USER;
 
-public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
+public class LoginNullableArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        boolean hasLoginAnnotation = parameter.hasParameterAnnotation(Login.class);
+        boolean hasLoginAnnotation = parameter.hasParameterAnnotation(LoginNullable.class);
         boolean hasSessionUserType = SessionUser.class.isAssignableFrom(parameter.getParameterType());
 
         return hasLoginAnnotation && hasSessionUserType;
@@ -23,14 +23,11 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-
         HttpServletRequest req = (HttpServletRequest) webRequest.getNativeRequest();
         HttpSession session = req.getSession(false);
-
-        if (session == null || session.getAttribute(LOGIN_USER) == null) {
-            throw new IllegalStateException("login 필요");
+        if(session == null){
+            return null;
         }
-
         return session.getAttribute(LOGIN_USER);
     }
 }

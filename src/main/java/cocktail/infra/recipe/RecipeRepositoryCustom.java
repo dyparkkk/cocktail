@@ -1,6 +1,7 @@
 package cocktail.infra.recipe;
 
 import cocktail.domain.recipe.Recipe;
+import cocktail.domain.user.User;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +20,6 @@ public interface RecipeRepositoryCustom {
     Optional<Recipe> fetchFindById(Long id);
     long deleteIngredients(Long id);
     long viewCntPlus(Long id);
+
+    List<Recipe> findAllByUser(User user);
 }

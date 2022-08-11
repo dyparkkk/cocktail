@@ -29,7 +29,7 @@ spring:
     hibernate:
       ddl-auto: create
     properties:
-      hibernate.default_batch_fetch_size: 20
+      hibernate.default_batch_fetch_size: 30
 
   path: /data/files
 

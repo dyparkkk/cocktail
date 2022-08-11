@@ -1,4 +1,4 @@
-package cocktail.domain;
+package cocktail.domain.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

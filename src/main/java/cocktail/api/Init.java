@@ -1,8 +1,9 @@
 package cocktail.api;
 
 
-import cocktail.domain.Role;
-import cocktail.domain.User;
+import cocktail.domain.user.Follow;
+import cocktail.domain.user.Role;
+import cocktail.domain.user.User;
 import cocktail.domain.recipe.Base;
 import cocktail.domain.recipe.Brewing;
 import cocktail.domain.recipe.Ingredient;
@@ -25,7 +26,7 @@ import java.util.List;
 @Profile("local")
 @Component
 @RequiredArgsConstructor
-public class InitRecipe {
+public class Init {
 
     private final InitRecipeService initRecipeService;
 
@@ -50,7 +51,16 @@ public class InitRecipe {
             User user = new User("username@naver.com", pw, "nickname","title","profileImgUrl", Role.USER);
             em.persist(user);
 
-            em.persist(new User("test@test.com", pw, "test", "title","profileImgUrl", Role.USER));
+            User testUser = new User("test@test.com", pw, "test", "title", "profileImgUrl", Role.USER);
+            em.persist(testUser);
+            User test2User = new User("test2@test.com", pw, "test2", "title2", "profileImgUrl", Role.USER);
+            em.persist(test2User);
+
+            // follow
+            em.persist(new Follow(test2User, user));
+            em.persist(new Follow(testUser, user));
+
+            em.persist(new Follow(user, testUser));
 
             // recipe
             List<Order> orderList = List.of(

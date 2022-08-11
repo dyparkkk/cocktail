@@ -1,14 +1,16 @@
 package cocktail.application.auth;
 
-import cocktail.domain.User;
+import cocktail.domain.user.User;
 import cocktail.dto.UserDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
 
 @ToString
 @Getter
+@NoArgsConstructor
 public class SessionUser implements Serializable {
     private String nickname;
     private String username;

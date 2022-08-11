@@ -1,6 +1,6 @@
 package cocktail.domain.recipe;
 
-import cocktail.domain.User;
+import cocktail.domain.user.User;
 import cocktail.global.BaseTimeEntity;
 import cocktail.infra.recipe.ListToStringConverter;
 import lombok.AccessLevel;
@@ -86,7 +86,8 @@ public class Recipe extends BaseTimeEntity {
 
     public void setUser(User user) {
         this.user = user;
-        user.getRecipe().add(this);
+        user.getRecipes().add(this);
+        user.addMyRecipeCnt();
     }
 
     public void setOfficial(Official official) {

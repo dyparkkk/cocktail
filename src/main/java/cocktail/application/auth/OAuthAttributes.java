@@ -1,7 +1,7 @@
 package cocktail.application.auth;
 
-import cocktail.domain.Role;
-import cocktail.domain.User;
+import cocktail.domain.user.Role;
+import cocktail.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

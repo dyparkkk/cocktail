@@ -1,7 +1,7 @@
 package cocktail.infra.user;
 
-import cocktail.domain.Bookmark;
-import cocktail.domain.User;
+import cocktail.domain.user.Bookmark;
+import cocktail.domain.user.User;
 import cocktail.domain.recipe.Recipe;
 
 import java.util.Optional;
