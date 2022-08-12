@@ -112,18 +112,10 @@ public class UserController {
 
     @GetMapping("/profile")
     @ApiOperation(value = "프로필 조회", notes = "로그인 필요")
-    public ResponseEntity<UserProfileDto> profile(@RequestBody UserIdCheckDto dto,
-                                                  @ApiIgnore @Login SessionUser sessionUser) {
-        String username = dto.getUsername();
-        UserProfileDto userProfileDto = userService.getProfile(username,sessionUser);
+    public ResponseEntity<UserProfileDto> profile(@ApiIgnore @Login SessionUser sessionUser) {
+        UserProfileDto userProfileDto = userService.getProfile(sessionUser);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userProfileDto);
-    }
-
-    @GetMapping("/recipes")
-    @ApiOperation(value = "내가 작성한 레시피 조회", notes = "로그인 필요")
-    public List<RecipeResponseDto> findMyRecipes(@ApiIgnore @Login SessionUser sessionUser) {
-        return userService.findMyRecipes(sessionUser);
     }
 
 }

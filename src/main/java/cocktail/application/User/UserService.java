@@ -3,8 +3,6 @@ package cocktail.application.User;
 import cocktail.application.auth.SessionUser;
 import cocktail.domain.user.Role;
 import cocktail.domain.user.User;
-import cocktail.domain.recipe.Recipe;
-import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.UserDto;
 import cocktail.dto.UserProfileDto;
 import cocktail.global.exception.DuplicateUserIdException;
@@ -22,7 +20,6 @@ import java.util.List;
 import static cocktail.dto.UserDto.LoginRequestDto;
 import static cocktail.dto.UserDto.SignUpRequestDto;
 import static cocktail.dto.UserDto.UserUpdateDto;
-import static java.util.stream.Collectors.toList;
 
 
 @Service
@@ -33,6 +30,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final FollowRepository followRepository;
+    private final FollowService followService;
 
 
     @Transactional
@@ -65,7 +63,7 @@ public class UserService {
 
     // 유저 중복 확인
     public void validateDuplicateUser(String userName) {
-         userRepository.findByUsername(userName)
+        userRepository.findByUsername(userName)
                 .ifPresent(member -> {
                     log.debug("userId : {}, 아이디 중복 발생", userName);
                     throw new DuplicateUserIdException("아이디 중복");
@@ -111,44 +109,34 @@ public class UserService {
     }
 
     @Transactional
-    public UserProfileDto getProfile(String username,SessionUser sessionId){
+    public UserProfileDto getProfile(SessionUser sessionId){
         UserProfileDto userProfileDto = new UserProfileDto();
+        User user =userRepository.findByUsername(sessionId.getUsername()).orElseThrow(IllegalArgumentException::new);
+        isValid(sessionId,user);
 
-        //현재 id에 해당하는 user정보로 UserDto 생성
-        User user = userRepository.findByUsername(username).orElseThrow(IllegalArgumentException::new);
+        //현재 username에 해당하는 user정보로 UserDto 생성
         userProfileDto.setUserDto(UserDto.builder()
-                        .username(user.getUsername())
-                        .nickname(user.getNickname())
-                        .title(user.getTitle())
-                        .profileImgUrl(user.getProfileImgUrl())
-                        .build());
+                .username(user.getUsername())
+                .nickname(user.getNickname())
+                .title(user.getTitle())
+                .profileImgUrl(user.getProfileImgUrl())
+                .build());
 
-        //sessionId로 profileId가 로그인된 유저인지 확인
+        //sessionId로 profileuser가 로그인된 유저인지 확인
         User loginUser = userRepository.findByUsername(sessionId.getUsername()).orElseThrow(IllegalArgumentException::new);
         userProfileDto.setLoginUser(loginUser.getUsername() == user.getUsername());
         userProfileDto.setLoginName(loginUser.getUsername());
 
-        //profileId를 가진 유저가 sessionId을 가진 유저를 팔로우했는지 확인
+        //profile username을 가진 유저가 sessionId을 가진 유저를 팔로우했는지 확인
         userProfileDto.setFollow(followRepository.findFollowByFromUserAndToUser(loginUser,user) != null);
 
+        Long followCount = followRepository.countByFromUserId(user.getId());
+        Long followerCount = followRepository.countByToUserId(user.getId());
+
         //profileId를 가진 유저의 팔로워,팔로인 수 체크
-       // userProfileDto.setUserFollowerCount(followRepository.findFollowerCountById(profileId));
-      // userProfileDto.setUserFollowingCount(followRepository.findFollowingCountById(profileId));
+        userProfileDto.setUserFollowerCount(followRepository.countByFromUserId(followCount));
+        userProfileDto.setUserFollowingCount(followRepository.countByToUserId(followerCount));
 
         return userProfileDto;
     }
-
-    @Transactional
-    public List<RecipeResponseDto> findMyRecipes(SessionUser sessionUser){
-        User user = userRepository.findByUsername(sessionUser.getUsername())
-                .orElseThrow(IllegalStateException::new);
-        List<Recipe> recipes = user.getRecipes();
-        return recipes.stream()
-                .sorted((a, b) -> b.getCreatedDate().compareTo(a.getCreatedDate()))
-                .map(RecipeResponseDto::fromEntity)
-                .collect(toList());
-    }
-
-
-
 }
