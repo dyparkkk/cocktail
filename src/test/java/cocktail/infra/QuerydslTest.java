@@ -2,6 +2,7 @@ package cocktail.infra;
 
 import cocktail.domain.*;
 import cocktail.domain.recipe.Recipe;
+import cocktail.domain.user.QUser;
 import cocktail.domain.user.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.Test;
