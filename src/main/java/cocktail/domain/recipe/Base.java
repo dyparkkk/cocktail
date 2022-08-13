@@ -10,6 +10,6 @@ public enum Base {
     WINE,
     CHAMPAGNE, // 샴페인
     LIQUEUR, // 리큐르
-    NONE,
+    NONE, // none
     OTHER  // 맥주, 소주 등
 }
