@@ -21,26 +21,29 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     @Transactional
-    public void follow(SessionUser user, String toUsername) {
+    public void follow(SessionUser user, String toNickname) {
         User fromUser = userRepository.findByUsername(user.getUsername())
                 .orElseThrow(IllegalArgumentException::new);
-        User toUser = userRepository.findByUsername(toUsername)
+        User toUser = userRepository.findByNickname(toNickname)
                 .orElseThrow(IllegalArgumentException::new);
 
         // 이미 팔로우 중일경우 에러
         followRepository.findByUsers(fromUser, toUser)
-                .orElseThrow(() -> new IllegalStateException("이미 팔로우 중입니다"));
+                .ifPresent((f)->{throw new IllegalStateException("이미 팔로우 중입니다");});
 
         followRepository.save(new Follow(fromUser, toUser));
     }
 
     @Transactional
-    public void unFollow(SessionUser user, String toUsername){
+    public void unFollow(SessionUser user, String toNickname){
         User fromUser = userRepository.findByUsername(user.getUsername())
                 .orElseThrow(IllegalArgumentException::new);
-        User toUser = userRepository.findByUsername(toUsername)
+        User toUser = userRepository.findByNickname(toNickname)
                 .orElseThrow(IllegalArgumentException::new);
 
+        followRepository.findByUsers(fromUser, toUser)
+                        .orElseThrow(()->new IllegalStateException("팔로우 중이지 않습니다."));
+        followRepository.unFollow(fromUser, toUser);
     }
 
     /**
@@ -52,8 +55,8 @@ public class FollowService {
      * 3-2. 내가 로그인중이 아니라면 전부 팔로우 x
      */
     @Transactional
-    public List<FollowDto> findFollowingList(String username, SessionUser sessionUser) {
-        User user = userRepository.findByUsername(username)
+    public List<FollowDto> findFollowingList(String nickname, SessionUser sessionUser) {
+        User user = userRepository.findByNickname(nickname)
                 .orElseThrow(IllegalArgumentException::new);
 
         List<Follow> followingList = followRepository.findFollowingList(user);
@@ -76,8 +79,8 @@ public class FollowService {
      * 3-2. 내가 로그인중이 아니라면 전부 팔로우 x
      */
     @Transactional
-    public List<FollowDto> findFollowerList(String username, SessionUser sessionUser) {
-        User user = userRepository.findByUsername(username)
+    public List<FollowDto> findFollowerList(String nickname, SessionUser sessionUser) {
+        User user = userRepository.findByNickname(nickname)
                 .orElseThrow(IllegalArgumentException::new);
 
         List<Follow> followerList = followRepository.findFollowerList(user);

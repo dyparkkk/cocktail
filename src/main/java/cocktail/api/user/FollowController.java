@@ -24,32 +24,32 @@ public class FollowController {
 
     @PostMapping
     @ApiOperation(value = "follow 하기", notes = "로그인 필수")
-    public String followUser(@RequestParam String username,
+    public String followUser(@RequestParam String nickname,
                              @ApiIgnore @Login SessionUser sessionUser){
-        followService.follow(sessionUser, username);
+        followService.follow(sessionUser, nickname);
         return "ok";
     }
 
     @DeleteMapping
     @ApiOperation(value = "unFollow 하기", notes = "로그인 필수")
-    public String unFollowUser(@RequestParam String username,
+    public String unFollowUser(@RequestParam String nickname,
                              @ApiIgnore @Login SessionUser sessionUser){
-        followService.unFollow(sessionUser , username);
+        followService.unFollow(sessionUser , nickname);
         return "ok";
     }
 
     @GetMapping("/follower")
     @ApiOperation(value = "user A의 팔로워 목록 조회", notes = "로그인 필수는 아님, 로그인시 내가 팔로워한 유저 확인 가능")
-    public List<FollowDto> getFollowerList(@RequestParam String username,
+    public List<FollowDto> getFollowerList(@RequestParam String nickname,
                                   @ApiIgnore @LoginNullable SessionUser sessionUser) {
-        return followService.findFollowerList(username, sessionUser);
+        return followService.findFollowerList(nickname, sessionUser);
     }
 
     @GetMapping("/following")
     @ApiOperation(value = "user A의 팔로잉 목록 조회", notes = "로그인 필수는 아님, 로그인시 내가 팔로워한 유저 확인 가능")
-    public List<FollowDto> getFollowingList(@RequestParam String username,
+    public List<FollowDto> getFollowingList(@RequestParam String nickname,
                                            @ApiIgnore @LoginNullable SessionUser sessionUser) {
-        return followService.findFollowingList(username, sessionUser);
+        return followService.findFollowingList(nickname, sessionUser);
     }
 
 }
