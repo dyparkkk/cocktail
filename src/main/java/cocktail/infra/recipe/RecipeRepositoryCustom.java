@@ -21,5 +21,5 @@ public interface RecipeRepositoryCustom {
     long deleteIngredients(Long id);
     long viewCntPlus(Long id);
 
-    List<Recipe> findAllByUser(User user);
+    List<Recipe> findAllByUser(User user, Pageable pageable);
 }

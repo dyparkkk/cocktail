@@ -13,6 +13,7 @@ import cocktail.infra.user.FollowRepository;
 import cocktail.infra.user.UserRepository;
 import cocktail.infra.recipe.RecipeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,7 @@ import static java.util.stream.Collectors.*;
 
 @Service
 @RequiredArgsConstructor
-public class UserMyPageService {
+public class UserProfileService {
 
     private final UserRepository userRepository;
     private final RecipeRepository recipeRepository;
@@ -33,8 +34,8 @@ public class UserMyPageService {
      * (레시피 수, 팔로잉 수, 팔로워 수, url, text, 내가 팔로우 중인지 아닌지)
      */
     @Transactional
-    public UserPageDto getUserPage(String username, SessionUser sessionUser) {
-        User user = userRepository.findByUsername(username)
+    public UserPageDto getUserPage(String nickname, SessionUser sessionUser) {
+        User user = userRepository.findByNickname(nickname)
                 .orElseThrow(IllegalStateException::new);
 
         UserPageDto res = UserPageDto.from(user);
@@ -51,12 +52,17 @@ public class UserMyPageService {
         return res;
     }
 
+    /**
+     * 유저 A가 작성한 레시피들을 보여준다
+     *
+     * 정렬 가능 : 최신 순, 최근 수정 순, 별점 순
+     */
     @Transactional
-    public List<RecipeResponseDto> getUserRecipes(String username) {
-        User user = userRepository.findByUsername(username)
+    public List<RecipeResponseDto> getUserRecipes(String nickname, Pageable pageable) {
+        User user = userRepository.findByNickname(nickname)
                 .orElseThrow(IllegalStateException::new);
 
-        List<Recipe> recipes = recipeRepository.findAllByUser(user);
+        List<Recipe> recipes = recipeRepository.findAllByUser(user, pageable);
         return recipes.stream()
                 .map(RecipeResponseDto::fromEntity)
                 .collect(toList());

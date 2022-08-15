@@ -21,7 +21,7 @@ import static org.mockito.BDDMockito.*;
 class UserMyPageServiceTest {
 
     @InjectMocks
-    private UserMyPageService userMyPageService;
+    private UserProfileService userProfileService;
     @Mock
     RecipeRepository recipeRepository;
     @Mock
@@ -48,7 +48,7 @@ class UserMyPageServiceTest {
                 .willReturn(Optional.empty());
 
         // then
-        Assertions.assertThatThrownBy(() -> userMyPageService.createBookmark(dto))
+        Assertions.assertThatThrownBy(() -> userProfileService.createBookmark(dto))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -69,7 +69,7 @@ class UserMyPageServiceTest {
                 .willReturn(Optional.empty());
 
         // then
-        Assertions.assertThatThrownBy(() -> userMyPageService.createBookmark(dto))
+        Assertions.assertThatThrownBy(() -> userProfileService.createBookmark(dto))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

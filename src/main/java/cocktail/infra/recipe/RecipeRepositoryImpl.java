@@ -68,8 +68,7 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(
-                        starSort(pageable).stream()
-                                .toArray(OrderSpecifier[]::new))
+                        starSort(pageable).toArray(OrderSpecifier[]::new))
                 .fetch();
     }
 
@@ -112,11 +111,12 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
     }
 
     @Override
-    public List<Recipe> findAllByUser(User user) {
+    public List<Recipe> findAllByUser(User user, Pageable pageable) {
         return queryFactory
                 .selectFrom(recipe)
                 .where(recipe.user.eq(user))
-                .orderBy(recipe.createdDate.desc())
+                .orderBy(
+                        starSort(pageable).toArray(OrderSpecifier[]::new))
                 .fetch();
     }
 
@@ -127,6 +127,10 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
 //            Order dir = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
                 if(order.getProperty().equals("star")){
                     OrderSpecifier<?> orderStar = getSortedColumn(Order.DESC, recipe, "star");
+                    orders.add(orderStar);
+                }
+                if(order.getProperty().equals("update")){
+                    OrderSpecifier<?> orderStar = getSortedColumn(Order.DESC, recipe, "lastModifiedDate");
                     orders.add(orderStar);
                 }
             }
