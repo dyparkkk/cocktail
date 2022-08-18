@@ -2,6 +2,7 @@ package cocktail.application.recipe;
 
 import cocktail.application.auth.SessionUser;
 import cocktail.domain.recipe.Recipe;
+import cocktail.domain.user.User;
 import cocktail.dto.RecipeResponseDto;
 import cocktail.dto.SearchCondition;
 import cocktail.infra.recipe.RecipeRepository;
